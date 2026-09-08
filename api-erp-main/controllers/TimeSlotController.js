@@ -1,0 +1,68 @@
+const TimeSlots = require('../models/TimeSlot');
+
+const getTimeSlots = async (req, res) => {
+    try {
+        const timeSlots = await TimeSlots.find({});
+
+        res.status(200).send({
+            success: true,
+            data: timeSlots
+        });
+
+    } catch (err) {
+        console.log(err);
+
+        res.status(400).send({
+            success: false,
+            message: err.message
+        });
+    }
+};
+
+
+const AddTimeSlots = async (req, res) => {
+    try {
+        const timeslot = new TimeSlots(req.body);
+
+        console.log(timeslot);
+
+        await timeslot.save();
+
+        res.status(200).send({
+            success: true,
+            data: timeslot
+        });
+
+    } catch (err) {
+        console.log(err);
+
+        res.status(400).send({
+            success: false,
+            message: err.message
+        });
+    }
+};
+
+const deleteTimeSlots = async (req, res) => {
+    try {
+        let id = req.params.id;
+        await TimeSlots.deleteOne({ _id: id });
+        res.status(200).send({
+            success: true,
+        });
+
+    } catch (err) {
+        console.log(err);
+        res.status(400).send({
+            success: false,
+            message: err.message
+        });
+    }
+}
+
+
+module.exports = {
+    getTimeSlots,
+    AddTimeSlots,
+    deleteTimeSlots
+};
