@@ -96,7 +96,7 @@ function BranchList() {
 
 
     function goToEdit(id) {
-        // navigate('/edit/branch/' + id);
+         navigate('/edit/branch/' + id);
     }
 
     return (

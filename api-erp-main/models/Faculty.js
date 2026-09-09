@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const timestamps = require('mongoose-timestamps');
 const Schema = mongoose.Schema;
 
 const facultySchema = new Schema({
@@ -22,11 +21,8 @@ const facultySchema = new Schema({
     teachingExperience: { type: Number, required:true },
     industryExperience: { type: Number, required:true },
     researchExperience: { type: Number, required:true },
-    facultyImage: { type: String, required:true },
+    facultyImage: { type: String, required:false },
     status: { type:String, default:'active',enum:['active','inactive'] },
-    createdAt: Date,
-    updatedAt: Date
-})
+    })
 
-facultySchema.plugin(timestamps, {index: true})
 module.exports = mongoose.model('faculty', facultySchema)

@@ -121,35 +121,54 @@ function AddStudent() {
 
 
     useEffect(() => {
-        axios
-            .get(`${apiUrl}/courses/for/student`)
-            .then((res) => {
-                if (res.data.success) {
-                    setCourses(res.data.data);
-                } else {
-                    alert("Failed to load Courses.");
-                }
-            })
+        axios({
+            url: apiUrl + '/courses/for/student',
+            method: 'get'
+        }).then((res) => {
+            if (res.data.success) {
+                setCourses(res.data.data);
+            } else {
+                alert("Failed to load Courses.");
+            }
+        })
             .catch((err) => {
                 console.error("Error fetching Courses:", err);
             });
     }, []);
 
     useEffect(() => {
+        if (!course) {
+            setBranches([]);
+            setBranch('');
+            return;
+        }
+
         axios
-            .get(`${apiUrl}/branches/for/student`)
+            .get(`${apiUrl}/branches/for/student`, {
+                params: {
+                    courseId: course
+                }
+            })
             .then((res) => {
                 if (res.data.success) {
                     setBranches(res.data.data);
+
+                    // No branches for this course
+                    if (res.data.data.length === 0) {
+                        setBranch('');
+                    }
                 } else {
-                    alert("Failed to load Branches.");
+                    setBranches([]);
+                    setBranch('');
                 }
             })
             .catch((err) => {
                 console.error("Error fetching Branches:", err);
+                setBranches([]);
+                setBranch('');
             });
-    }, []);
 
+    }, [course]);
 
     let doAddStudent = async (e) => {
 
@@ -246,6 +265,7 @@ function AddStudent() {
                 setPermanentPincode('');
 
                 setSameAsLocal(false);
+                navigate('/students');
             }
 
         }).catch((err) => {
@@ -429,26 +449,44 @@ function AddStudent() {
                     <Col md={4}>
                         <Form.Group className="mb-3">
                             <Form.Label>Select Course</Form.Label>
-                            <Form.Select value={course} onChange={(e) => setCourse(e.target.value)} required>
+                            <Form.Select
+                                value={course}
+                                onChange={(e) => {
+                                    setCourse(e.target.value);
+                                    setBranch('');
+                                }}
+                                required
+                            >
                                 <option value="">Select</option>
+
                                 {courses.map((c) => (
-                                    <option key={c.value} value={c.value}>{c.label}</option>
-                                ))
-                                }
+                                    <option key={c.value} value={c.value}>
+                                        {c.label}
+                                    </option>
+                                ))}
                             </Form.Select>
                         </Form.Group>
                     </Col>
                     <Col md={4}>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Select Branch</Form.Label>
-                            <Form.Select value={branch} onChange={(e) => setBranch(e.target.value)} required>
-                                <option value="">Select</option>
-                                {branches.map((c) => (
-                                    <option key={c.value} value={c.value}>{c.label}</option>
-                                ))
-                                }
-                            </Form.Select>
-                        </Form.Group>
+                        {course && branches.length > 0 && (
+                            <Form.Group className="mb-3">
+                                <Form.Label>Select Branch</Form.Label>
+
+                                <Form.Select
+                                    value={branch}
+                                    onChange={(e) => setBranch(e.target.value)}
+                                    required
+                                >
+                                    <option value="">Select</option>
+
+                                    {branches.map((b) => (
+                                        <option key={b.value} value={b.value}>
+                                            {b.label}
+                                        </option>
+                                    ))}
+                                </Form.Select>
+                            </Form.Group>
+                        )}
                     </Col>
                     <Col md={4}>
                         <Form.Group className="mb-3">

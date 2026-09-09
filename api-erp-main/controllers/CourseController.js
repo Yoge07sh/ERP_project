@@ -29,6 +29,7 @@ async function getCourses(req, res) {
         let courses = await Course.find({
             courseFullName: { $regex: new RegExp(req.query.courseFullName, "i") }
         });
+        console.log(courses)
         res.status(200).send({ success: true, data: courses })
     } catch (error) {
         console.log(error)

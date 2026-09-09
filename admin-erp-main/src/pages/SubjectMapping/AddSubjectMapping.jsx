@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import {
   Container,
   Row,
@@ -7,12 +7,11 @@ import {
   Button,
   Modal,
   Spinner,
-  Card,
 } from "react-bootstrap";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
-
+const apiUrl = import.meta.env.VITE_API_URL;
 function SubjectMapping() {
   let navigate = useNavigate();
   let [subjects, setSubjects] = useState([]);
@@ -31,7 +30,7 @@ function SubjectMapping() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/courses/for/mapping")
+      .get(apiUrl+"/courses/for/mapping")
       .then((res) => {
         if (res.data.success) {
           setCourses(res.data.data);
@@ -45,7 +44,7 @@ function SubjectMapping() {
   }, []);
   useEffect(() => {
     axios
-      .get("http://localhost:3000/subjects/for/mapping")
+      .get(apiUrl+"/subjects/for/mapping")
       .then((res) => {
         if (res.data.success) {
           setSubjects(res.data.data);
@@ -59,7 +58,7 @@ function SubjectMapping() {
   }, []);
   useEffect(() => {
     axios
-      .get("http://localhost:3000/branchs/for/mapping")
+      .get( apiUrl+"/branchs/for/mapping")
       .then((res) => {
         if (res.data.success) {
           setBranchs(res.data.data);
@@ -77,7 +76,7 @@ function SubjectMapping() {
     SetShowForm(false);
     setShowSpinner(true);
     axios({
-      url: "http://localhost:3000/add/subjectMapping",
+      url: apiUrl+"/add/subjectMapping",
       method: "post",
       data: { session,subject, course, branch, year, semester },
     })

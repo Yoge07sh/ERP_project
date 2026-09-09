@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import  { useEffect, useState } from 'react'
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -26,7 +26,6 @@ function BranchEdit() {
     function handleChange(e) {
         let name = e.target.name
         let value = e.target.value
-        setCourse(e.target.value);
         setBranch((prev) => {
             return {
                 ...prev, [name]: value
@@ -55,9 +54,9 @@ function BranchEdit() {
         }).then((result) => {
             setBranch(result.data.data)
         }).catch((err) => {
-
+            alert(err)
         })
-    }, [params])
+    }, [params.id])
 
 
 
@@ -75,9 +74,7 @@ function BranchEdit() {
             console.error("Error fetching Branches:", err);
           });
       }, []);
-      function handleChange(e) {
-        setCourse(e.target.value);
-      }
+      
 
 
     return (
@@ -94,7 +91,7 @@ function BranchEdit() {
                             name='course'
                         >
                             {
-                                courses.map((c) => (
+                                course.map((c) => (
                                     <option key={c.value} value={c.value}>{c.label}</option>
 
                                 ))
@@ -157,7 +154,7 @@ function BranchEdit() {
                     <Button onClick={() => navigate('/branches')} variant="secondary" type="button">
                         Cancel
                     </Button>
-                    <Button onClick={doEditBranch(branch._id)} variant="primary" >
+                    <Button onClick={()=>doEditBranch(branch._id)} variant="primary" type='button' >
                         Update
                     </Button>
                 </div>
@@ -169,7 +166,7 @@ function BranchEdit() {
                 <Modal.Header closeButton>
                     <Modal.Title>Success</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Branch Added successfully👍</Modal.Body>
+                <Modal.Body>Branch Updated successfully👍</Modal.Body>
                 <Modal.Footer>
                     <Button variant="danger" onClick={handleClose}>
                         Close

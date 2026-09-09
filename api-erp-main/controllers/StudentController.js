@@ -36,28 +36,45 @@ async function getCourseForStudent(req, res) {
 
 async function getBranchForStudent(req, res) {
     try {
-        let branches = await Branch.find(
-            { branchFullName: { $regex: new RegExp(req.query.branchFullName, "i") } },
+        const { courseId } = req.query;
+
+        if (!courseId) {
+            return res.status(200).send({
+                success: true,
+                data: []
+            });
+        }
+
+        const branches = await Branch.find(
+            {
+                course: courseId,
+                status: 'Active'
+            },
             {
                 _id: 1,
-                branchFullName: 1,
+                branchFullName: 1
             }
-        );
-        let sendBranches = []
-        for (let i = 0; i < branches.length; i++) {
-            sendBranches.push({
-                value: branches[i]._id,
-                label: branches[i].branchFullName,
-            })
-        }
-        res.status(200).send({ success: true, data: sendBranches })
-    } catch (error) {
-        res.status(500).send({ success: false, message: 'something went wrong' })
-        console.log(error);
+        ).sort({ branchFullName: 1 });
 
+        const sendBranches = branches.map(branch => ({
+            value: branch._id,
+            label: branch.branchFullName
+        }));
+
+        res.status(200).send({
+            success: true,
+            data: sendBranches
+        });
+
+    } catch (error) {
+        console.error("Error fetching branches:", error);
+
+        res.status(500).send({
+            success: false,
+            message: 'Something went wrong'
+        });
     }
 }
-
 
 async function addStudent(req, res) {
     try {

@@ -8,6 +8,7 @@ const adminSchema = new Schema({
     mobNo: { type: String, default: '' },
     lastLogin: { type: Date },
     adminImage: { type: String, default: '' },
+    adminType: {type:String,default:'student',enum:['student','faculty','admin']},
     status: { type: String, default: 'Active', enum: ['Active', 'InActive'] },
 
 }, { timestamps: true })

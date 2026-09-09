@@ -3,7 +3,7 @@ const router = express.Router()
 const CourseController = require('../controllers/CourseController')
 const bodyParser = require('body-parser')
 router.use(bodyParser.json());
-router.use(bodyParser.urlencoded({extended:false}))
+router.use(bodyParser.urlencoded({ extended: false }))
 
 
 router.post('/add/course', (req, res) => {
@@ -25,5 +25,7 @@ router.get('/course/:id', (req, res) => {
 router.put('/edit/course/:id', (req, res) => {
     CourseController.editCourse(req, res);
 })
+
+
 
 module.exports = router

@@ -163,7 +163,7 @@ function FacultyList() {
                         faculties.map((faculty) =>
                             <tr>
                                 <td><img src={faculty.facultyImage} height='50px'width='50px' alt="" /></td>
-                                <td>{faculty.firstName}{faculty.lastName}</td>
+                                <td>{faculty.firstName}{" "}{faculty.lastName}</td>
                                 <td>{faculty.designation}</td>
                                 <td>{faculty.highestQualification}</td>
                                 <td>

@@ -16,6 +16,7 @@ async function createAdmin() {
             admin.email = 'ys742896@yopmail.com';
             let encryptedPassword = bcrypt.hashSync("123456", 10);
             admin.password = encryptedPassword;
+            admin.adminType='admin'
 
 
             await admin.save();

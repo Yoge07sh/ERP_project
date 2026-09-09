@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const timestamps = require('mongoose-timestamps');
 
 function toTitleCase(value) {
   if (!value) return value;
@@ -28,8 +27,8 @@ const studentSchema = new mongoose.Schema({
   emergencyMobNumber: { type: String },
 
   // Below three attributes are used in modal for uploading students through CSV files.
-  course: { type: mongoose.Schema.Types.ObjectId, ref: 'course', required: true },
-  branch: { type: mongoose.Schema.Types.ObjectId, ref: 'branch', required: true },
+  course: { type: mongoose.Schema.Types.ObjectId, ref: 'Course', required: true },
+  branch: { type: mongoose.Schema.Types.ObjectId, ref: 'Branch', required: false, default:null },
   section: { type: String, default: 'P1', enum: ['P1', 'P2', 'C1', 'C2'] },
 
   admissionYear: { type: Number, required: false },
@@ -54,10 +53,7 @@ const studentSchema = new mongoose.Schema({
   permanentPincode: { type: String, trim: true },
 
   status: { type: String, enum: ['Active', 'InActive'], default: 'Active' },
-  createdAt: Date,
-  updatedAt: Date
-});
+},{timestamps: true});
 
-studentSchema.plugin(timestamps, { index: true });
 
 module.exports = mongoose.model('student', studentSchema);
