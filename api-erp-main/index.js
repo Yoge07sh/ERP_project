@@ -1,4 +1,3 @@
-
 const express = require('express');
 const app = express();
 const connect = require('./connection');
@@ -27,13 +26,8 @@ app.use(timeSlot)
 
 app.use(user)
 
-
-
 connect();
 createAdmin()
-
-
-
 
 app.listen(3000, (err) => {
     if (err) {

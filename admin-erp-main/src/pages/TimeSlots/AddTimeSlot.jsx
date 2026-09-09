@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
 import { Container, Form, Button, Row, Col, Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -14,37 +13,29 @@ function AddTimeSlot() {
     const [session, setSession] = useState("");
     const [lectureNo, setLectureNo] = useState("");
     const [timeSlot, setTimeSlot] = useState("");
-
     const handleClose = () => {
         setShow(false);
     };
 
-    // Session options
     const sessions = [
         "2026-27",
         "2027-28",
         "2028-29",
     ];
 
-    // Lecture options
     const lectureNumbers = [1, 2, 3, 4, 5, 6, 7, 8];
-
-    // Time slot options
-    const timeSlots = [
-        "9:10 to 10:00",
-        "10:00 to 10:50",
-        "11:00 to 11:50",
-        "11:50 to 12:20",
-        "12:50 to 1:10",
-        "1:10 to 2:00",
-        "2:00 to 2:50",
-        "2:50 to 3:10",
-        "3:10 to 4:00",
-        "4:00 to 4:50",
-    ];
+    const handleTimeSlot = (e) => {
+        setTimeSlot(e.target.value);
+    }
 
     const doAddTimeSlot = async (e) => {
         e.preventDefault();
+        const timeSlotRegex = /^([01]\d|2[0-3]):([0-5]\d)-([01]\d|2[0-3]):([0-5]\d)$/;
+
+        if (!timeSlotRegex.test(timeSlot)) {
+            alert("Time slot must be in HH:MM-HH:MM format.");
+            return;
+        }
 
         setButtonDisabled(true);
 
@@ -53,7 +44,7 @@ function AddTimeSlot() {
                 "http://localhost:3000/add/timeslots",
                 {
                     session,
-                    lectureNo:Number(lectureNo),
+                    lectureNo: Number(lectureNo),
                     timeSlot,
                 }
             );
@@ -62,17 +53,12 @@ function AddTimeSlot() {
 
             setShow(true);
 
-            // Reset form
             setSession("");
             setLectureNo("");
             setTimeSlot("");
-            navigate('/timeslots')
-
         } catch (err) {
             console.log(err.response?.data || err);
-
-            // You can add an alert here if required
-            // alert("Failed to add time slot");
+            alert("Failed to add time slot.");
         } finally {
             setButtonDisabled(false);
         }
@@ -80,18 +66,14 @@ function AddTimeSlot() {
 
     return (
         <Container>
-
             <Form onSubmit={doAddTimeSlot}>
-
                 <h3 className="text-center mb-4 py-2 text-primary fw-bold">
                     ADD NEW TIME SLOT
                 </h3>
 
                 <hr />
 
-                {/* Session */}
                 <Row className="mb-3">
-
                     <Form.Group as={Col} controlId="session">
                         <Form.Label>Session</Form.Label>
 
@@ -110,10 +92,8 @@ function AddTimeSlot() {
                                 </option>
                             ))}
                         </Form.Select>
-
                     </Form.Group>
 
-                    {/* Lecture Number */}
                     <Form.Group as={Col} controlId="lectureNo">
                         <Form.Label>Lecture No.</Form.Label>
 
@@ -132,45 +112,18 @@ function AddTimeSlot() {
                                 </option>
                             ))}
                         </Form.Select>
-
                     </Form.Group>
-
                 </Row>
-
-
-                {/* Time Slot */}
-                <Row className="mb-3">
-
-                    <Form.Group as={Col} controlId="timeSlot">
-
-                        <Form.Label>Time Slot</Form.Label>
-
-                        <Form.Select
-                            value={timeSlot}
-                            onChange={(e) => setTimeSlot(e.target.value)}
-                            required
-                        >
-
-                            <option value="">
-                                -- Select Time Slot --
-                            </option>
-
-                            {timeSlots.map((slot) => (
-                                <option key={slot} value={slot}>
-                                    {slot}
-                                </option>
-                            ))}
-
-                        </Form.Select>
-
+                <Row>
+                    <Form.Group>
+                        <Form.Label>Enter Time slot</Form.Label>
+                        <Form.Control type='text' placeholder='Format 00:00-00:00' value={timeSlot} onChange={handleTimeSlot}></Form.Control>
                     </Form.Group>
-
+                    <span className='mt-2 text-danger'>
+                        <h6 style={{fontSize:'15px'}}>Example-- 09:10-10:00</h6>
+                    </span>
                 </Row>
-
-
-                {/* Buttons */}
                 <div className="d-flex justify-content-center gap-2 mt-4">
-
                     <Button
                         onClick={() => navigate("/timeslots")}
                         variant="secondary"
@@ -184,17 +137,14 @@ function AddTimeSlot() {
                         variant="primary"
                         type="submit"
                     >
-                        Add Time Slot
+                        {buttonDisabled
+                            ? "Adding..."
+                            : "Add Time Slot"}
                     </Button>
-
                 </div>
-
             </Form>
 
-
-            {/* Success Modal */}
             <Modal show={show} onHide={handleClose}>
-
                 <Modal.Header closeButton>
                     <Modal.Title>Success</Modal.Title>
                 </Modal.Header>
@@ -204,20 +154,20 @@ function AddTimeSlot() {
                 </Modal.Body>
 
                 <Modal.Footer>
-
                     <Button
                         variant="danger"
-                        onClick={handleClose}
+                        onClick={() => {
+                            handleClose();
+                            navigate("/timeslots");
+                        }}
                     >
                         Close
                     </Button>
-
                 </Modal.Footer>
-
             </Modal>
-
         </Container>
     );
 }
 
 export default AddTimeSlot;
+

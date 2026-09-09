@@ -43,6 +43,37 @@ const AddTimeSlots = async (req, res) => {
     }
 };
 
+const getTimeSlotById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        let timeslot = await TimeSlots.findOne({ _id: id });
+        res.status(200).send({ success: true, data: timeslot });
+
+    } catch (err) {
+        console.log(err);
+        res.status(400).send({
+            success: false,
+            message: err.message
+        });
+
+    }
+}
+
+const editTimeSlot = async (req, res) => {
+    try {
+        const id = req.params.id;
+        let data = req.body
+        await TimeSlots.updateOne({ _id: id, }, { $set: data });
+        res.status(200).send({ success: true });
+    } catch (err) {
+        console.log(err);
+        res.status(400).send({
+            success: false,
+            message: err.message
+        });
+    }
+}
+
 const deleteTimeSlots = async (req, res) => {
     try {
         let id = req.params.id;
@@ -64,5 +95,7 @@ const deleteTimeSlots = async (req, res) => {
 module.exports = {
     getTimeSlots,
     AddTimeSlots,
+    editTimeSlot,
+    getTimeSlotById,
     deleteTimeSlots
 };

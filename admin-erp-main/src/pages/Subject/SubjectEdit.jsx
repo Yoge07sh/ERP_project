@@ -50,7 +50,7 @@ function SubjectEdit() {
             method: 'get'
         }).then((result) => {
             setSubject(result.data.data)
-        }).catch((err) => {
+        }).catch(() => {
 
         })
     }, [params])

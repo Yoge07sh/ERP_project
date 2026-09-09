@@ -35,6 +35,7 @@ import StudentProfile from './pages/Student/StudentProfile'
 //TimeSlots
 import TimeSlotList from './pages/TimeSlots/TimeSlotsList'
 import AddTimeSlot from './pages/TimeSlots/AddTimeSlot'
+import EditTimeSlot from './pages/TimeSlots/EditTimeSot'
 function App() {
   return (
     <BrowserRouter>
@@ -95,6 +96,7 @@ function App() {
             {/*TimeSlots*/}
             <Route path="/timeslots" element={<TimeSlotList />} />
             <Route path="/add/timeslots" element={<AddTimeSlot />} />
+            <Route path="/edit/timeslot/:id" element={<EditTimeSlot />} />
 
           </Routes>
         </main>
