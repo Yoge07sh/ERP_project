@@ -102,11 +102,27 @@ async function getSubjectsMapped(req, res) {
     }
 }
 
+const editSubjectMapping = async (req, res) => {
+    try {
+        let subjectId = req.params.id;
+        let subjectmap = await Mapping.findOne({ _id: subjectId })
+        Object.assign(subjectmap, req.body)
+        await subjectmap.save();
+        //console.log(subjectmap);
+        res.status(200).send({ success: true, message: 'SubjectMapping has been updated' })
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ success: false, message: 'Something went wrong in updating SubjectMapping' })
+    }
+}
+
 
 module.exports={
     getSubjectsForMapping,
     getCoursesForMapping,
     getBranchsForMapping,
     addSubjectMapping,
-    getSubjectsMapped
+    getSubjectsMapped,
+    editSubjectMapping,
 }
