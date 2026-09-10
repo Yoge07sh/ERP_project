@@ -217,10 +217,10 @@ function SubjectMapping() {
               </Col>
             </Row>
 
-            <div className="d-flex gap-2 mt-4">
+            <div className="d-flex justify-content-center gap-2 mt-4">
               <Button
                 onClick={() => navigate("/subjectsmap")}
-                variant="secondary"
+                variant="danger"
                 type="button"
               >
                 Cancel
