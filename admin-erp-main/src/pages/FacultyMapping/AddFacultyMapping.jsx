@@ -112,6 +112,13 @@ function AddFacultyMapping() {
         console.error("Error fetching Faculties:", err);
       });
   }, []);
+  // ================= RESET BRANCH WHEN COURSE CHANGES =================
+  useEffect(() => {
+    setFacultyMapping((prev) => ({
+      ...prev,
+      branch: "",
+    }));
+  }, [facultyMapping.course]);
 
   // ================= SUBMIT FACULTY MAPPING =================
   const handleSubmit = async (e) => {
@@ -250,32 +257,34 @@ function AddFacultyMapping() {
         <Row className="mb-3">
 
           {/* Branch */}
-          <Col md={4}>
-            <Form.Group>
-              <Form.Label>
-                Branch <span className="text-danger">*</span>
-              </Form.Label>
+          {/* Branch */}
+          {facultyMapping.course && branches.length > 0 && (
+            <Col md={4}>
+              <Form.Group>
+                <Form.Label>
+                  Branch <span className="text-danger">*</span>
+                </Form.Label>
 
-              <Form.Select
-                name="branch"
-                value={facultyMapping.branch}
-                onChange={handleChange}
-                required
-              >
-                <option value="">---Select Branch---</option>
+                <Form.Select
+                  name="branch"
+                  value={facultyMapping.branch}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">---Select Branch---</option>
 
-                {branches.map((branch) => (
-                  <option
-                    key={branch.value}
-                    value={branch.value}
-                  >
-                    {branch.label}
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
-          </Col>
-
+                  {branches.map((branch) => (
+                    <option
+                      key={branch.value}
+                      value={branch.value}
+                    >
+                      {branch.label}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+            </Col>
+          )}
           {/* Year */}
           <Col md={4}>
             <Form.Group>
