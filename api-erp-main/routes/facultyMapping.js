@@ -37,5 +37,9 @@ router.get('/facultyMapping/:id', (req, res) => {
 router.put('/edit/facultyMapping/:id', (req, res) => {
     FacultyMappingController.editFacultyMapping(req, res);
 });
+router.delete('/delete/facultyMapping/:id', (req, res) => {
+    FacultyMappingController.deleteFacultyMapping(req, res);
+});
+
 
 module.exports = router;
