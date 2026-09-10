@@ -120,9 +120,36 @@ function FacultyList() {
   function goToAddFacultyPage() {
         navigate('/add/faculty')
     }
+
      function goToEdit(id) {
         navigate('/edit/faculty/' + id);
     }
+    
+    function goToDelete(id) {
+    const confirmDelete = window.confirm("Are you sure you want to delete this faculty?")
+
+    if (!confirmDelete) {
+        return
+    }
+
+    axios({
+        url: 'http://localhost:3000/delete/faculty/' + id,
+        method: 'delete'
+    })
+    .then((result) => {
+        if (result.data.success) {
+            alert("Faculty deleted successfully")
+              setFaculties(
+              faculties.filter((faculty) => faculty._id !== id)
+            )
+          }
+        })
+    .catch((err) => {
+        console.log(err.message)
+        alert("Something went wrong while deleting faculty")
+    })
+}
+
 
   return (
          <>
@@ -167,14 +194,16 @@ function FacultyList() {
                                 <td>{faculty.designation}</td>
                                 <td>{faculty.highestQualification}</td>
                                 <td>
-                                    <i className="bi bi-pencil me-3 " onClick={() => goToEdit(faculty._id)} ></i>
-                                    {/* <i className="bi bi-trash" onClick={() => goToDelete(faculty._id)}></i> */}
+                                    <i className="bi bi-pencil me-3 text-warning " onClick={() => goToEdit(faculty._id)} ></i>
+                                    <i className="bi bi-trash  text-danger" onClick={() => goToDelete(faculty._id)}></i> 
                                 </td>
                             </tr>
                         )
                     }
+                    
                 </tbody>
             </table>
+          
                     <div className='d-flex justify-content-center'>
       {totalFaculties > facultyPerPage&&
       <Pagination>{items}</Pagination>}
