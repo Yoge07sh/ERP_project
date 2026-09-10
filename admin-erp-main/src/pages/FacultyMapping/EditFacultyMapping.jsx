@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { Button, Container, Form, Row, Col } from 'react-bootstrap'
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { axios } from 'axios'
+import axios from 'axios'
 const apiUrl = import.meta.env.VITE_API_URL
 function EditFacultyMapping() {
 
@@ -14,8 +14,8 @@ function EditFacultyMapping() {
             method: 'get'
         }).then((res) => {
             alert(res.success)
-         })
-            .catch((err) => { 
+        })
+            .catch((err) => {
                 alert(err)
             })
     }, [params.id])
