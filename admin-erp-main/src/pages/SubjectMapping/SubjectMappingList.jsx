@@ -1,9 +1,11 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import axios from 'axios'
-import { Modal, Button, Form, InputGroup, Container } from 'react-bootstrap'
+import { Modal, Button, Form, InputGroup } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+const apiUrl = import.meta.env.VITE_API_URL
+import { FaEdit } from "react-icons/fa"
 
 
 function SubjectMappingList() {
@@ -20,7 +22,8 @@ function SubjectMappingList() {
     useEffect(() => {
 
         axios({
-            url: 'http://localhost:3000/subjectsMapped',
+            //url: 'http://localhost:3000/subjectsMapped',
+            url: apiUrl + '/subjectsMapped',
             method: 'get',
             params: {
                 course: searchByCourse
@@ -44,13 +47,8 @@ function SubjectMappingList() {
     }
 
     function goToEdit() {
-        navigate('/edit/subject')
+        navigate('/edit/subjectmapping')
     }
-    function goToAddMappingPage() {
-        navigate('/add/subjectMapping')
-    }
-
-
     return (
         <>
             <h3 className="text-center mb-4 py-2 text-primary fw-bold">LIST OF SUBJECTS MAPPING</h3>
@@ -62,7 +60,7 @@ function SubjectMappingList() {
                 <Form.Control type="text" placeholder=" Type Subject Name to search" onChange={(e) => setSearchByCourse(e.target.value)} />
             </InputGroup>
 
-            <button className="btn btn-success ms-3 mt-2 float-end" onClick={goToAddMappingPage}>Map Subject +</button>
+            <button className="btn btn-success ms-3 mt-2 float-end" onClick={() => navigate('/add/subjectMapping')}>Map Subject +</button>
 
 
             <table className="table text-center table-hover mt-5">
@@ -89,7 +87,13 @@ function SubjectMappingList() {
                                 <td>{subject.semester}</td>
 
                                 <td>
-                                    <i className="bi bi-pencil me-3 " onClick={() => goToEdit(subject._id)} ></i>
+                                    {/* <i className="bi bi-pencil me-3 " onClick={() => goToEdit(subject._id)} ></i> */}
+                                    <Button
+                                    variant="warning"
+                                    onClick={() => goToEdit(subject._id)}
+                                    >
+                                        <FaEdit></FaEdit>
+                                    </Button>
 
                                 </td>
                             </tr>

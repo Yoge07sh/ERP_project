@@ -12,8 +12,8 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
 const apiUrl = import.meta.env.VITE_API_URL;
-function SubjectMapping() {
-  let navigate = useNavigate();
+function EditSubjectMapping() {
+    let navigate = useNavigate();
   let [subjects, setSubjects] = useState([]);
   let [courses, setCourses] = useState([]);
   let [branchs, setBranchs] = useState([]);
@@ -27,6 +27,7 @@ function SubjectMapping() {
   let [branch, setBranch] = useState("");
   let [year, setYear] = useState("1");
   let [semester, setSemester] = useState("1");
+  let [subjectMapping, setSubjectMapping] = useState({})
 
   useEffect(() => {
     axios
@@ -71,13 +72,36 @@ function SubjectMapping() {
       });
   }, []);
 
-  let doAddMapping = () => {
+  useEffect(() => {
+    axios({
+        url: apiUrl + '/edit/subjectMapping' + id,
+        method: 'get'
+    }).then((res) => {
+        setSubjectMapping(res.data.data)
+    })
+    .catch((err) => {
+        alert("Error..")
+    })
+  })
+
+  function manageUpdate(e) {
+        let name = e.target.name
+        let value = e.target.value
+        setMobile((prev) => {
+            return {
+                ...prev,
+                [name]: value
+            }
+        })
+    }
+
+  let doEditMapping = () => {
     setButtonDisabled(true);
     SetShowForm(false);
     setShowSpinner(true);
     axios({
-      url: apiUrl + "/add/subjectMapping",
-      method: "post",
+      url: apiUrl + "/Edit/subjectMapping",
+      method: "put",
       data: { session,subject, course, branch, year, semester },
     })
       .then((result) => {
@@ -99,12 +123,12 @@ function SubjectMapping() {
     navigate("/subjectsmap");
   };
 
-  return (
+  return(
     <>
       {showForm && (
         <Container className="mt-5">
 
-          <h3 className="text-center mb-4 py-2 text-primary fw-bold ">ADD SUBJECT MAPPING</h3>
+          <h3 className="text-center mb-4 py-2 text-primary fw-bold ">EDIT SUBJECT MAPPING</h3>
           <hr />
 
           <Form>
@@ -226,12 +250,12 @@ function SubjectMapping() {
                 Cancel
               </Button>
               <Button
-                onClick={doAddMapping}
+                onClick={doEditMapping}
                 disabled={buttonDisabled}
                 variant="success"
                 type="submit"
               >
-                Add Mapping
+                Edit Mapping
               </Button>
             </div>
           </Form>
@@ -259,5 +283,6 @@ function SubjectMapping() {
     </>
   );
 }
+    
 
-export default SubjectMapping;
+export default EditSubjectMapping
