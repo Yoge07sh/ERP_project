@@ -30,7 +30,6 @@ async function getCoursesForBranch(req, res) {
 async function addBranch(req, res) {
     try {
         let branch = new Branch(req.body);
-        console.log(branch)
         await branch.save();
         res.status(200).send({ success: true, message: 'Data Saved Successfully' })
     } catch (error) {

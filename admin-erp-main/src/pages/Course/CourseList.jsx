@@ -123,8 +123,8 @@ function CourseList() {
                                 <td>{course.courseShortName}</td>
                                 <td>{course.totalIntake}</td>
                                 <td>
-                                    <i className="bi bi-pencil me-3 " onClick={() => goToEdit(course._id)} ></i>
-                                    <i className="bi bi-trash" onClick={() => goToDelete(course._id)}></i>
+                                    <i className="bi bi-pencil me-3 text-primary" onClick={() => goToEdit(course._id)} ></i>
+                                    <i className="bi bi-trash text-danger" onClick={() => goToDelete(course._id)}></i>
                                 </td>
                             </tr>
                         )

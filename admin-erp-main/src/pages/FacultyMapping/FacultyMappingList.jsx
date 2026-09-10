@@ -1,7 +1,13 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 
-import {Button,Form,InputGroup,Container,Pagination} from 'react-bootstrap'
+import {
+    Button,
+    Form,
+    InputGroup,
+    Container,
+    Pagination
+} from 'react-bootstrap'
 
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -19,9 +25,9 @@ function FacultyMappingList() {
 
     const [facultyMapping, setFacultyMapping] = useState([]);
 
-    // Search state
-    const [search, setSearch] = useState('');
-    const [searchBy, setSearchBy] = useState('facultyName');
+    // Separate search states
+    const [sessionSearch, setSessionSearch] = useState('');
+    const [facultyNameSearch, setFacultyNameSearch] = useState('');
 
     // Pagination state
     const [page, setPage] = useState(1);
@@ -45,14 +51,13 @@ function FacultyMappingList() {
                 params: {
                     page: page,
                     limit: limit,
-                    search: search,
-                    searchBy: searchBy
+                    session: sessionSearch,
+                    facultyName: facultyNameSearch
                 }
             });
 
             setFacultyMapping(res.data.data);
 
-            // Total pages returned from backend
             setTotalPages(res.data.totalPages);
 
         } catch (err) {
@@ -72,88 +77,76 @@ function FacultyMappingList() {
     }
 
 
-    // Get data whenever page, search or search type changes
+    // Get data whenever page or search changes
     useEffect(() => {
 
         getFacultyMapping();
 
-    }, [page, search, searchBy]);
+    }, [page, sessionSearch, facultyNameSearch]);
 
 
-    // Handle search text
-    const handleSearch = (e) => {
+    // Session search
+    const handleSessionSearch = (e) => {
 
-        setSearch(e.target.value);
+        setSessionSearch(e.target.value);
 
-        // Reset pagination when searching
+        // Reset pagination
         setPage(1);
 
     }
 
 
-    // Handle search type
-    const handleSearchByChange = (e) => {
+    // Faculty name search
+    const handleFacultyNameSearch = (e) => {
 
-        setSearchBy(e.target.value);
+        setFacultyNameSearch(e.target.value);
 
-        // Reset pagination when changing search type
+        // Reset pagination
         setPage(1);
 
     }
-
+    //handle edit
+    const handleEdit = (id) => {
+        navigate('/edit/facultymapping' + id)
+    }
+    //handle delete
+    const handleDelete = (id) => {
+        axios({
+            url: apiUrl + '/delete/facultyMapping' + id,
+            method: 'delete'
+        }).then(() => {
+            alert('success')
+        }).catch((err) => { 
+            alert(err);
+        })
+    }
 
     return (
 
         <Container>
-
 
             <h3 className="text-center mb-4 py-2 text-primary fw-bold">
                 LIST OF FACULTY MAPPING
             </h3>
 
 
-
+            {/* Search Section */}
             <div className="row mb-3">
 
-
-                <div className="col-md-3">
-
-                    <Form.Select
-                        value={searchBy}
-                        onChange={handleSearchByChange}
-                    >
-
-                        <option value="facultyName">
-                            Faculty Name
-                        </option>
-
-                        <option value="session">
-                            Session
-                        </option>
-
-                    </Form.Select>
-
-                </div>
-
-
-
-                <div className="col-md-6">
+                {/* Session Search */}
+                <div className="col-md-4">
 
                     <InputGroup>
 
                         <InputGroup.Text>
-                            <i className="bi bi-search"></i>
+                            <i className="bi bi-calendar3"></i>
                         </InputGroup.Text>
 
                         <Form.Control
                             type="text"
-                            value={search}
-                            onChange={handleSearch}
-                            placeholder={
-                                searchBy === 'facultyName'
-                                    ? 'Type Faculty Name to search'
-                                    : 'Type Session to search'
-                            }
+                            value={sessionSearch}
+                            onChange={handleSessionSearch}
+                            placeholder="Search by Session"
                         />
 
                     </InputGroup>
@@ -161,8 +154,29 @@ function FacultyMappingList() {
                 </div>
 
 
+                {/* Faculty Name Search */}
+                <div className="col-md-4">
 
-                <div className="col-md-3">
+                    <InputGroup>
+
+                        <InputGroup.Text>
+                            <i className="bi bi-person"></i>
+                        </InputGroup.Text>
+
+                        <Form.Control
+                            type="text"
+                            value={facultyNameSearch}
+                            onChange={handleFacultyNameSearch}
+                            placeholder="Search by Faculty Name"
+                        />
+
+                    </InputGroup>
+
+                </div>
+
+
+                {/* Add Button */}
+                <div className="col-md-4">
 
                     <Button
                         className="btn btn-success float-end"
@@ -176,7 +190,7 @@ function FacultyMappingList() {
             </div>
 
 
-
+            {/* Table */}
             <div className="table-responsive">
 
                 <table className="table text-center table-hover mt-5">
@@ -201,7 +215,6 @@ function FacultyMappingList() {
 
                     <tbody>
 
-
                         {loading ? (
 
                             <tr>
@@ -213,7 +226,6 @@ function FacultyMappingList() {
                             </tr>
 
                         ) : facultyMapping.length > 0 ? (
-
 
                             facultyMapping.map((mapping) => (
 
@@ -258,22 +270,20 @@ function FacultyMappingList() {
 
                                     <td>
 
-
-                                        <i
+                                        <button onClick={() => handleEdit(mapping._id)}> <i
                                             className="bi bi-pencil me-3"
                                             style={{
                                                 cursor: "pointer"
                                             }}
-                                        ></i>
 
+                                        ></i></button>
 
-
-                                        <i
+                                        <button onClick={() => handleDelete(mapping._id)}><i
                                             className="bi bi-trash"
                                             style={{
                                                 cursor: "pointer"
                                             }}
-                                        ></i>
+                                        ></i></button>
 
                                     </td>
 
@@ -282,7 +292,6 @@ function FacultyMappingList() {
                             ))
 
                         ) : (
-
 
                             <tr>
 
@@ -301,27 +310,22 @@ function FacultyMappingList() {
             </div>
 
 
-
+            {/* Pagination */}
             {totalPages > 1 && (
 
                 <div className="d-flex justify-content-center mt-4">
 
                     <Pagination>
 
-
                         <Pagination.First
                             disabled={page === 1}
                             onClick={() => setPage(1)}
                         />
 
-
-
                         <Pagination.Prev
                             disabled={page === 1}
                             onClick={() => setPage(page - 1)}
                         />
-
-
 
                         {[...Array(totalPages)].map((_, index) => {
 
@@ -341,15 +345,10 @@ function FacultyMappingList() {
 
                         })}
 
-
-
                         <Pagination.Next
                             disabled={page === totalPages}
                             onClick={() => setPage(page + 1)}
                         />
-
-
-                        // Last page
 
                         <Pagination.Last
                             disabled={page === totalPages}

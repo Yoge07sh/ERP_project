@@ -720,10 +720,10 @@ function AddStudent() {
                         </Form.Group>
                     </Col>
                 </Row>
-
+                <div className="d-flex justify-content-center gap-2 mt-4">
                 <Button onClick={() => navigate('/students')} className="me-2" variant="danger">Cancel</Button>
                 <Button variant="success" disabled={buttonDisabled} type='submit'>Add Student</Button>
-
+                </div>
             </Form>
 
             <Modal show={show} onHide={handleClose}>

@@ -119,27 +119,9 @@ function TimeSlotList() {
                                 </td>
 
                                 <td>
-
-                                    <i
-                                        className="bi bi-pencil me-3"
-                                        style={{ cursor: "pointer" }}
-                                        onClick={() =>
-                                            goToEdit(timeslot._id)
-                                        }
-                                    >
-                                    </i>
-
-
-                                    <i
-                                        className="bi bi-trash"
-                                        style={{ cursor: "pointer" }}
-                                        onClick={() =>
-                                            goToDelete(timeslot._id)
-                                        }
-                                    >
-                                    </i>
-
-                                </td>
+                                    <i className="bi bi-pencil me-3 text-primary" style={{ cursor: "pointer" }} onClick={() =>goToEdit(timeslot._id)} > </i>
+                                    <i className="bi bi-trash text-danger" style={{ cursor: "pointer" }} onClick={() => goToDelete(timeslot._id)} ></i>
+                                 </td>
 
                             </tr>
 
