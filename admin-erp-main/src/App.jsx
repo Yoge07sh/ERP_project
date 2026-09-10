@@ -28,6 +28,7 @@ import FacultyEdit from './pages/Faculty/FacultyEdit'
 import AdminLogin from './pages/LoginSignupPages/AdminLogin'
 
 //faculty mapping
+import FacultyMappingList from './pages/FacultyMapping/FacultyMappingList'
 import AddFacultyMapping from './pages/FacultyMapping/AddFacultyMapping'
 
 
@@ -103,6 +104,7 @@ function App() {
             <Route path="/edit/timeslot/:id" element={<EditTimeSlot />} />
 
             {/*facultyMapping*/}
+            <Route path='/facultymapping' element={<FacultyMappingList></FacultyMappingList>}></Route>
             <Route path='/add/facultymapping' element={< AddFacultyMapping ></AddFacultyMapping>}></Route>
             <Route path='/add/facultymapping' element={< AddFacultyMapping ></AddFacultyMapping>}></Route>
 
