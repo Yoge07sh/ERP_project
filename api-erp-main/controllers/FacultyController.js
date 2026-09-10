@@ -175,6 +175,34 @@ async function editFaculty(req, res) {
     }
 }
 
+async function getFacultyProfile(req, res) {
+    try {
+        const faculty = await Faculty.findById(req.params.id);
+
+        if (!faculty) {
+            return res.status(404).send({
+                success: false,
+                message: 'Faculty not found'
+            });
+        }
+
+        res.status(200).send({
+            success: true,
+            message: 'Faculty profile fetched successfully',
+            data: faculty
+        });
+
+    } catch (error) {
+        console.error('Get Faculty Profile Error:', error);
+
+        res.status(500).send({
+            success: false,
+            message: 'Server error',
+            error: error.message
+        });
+    }
+}
+
 module.exports = {
   addFaculty,
   addFaculties,
@@ -182,4 +210,5 @@ module.exports = {
   getFaculty,
   deleteFaculty,
   editFaculty,
+  getFacultyProfile
 };
