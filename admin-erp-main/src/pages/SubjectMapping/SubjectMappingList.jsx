@@ -50,6 +50,19 @@ function SubjectMappingList() {
         navigate('/add/subjectMapping')
     }
 
+    function goToDelete(id) {
+        axios({
+            url: 'http://localhost:3000/delete/subjectmapping/' + id,
+            method: 'delete'
+
+        }).then((result) => {
+            if (result.data.success) {
+                setShow(true)
+            }
+        }).catch((err) => {
+            console.log(err.message);
+        })
+    }
 
     return (
         <>
@@ -89,7 +102,8 @@ function SubjectMappingList() {
                                 <td>{subject.semester}</td>
 
                                 <td>
-                                    <i className="bi bi-pencil me-3 " onClick={() => goToEdit(subject._id)} ></i>
+                                    <i className="bi bi-pencil me-3 text-primary" onClick={() => goToEdit(subject._id)} ></i>
+                                    <i className="bi bi-trash text-danger" onClick={() => goToDelete(subject._id)} ></i>
 
                                 </td>
                             </tr>

@@ -30,6 +30,7 @@ import AdminLogin from './pages/LoginSignupPages/AdminLogin'
 //faculty mapping
 import FacultyMappingList from './pages/FacultyMapping/FacultyMappingList'
 import AddFacultyMapping from './pages/FacultyMapping/AddFacultyMapping'
+import EditFacultyMapping from './pages/FacultyMapping/EditFacultyMapping'
 
 
 // Student
@@ -107,7 +108,7 @@ function App() {
             <Route path='/facultymapping' element={<FacultyMappingList></FacultyMappingList>}></Route>
             <Route path='/add/facultymapping' element={< AddFacultyMapping ></AddFacultyMapping>}></Route>
             <Route path='/add/facultymapping' element={< AddFacultyMapping ></AddFacultyMapping>}></Route>
-
+            <Route path='/edit/facultymapping/:id' element={<EditFacultyMapping></EditFacultyMapping>}></Route>
 
           </Routes>
         </main>

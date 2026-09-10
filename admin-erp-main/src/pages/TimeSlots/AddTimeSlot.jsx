@@ -124,23 +124,8 @@ function AddTimeSlot() {
                     </span>
                 </Row>
                 <div className="d-flex justify-content-center gap-2 mt-4">
-                    <Button
-                        onClick={() => navigate("/timeslots")}
-                        variant="secondary"
-                        type="button"
-                    >
-                        Cancel
-                    </Button>
-
-                    <Button
-                        disabled={buttonDisabled}
-                        variant="primary"
-                        type="submit"
-                    >
-                        {buttonDisabled
-                            ? "Adding..."
-                            : "Add Time Slot"}
-                    </Button>
+                    <Button onClick={() => navigate("/timeslots")} variant="danger" type="button" > Cancel</Button>
+                    <Button disabled={buttonDisabled} variant="success" type="submit"> {buttonDisabled? "Adding..." : "Add Time Slot"} </Button>
                 </div>
             </Form>
 
