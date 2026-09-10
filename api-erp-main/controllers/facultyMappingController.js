@@ -167,28 +167,6 @@ const addFacultyMapping = async (req, res) => {
     }
 };
 
-const getFacultyList = async (req, res) => {
-    try {
-        const facultyMapping = await FacultyMap.find({})
-            .populate("facultyId", "firstName lastName")
-            .populate("course", "courseFullName")
-            .populate("branch", "branchFullName")
-            .populate("subjectId", "subjectFullName");
-        res.status(200).send({
-            success: true,
-            data: facultyMapping
-        });
-
-    } catch (err) {
-        console.log(err);
-
-        res.status(500).json({
-            success: false,
-            message: "Failed to get faculty mapping.",
-            error: err.message
-        });
-    }
-}
 module.exports = {
     getFacultyForMapping,
     getBranchsForMapping,
