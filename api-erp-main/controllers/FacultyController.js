@@ -138,6 +138,22 @@ async function getFaculty(req, res) {
         res.status(500).send({ success: false, message: 'Something went wrong...' });
     }
 }
+async function deleteFaculty(req, res) {
+    try {
+        let facultyId = req.params.id;
+        const result = await Faculty.deleteOne({ _id: facultyId });
+
+        if (result) {
+            res.status(200).send({ success: true, message: 'Faculty Deleted Successfull...' });
+        } else {
+            res.status(500).send({ success: false, message: 'Can not Delete Faculty' });
+        }
+      } 
+      catch (error) {
+        console.log(error)
+        res.status(500).send({ success: false, message: 'Can not Delete, Something went wrong..!' });
+      }
+    }
 async function editFaculty(req, res) {
     try {
         let facultyId = req.params.id;
@@ -162,5 +178,6 @@ module.exports = {
   addFaculties,
   getFaculties,
   getFaculty,
+  deleteFaculty,
   editFaculty,
 };
