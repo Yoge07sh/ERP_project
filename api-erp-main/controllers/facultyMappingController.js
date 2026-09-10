@@ -167,6 +167,174 @@ const addFacultyMapping = async (req, res) => {
     }
 };
 
+const getFacultyList = async (req, res) => {
+
+    try {
+
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const search = req.query.search || "";
+        const searchBy = req.query.searchBy || "facultyName";
+        const skip = (page - 1) * limit;
+        let searchCondition = {};
+
+        if (searchBy === "session" && search.trim() !== "") {
+            searchCondition.session = {
+                $regex: search.trim(),
+                $options: "i"
+            };
+
+        }
+        if (searchBy === "facultyName" && search.trim() !== "") {
+            searchCondition.$or = [
+                {
+                    "facultyId.firstName": {
+                        $regex: search.trim(),
+                        $options: "i"
+                    }
+                },
+                {
+                    "facultyId.lastName": {
+                        $regex: search.trim(),
+                        $options: "i"
+                    }
+                }
+            ];
+
+        }
+
+        const totalRecords = await FacultyMap.aggregate([
+            {
+                $lookup: {
+                    from: "faculties",
+                    localField: "facultyId",
+                    foreignField: "_id",
+                    as: "facultyId"
+                }
+            },
+            {
+                $unwind: { path: "$facultyId", preserveNullAndEmptyArrays: true }
+            },
+
+            { $match: searchCondition },
+
+            { $count: "total" }
+
+
+        ]);
+
+        const total = totalRecords.length > 0
+            ? totalRecords[0].total
+            : 0;
+
+        const facultyMapping = await FacultyMap.aggregate([
+
+            {
+                $lookup: {
+                    from: "faculties",
+                    localField: "facultyId",
+                    foreignField: "_id",
+                    as: "facultyId"
+                }
+            },
+
+            {
+                $lookup: {
+                    from: "courses",
+                    localField: "course",
+                    foreignField: "_id",
+                    as: "course"
+                }
+            },
+
+            {
+                $lookup: {
+                    from: "branches",
+                    localField: "branch",
+                    foreignField: "_id",
+                    as: "branch"
+                }
+            },
+
+            {
+                $lookup: {
+                    from: "subjects",
+                    localField: "subjectId",
+                    foreignField: "_id",
+                    as: "subjectId"
+                }
+            },
+
+            {
+                $unwind: {
+                    path: "$facultyId",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+
+            {
+                $unwind: {
+                    path: "$course",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+
+            {
+                $unwind: {
+                    path: "$branch",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+
+            {
+                $unwind: {
+                    path: "$subjectId",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+
+            {
+                $match: searchCondition
+            },
+
+            {
+                $sort: {
+                    "facultyId.firstName": 1
+                }
+            },
+
+            {
+                $skip: skip
+            },
+
+            {
+                $limit: limit
+            }
+
+        ]);
+        const totalPages = Math.ceil(total / limit);
+
+        res.status(200).send({
+            success: true,
+            data: facultyMapping,
+            totalRecords: total,
+            totalPages: totalPages,
+            currentPage: page,
+            limit: limit
+        });
+
+    } catch (err) {
+
+        console.log(err);
+
+        res.status(500).send({
+            success: false,
+            message: "Failed to get faculty mapping.",
+            error: err.message
+        });
+
+    }
+}
 module.exports = {
     getFacultyForMapping,
     getBranchsForMapping,
