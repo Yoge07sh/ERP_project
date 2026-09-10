@@ -29,5 +29,10 @@ router.delete('/delete/faculty/:id', (req, res) => {
 router.put('/edit/faculty/:id', (req, res) => {
     FacultyController.editFaculty(req, res);
 })
+// Get faculty profile by ID
+router.get('/faculty/profile:id', (req, res) => {
+    FacultyController.getFacultyProfile(req, res);
+});
+
 
 module.exports = router
