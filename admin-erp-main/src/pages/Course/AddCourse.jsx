@@ -132,11 +132,11 @@ function AddCourse() {
                 </Row>
 
 
-                <div className="d-flex justify-content-center gap-2 mt-4">
-                    <Button onClick={() => navigate('/courses')} variant="secondary" type="button">
+                <div className="d-flex justify-content-center gap-2 mt-4 ">
+                    <Button variant="danger" onClick={() => navigate('/courses')}  type="button">
                         Cancel
                     </Button>
-                    <Button onClick={doAddCourse} disabled={buttonDisabled} variant="primary" type="submit">
+                    <Button variant="success" onClick={doAddCourse} disabled={buttonDisabled}  type="submit">
                         Add Course
                     </Button>
                 </div>

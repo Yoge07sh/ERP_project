@@ -154,10 +154,10 @@ function AddBranch() {
 
 
         <div className="d-flex justify-content-center gap-2 mt-4">
-          <Button onClick={() => navigate('/branches')} variant="secondary" type="button">
+          <Button onClick={() => navigate('/branches')} variant="danger" type="button">
             Cancel
           </Button>
-          <Button onClick={doAddBranch} disabled={buttonDisabled} variant="primary" type="submit">
+          <Button onClick={doAddBranch} disabled={buttonDisabled} variant="success" type="submit">
             Add Branch
           </Button>
         </div>
