@@ -84,7 +84,7 @@ let [isloggedin,setIsloggedin]=useState(false)
 
             <ListGroup.Item
               as={NavLink}
-              to=""
+              to="/facultymapping"
               className="d-flex align-items-center gap-2"
             >
               <i className='bi bi-diagram-3'></i>

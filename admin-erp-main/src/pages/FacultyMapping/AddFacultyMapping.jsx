@@ -1,5 +1,14 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+
+import {
+  Button,
+  Col,
+  Container,
+  Form,
+  Row,
+  Modal,
+} from "react-bootstrap";
+
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -15,7 +24,7 @@ function AddFacultyMapping() {
     semester: "",
     section: "",
     subjectId: "",
-    loadReview: "",
+    loadPerWeek: "",
   });
 
   const [courses, setCourses] = useState([]);
@@ -23,6 +32,14 @@ function AddFacultyMapping() {
   const [branches, setBranches] = useState([]);
   const [faculties, setFaculties] = useState([]);
 
+  // ================= SUCCESS MODAL =================
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => {
+    setShow(false);
+  };
+
+  // ================= HANDLE CHANGE =================
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -32,6 +49,7 @@ function AddFacultyMapping() {
     }));
   };
 
+  // ================= FETCH COURSES =================
   useEffect(() => {
     axios
       .get(apiUrl + "/courses/for/mapping")
@@ -47,6 +65,7 @@ function AddFacultyMapping() {
       });
   }, []);
 
+  // ================= FETCH SUBJECTS =================
   useEffect(() => {
     axios
       .get(apiUrl + "/subjects/for/mapping")
@@ -62,6 +81,7 @@ function AddFacultyMapping() {
       });
   }, []);
 
+  // ================= FETCH BRANCHES =================
   useEffect(() => {
     axios
       .get(apiUrl + "/branchs/for/mapping")
@@ -77,6 +97,7 @@ function AddFacultyMapping() {
       });
   }, []);
 
+  // ================= FETCH FACULTIES =================
   useEffect(() => {
     axios
       .get(apiUrl + "/faculties/for/mapping")
@@ -92,6 +113,7 @@ function AddFacultyMapping() {
       });
   }, []);
 
+  // ================= SUBMIT FACULTY MAPPING =================
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -102,8 +124,10 @@ function AddFacultyMapping() {
       );
 
       if (res.data.success) {
-        alert("Faculty mapping added successfully!");
+        // Show success modal
+        setShow(true);
 
+        // Reset form
         setFacultyMapping({
           session: "",
           facultyId: "",
@@ -113,7 +137,7 @@ function AddFacultyMapping() {
           semester: "",
           section: "",
           subjectId: "",
-          loadReview: "",
+          loadPerWeek: "",
         });
       } else {
         alert(
@@ -125,7 +149,7 @@ function AddFacultyMapping() {
 
       alert(
         err.response?.data?.message ||
-          "Something went wrong while adding faculty mapping."
+        "Something went wrong while adding faculty mapping."
       );
     }
   };
@@ -136,8 +160,14 @@ function AddFacultyMapping() {
         ADD FACULTY MAPPING
       </h3>
 
+      <hr />
+
       <Form onSubmit={handleSubmit}>
+
+        {/* ================= ROW 1 ================= */}
         <Row className="mb-3">
+
+          {/* Session */}
           <Col md={4}>
             <Form.Group>
               <Form.Label>
@@ -158,6 +188,7 @@ function AddFacultyMapping() {
             </Form.Group>
           </Col>
 
+          {/* Faculty */}
           <Col md={4}>
             <Form.Group>
               <Form.Label>
@@ -186,6 +217,7 @@ function AddFacultyMapping() {
             </Form.Group>
           </Col>
 
+          {/* Course */}
           <Col md={4}>
             <Form.Group>
               <Form.Label>
@@ -211,9 +243,13 @@ function AddFacultyMapping() {
               </Form.Select>
             </Form.Group>
           </Col>
+
         </Row>
 
+        {/* ================= ROW 2 ================= */}
         <Row className="mb-3">
+
+          {/* Branch */}
           <Col md={4}>
             <Form.Group>
               <Form.Label>
@@ -240,6 +276,7 @@ function AddFacultyMapping() {
             </Form.Group>
           </Col>
 
+          {/* Year */}
           <Col md={4}>
             <Form.Group>
               <Form.Label>
@@ -261,6 +298,7 @@ function AddFacultyMapping() {
             </Form.Group>
           </Col>
 
+          {/* Semester */}
           <Col md={4}>
             <Form.Group>
               <Form.Label>
@@ -285,9 +323,13 @@ function AddFacultyMapping() {
               </Form.Select>
             </Form.Group>
           </Col>
+
         </Row>
 
+        {/* ================= ROW 3 ================= */}
         <Row className="mb-3">
+
+          {/* Section */}
           <Col md={4}>
             <Form.Group>
               <Form.Label>
@@ -309,6 +351,7 @@ function AddFacultyMapping() {
             </Form.Group>
           </Col>
 
+          {/* Subject */}
           <Col md={4}>
             <Form.Group>
               <Form.Label>
@@ -335,9 +378,12 @@ function AddFacultyMapping() {
             </Form.Group>
           </Col>
 
+          {/* Load Per Week */}
           <Col md={4}>
             <Form.Group>
-              <Form.Label>Load Per Week</Form.Label>
+              <Form.Label>
+                Load Per Week
+              </Form.Label>
 
               <Form.Control
                 type="text"
@@ -348,12 +394,43 @@ function AddFacultyMapping() {
               />
             </Form.Group>
           </Col>
+
         </Row>
 
-        <Button className="mt-4" type="submit">
+        {/* ================= SUBMIT BUTTON ================= */}
+        <Button
+          className="mt-4"
+          type="submit"
+        >
           Add Mapping
         </Button>
+
       </Form>
+
+      {/* ================= SUCCESS MODAL ================= */}
+      <Modal show={show} onHide={handleClose}>
+
+        <Modal.Header closeButton>
+          <Modal.Title>
+            Success
+          </Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          Faculty Mapping has been saved successfully...
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={handleClose}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
+
+      </Modal>
+
     </Container>
   );
 }

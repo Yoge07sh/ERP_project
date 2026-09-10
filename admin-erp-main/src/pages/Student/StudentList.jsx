@@ -14,10 +14,10 @@ function StudentList() {
     const [show, setShow] = useState(false)
     let [isDelete, setIsDelete] = useState(false)
     let [searchByFirstName, setSearchByFirstName] = useState('')
-    let [searchByLastName, setSearchByLastName] = useState('')
-    let [searchByEnrollment, setSearchByEnrollment] = useState('')
-    let [searchByRollno, setSearchByRollno] = useState('')
-    let [searchByFileno, setSearchByFileno] = useState('')
+    let [searchByLastName, ] = useState('')
+    let [searchByEnrollment, ] = useState('')
+    let [searchByRollno, ] = useState('')
+    let [searchByFileno, ] = useState('')
 
 
     useEffect(() => {
