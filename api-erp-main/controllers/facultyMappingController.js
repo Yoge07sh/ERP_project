@@ -167,43 +167,53 @@ const addFacultyMapping = async (req, res) => {
     }
 };
 
+
 const getFacultyList = async (req, res) => {
 
     try {
 
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
-        const search = req.query.search || "";
-        const searchBy = req.query.searchBy || "facultyName";
         const skip = (page - 1) * limit;
+
+        const session = req.query.session || "";
+        const facultyName = req.query.facultyName || "";
+
         let searchCondition = {};
 
-        if (searchBy === "session" && search.trim() !== "") {
+        if (session.trim() !== "") {
+
             searchCondition.session = {
-                $regex: search.trim(),
+                $regex: session.trim(),
                 $options: "i"
             };
 
         }
-        if (searchBy === "facultyName" && search.trim() !== "") {
+
+        if (facultyName.trim() !== "") {
+
             searchCondition.$or = [
+
                 {
                     "facultyId.firstName": {
-                        $regex: search.trim(),
+                        $regex: facultyName.trim(),
                         $options: "i"
                     }
                 },
+
                 {
                     "facultyId.lastName": {
-                        $regex: search.trim(),
+                        $regex: facultyName.trim(),
                         $options: "i"
                     }
                 }
+
             ];
 
         }
 
         const totalRecords = await FacultyMap.aggregate([
+
             {
                 $lookup: {
                     from: "faculties",
@@ -212,14 +222,21 @@ const getFacultyList = async (req, res) => {
                     as: "facultyId"
                 }
             },
+
             {
-                $unwind: { path: "$facultyId", preserveNullAndEmptyArrays: true }
+                $unwind: {
+                    path: "$facultyId",
+                    preserveNullAndEmptyArrays: true
+                }
             },
 
-            { $match: searchCondition },
+            {
+                $match: searchCondition
+            },
 
-            { $count: "total" }
-
+            {
+                $count: "total"
+            }
 
         ]);
 
@@ -312,35 +329,87 @@ const getFacultyList = async (req, res) => {
             }
 
         ]);
+
         const totalPages = Math.ceil(total / limit);
 
         res.status(200).send({
+
             success: true,
             data: facultyMapping,
             totalRecords: total,
             totalPages: totalPages,
             currentPage: page,
             limit: limit
+
         });
 
     } catch (err) {
 
-        console.log(err);
+        console.error("Error fetching faculty mapping:", err);
 
         res.status(500).send({
+
             success: false,
             message: "Failed to get faculty mapping.",
             error: err.message
+
         });
 
     }
 }
+const getFacultyMappingById = async (req, res) => {
+    try {
+        let facultyId = req.params.id;
+        let facultyMap = await FacultyMap.findOne({ _id: facultyId })
+        console.log(facultyMap);      
+        res.status(200).send({ success: true, data: facultyMap })
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ success: false, message: 'Something went wrong...' });
+    }
+}
+
+const editFacultyMapping = async (req, res) => {
+    try {
+        let facultyId = req.params.id;
+        let facultyMap = await FacultyMap.findOne({ _id: facultyId })
+        Object.assign(facultyMap, req.body)
+        await facultyMap.save();
+        console.log(facultyMap);
+        res.status(200).send({ success: true, message: 'FacultyMapping has been updated' })
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ success: false, message: 'Something went wrong in updating FacultyMapping' })
+    }
+}
+
+const deleteFacultyMapping = async (req, res) => {
+    try {
+        let facultyId = req.params.id;
+        const result = await FacultyMap.deleteOne({ _id: facultyId });
+
+        if (result) {
+            res.status(200).send({ success: true, message: 'Faculty Mapping Deleted Successfull...' });
+        } else {
+            res.status(500).send({ success: false, message: 'Can not Delete Faculty Mapping' });
+        }
+      } 
+      catch (error) {
+        console.log(error)
+        res.status(500).send({ success: false, message: 'Can not Delete, Something went wrong..!' });
+      }
+    }
+
 module.exports = {
     getFacultyForMapping,
     getBranchsForMapping,
     getCoursesForMapping,
     getSubjectsForMapping,
     addFacultyMapping,
-    getFacultyList
+    getFacultyList,
+    getFacultyMappingById,
+    editFacultyMapping,
+    deleteFacultyMapping,
 
 };

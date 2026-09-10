@@ -63,7 +63,7 @@ function AddCourse() {
                 <hr />
                 <Row className="mb-3">
                     <Form.Group as={Col} controlId="formGridEmail">
-                        <Form.Label>Course Code</Form.Label>
+                        <Form.Label>Course Code :-</Form.Label>
                         <Form.Control
                             type="text"
                             value={courseCode}
@@ -74,7 +74,7 @@ function AddCourse() {
                     </Form.Group>
 
                     <Form.Group as={Col} controlId="formGridPassword">
-                        <Form.Label>Course Short Name</Form.Label>
+                        <Form.Label>Course Short Name :-</Form.Label>
                         <Form.Control
                             type="text"
                             value={courseShortName}
@@ -88,7 +88,7 @@ function AddCourse() {
 
                 <Row className="mb-3">
                     <Form.Group as={Col} controlId="formGridEmail">
-                        <Form.Label>Course Full Name</Form.Label>
+                        <Form.Label>Course Full Name :-</Form.Label>
                         <Form.Control
                             type="text"
                             value={courseFullName}
@@ -99,7 +99,7 @@ function AddCourse() {
                     </Form.Group>
 
                     <Form.Group as={Col} controlId="formGridPassword">
-                        <Form.Label>Total Intake</Form.Label>
+                        <Form.Label>Total Intake :-</Form.Label>
                         <Form.Control
                             type="number"
                             value={totalIntake}
@@ -113,7 +113,7 @@ function AddCourse() {
 
                 <Row className="mb-3">
                     <Form.Group as={Col} controlId="formGridState">
-                        <Form.Label>Affiliated University</Form.Label>
+                        <Form.Label>Affiliated University :-</Form.Label>
                         <Form.Select
                             value={affiliatedUniversity}
                             onChange={(e) => setAffiliatedUniversity(e.target.value)}
@@ -132,11 +132,11 @@ function AddCourse() {
                 </Row>
 
 
-                <div className="d-flex justify-content-center gap-2 mt-4">
-                    <Button onClick={() => navigate('/courses')} variant="secondary" type="button">
+                <div className="d-flex justify-content-center gap-2 mt-4 ">
+                    <Button variant="danger" onClick={() => navigate('/courses')}  type="button">
                         Cancel
                     </Button>
-                    <Button onClick={doAddCourse} disabled={buttonDisabled} variant="primary" type="submit">
+                    <Button variant="success" onClick={doAddCourse} disabled={buttonDisabled}  type="submit">
                         Add Course
                     </Button>
                 </div>

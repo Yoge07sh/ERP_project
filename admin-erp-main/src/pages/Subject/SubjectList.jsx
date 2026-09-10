@@ -115,7 +115,7 @@ function SubjectList() {
                         <th>Subject Short Name</th>
                         <th>Subject Category</th>
                         <th>Subject Type</th>
-                        <th>Cradit Score</th>
+                        <th>Credit Score</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -130,8 +130,8 @@ function SubjectList() {
                                 <td>{subject.subjectType}</td>
                                 <td>{subject.creditScore}</td>
                                 <td>
-                                    <i className="bi bi-pencil me-3 " onClick={() => goToEdit(subject._id)} ></i>
-                                    <i className="bi bi-trash" onClick={() => goToDelete(subject._id)}></i>
+                                    <i className="bi bi-pencil me-3 text-primary" onClick={() => goToEdit(subject._id)} ></i>
+                                    <i className="bi bi-trash text-danger" onClick={() => goToDelete(subject._id)}></i>
                                 </td>
                             </tr>
                         )

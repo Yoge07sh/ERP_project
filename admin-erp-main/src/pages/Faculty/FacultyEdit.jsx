@@ -60,7 +60,7 @@ function FacultyEdit() {
     <Container className="">
       <Form>
         <h3 className="text-center mb-4 py-2 text-white fw-bold bg-black">
-          UPDATE Faculty
+          UPDATE FACULTY
         </h3>
         <Row className="mb-3">
           <Form.Group as={Col} controlId="formGridEmail">

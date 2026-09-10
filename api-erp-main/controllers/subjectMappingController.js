@@ -102,13 +102,24 @@ async function getSubjectsMapped(req, res) {
     }
 }
 
+const getSubjectMappingById = async (req, res) => {
+    try {
+        let subjectId = req.params.id;
+        let subjectMap = await Mapping.findOne({ _id: subjectId })
+        console.log(subjectMap);      
+        res.status(200).send({ success: true, data: subjectMap })
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ success: false, message: 'Something went wrong...' });
+    }
+}
+
 const editSubjectMapping = async (req, res) => {
     try {
         let subjectId = req.params.id;
         let subjectmap = await Mapping.findOne({ _id: subjectId })
-        Object.assign(subjectmap, req.body)
+        Object.assign(subjectmap, req.body);
         await subjectmap.save();
-        //console.log(subjectmap);
         res.status(200).send({ success: true, message: 'SubjectMapping has been updated' })
 
     } catch (error) {
@@ -118,11 +129,30 @@ const editSubjectMapping = async (req, res) => {
 }
 
 
+const deleteSubjectMapping = async (req, res) => {
+    try {
+        let subjectId = req.params.id;
+        const result = await Mapping.deleteOne({ _id: subjectId });
+
+        if (result) {
+            res.status(200).send({ success: true, message: 'Subject Mapping Deleted Successfull...' });
+        } else {
+            res.status(500).send({ success: false, message: 'Can not Delete Subject Mapping' });
+        }
+      } 
+      catch (error) {
+        console.log(error)
+        res.status(500).send({ success: false, message: 'Can not Delete, Something went wrong..!' });
+      }
+    }
+
 module.exports={
     getSubjectsForMapping,
     getCoursesForMapping,
     getBranchsForMapping,
     addSubjectMapping,
     getSubjectsMapped,
+    getSubjectMappingById,
     editSubjectMapping,
+    deleteSubjectMapping,
 }

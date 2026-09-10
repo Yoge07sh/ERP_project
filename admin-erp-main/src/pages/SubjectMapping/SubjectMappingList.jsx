@@ -50,10 +50,23 @@ function SubjectMappingList() {
         navigate('/add/subjectMapping')
     }
 
+    function goToDelete(id) {
+        axios({
+            url: 'http://localhost:3000/delete/subjectmapping/' + id,
+            method: 'delete'
+
+        }).then((result) => {
+            if (result.data.success) {
+                setShow(true)
+            }
+        }).catch((err) => {
+            console.log(err.message);
+        })
+    }
 
     return (
         <>
-            <h3 className="text-center mb-4 py-2 text-primary fw-bold">LIST OF SUBJECTS MAPPING</h3>
+            <h3 className="text-center mb-4 py-2 text-primary fw-bold">LIST OF SUBJECT MAPPING</h3>
 
             <InputGroup className="mb-3">
                 <InputGroup.Text>
@@ -89,7 +102,8 @@ function SubjectMappingList() {
                                 <td>{subject.semester}</td>
 
                                 <td>
-                                    <i className="bi bi-pencil me-3 " onClick={() => goToEdit(subject._id)} ></i>
+                                    <i className="bi bi-pencil me-3 text-primary" onClick={() => goToEdit(subject._id)} ></i>
+                                    <i className="bi bi-trash text-danger" onClick={() => goToDelete(subject._id)} ></i>
 
                                 </td>
                             </tr>

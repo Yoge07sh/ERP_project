@@ -111,7 +111,7 @@ function SubjectMapping() {
             <Row>
               <Col md={6}>
                 <Form.Group className="mb-3">
-                  <Form.Label>Session</Form.Label>
+                  <Form.Label>Session :-</Form.Label>
                   <Form.Select
                     onChange={(e) => setSession(e.target.value)}
                     required
@@ -126,7 +126,7 @@ function SubjectMapping() {
               </Col>
               <Col md={6}>
                 <Form.Group className="mb-3">
-                  <Form.Label>Subjects</Form.Label>
+                  <Form.Label>Subject :-</Form.Label>
                   <Form.Select
                     value={subject}
                     onChange={(e) => setSubject(e.target.value)}
@@ -146,7 +146,7 @@ function SubjectMapping() {
             <Row>
               <Col md={6}>
                 <Form.Group className="mb-3">
-                  <Form.Label>Courses</Form.Label>
+                  <Form.Label>Course :-</Form.Label>
                   <Form.Select
                     value={course}
                     onChange={(e) => setCourse(e.target.value)}
@@ -163,7 +163,7 @@ function SubjectMapping() {
               </Col>
               <Col md={6}>
                 <Form.Group className="mb-3">
-                  <Form.Label>Branch</Form.Label>
+                  <Form.Label>Branch :-</Form.Label>
                   <Form.Select
                     value={branch}
                     onChange={(e) => setBranch(e.target.value)}
@@ -185,7 +185,7 @@ function SubjectMapping() {
             <Row>
               <Col md={6}>
                 <Form.Group className="mb-3">
-                  <Form.Label>Year</Form.Label>
+                  <Form.Label>Year :-</Form.Label>
                   <Form.Select
                     onChange={(e) => setYear(e.target.value)}
                     required
@@ -199,7 +199,7 @@ function SubjectMapping() {
               </Col>
               <Col md={6}>
                 <Form.Group className="mb-3">
-                  <Form.Label>Semester</Form.Label>
+                  <Form.Label>Semester :-</Form.Label>
                   <Form.Select
                     onChange={(e) => setSemester(e.target.value)}
                     required
@@ -217,10 +217,10 @@ function SubjectMapping() {
               </Col>
             </Row>
 
-            <div className="d-flex gap-2 mt-4">
+            <div className="d-flex justify-content-center gap-2 mt-4">
               <Button
                 onClick={() => navigate("/subjectsmap")}
-                variant="secondary"
+                variant="danger"
                 type="button"
               >
                 Cancel
@@ -247,7 +247,7 @@ function SubjectMapping() {
       )}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Sucess</Modal.Title>
+          <Modal.Title>Success</Modal.Title>
         </Modal.Header>
         <Modal.Body>Subject mapping added successfully</Modal.Body>
         <Modal.Footer>
