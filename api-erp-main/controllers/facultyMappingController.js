@@ -335,12 +335,40 @@ const getFacultyList = async (req, res) => {
 
     }
 }
+const getFacultyMappingById = async (req, res) => {
+    try {
+        let facultyId = req.params.id;
+        let faculty = await Faculty.findOne({ _id: facultyId })
+        console.log("Pradhan Sir"+faculty);      
+        res.status(200).send({ success: true, data: faculty })
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ success: false, message: 'Something went wrong...' });
+    }
+}
+
+const editFacultyMapping = async (req, res) => {
+    try {
+        let facultyId = req.params.id;
+        let facultyMap = await FacultyMap.findOne({ _id: facultyId })
+        Object.assign(facultyMap, req.body)
+        await facultyMap.save();
+        console.log(facultyMap);
+        res.status(200).send({ success: true, message: 'FacultyMapping has been updated' })
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ success: false, message: 'Something went wrong in updating FacultyMapping' })
+    }
+}
+
 module.exports = {
     getFacultyForMapping,
     getBranchsForMapping,
     getCoursesForMapping,
     getSubjectsForMapping,
     addFacultyMapping,
-    getFacultyList
-
+    getFacultyList,
+    getFacultyMappingById,
+    editFacultyMapping,
 };

@@ -31,5 +31,11 @@ router.post('/add/facultymapping', (req, res) => {
 router.get('/get/facultymapping',(req,res)=>{
     FacultyMappingController.getFacultyList(req,res)
 })
+router.get('/facultyMapping/:id', (req, res) => {
+    FacultyMappingController.getFacultyMappingById(req, res);
+});
+router.put('/edit/facultyMapping/:id', (req, res) => {
+    FacultyMappingController.editFacultyMapping(req, res);
+});
 
 module.exports = router;
