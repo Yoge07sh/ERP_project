@@ -8,8 +8,6 @@ const courseSchema = new Schema({
     affiliatedUniversity: { type: String, required: true },  // Get from json file
     totalIntake: { type: Number, default: 60 },
     status: { type: String, default: 'Active', enum: ['Active', 'InActive'] },
-    createdAt: Date,
-    updatedAt: Date
 }, { timestamps: true })
 
 module.exports = mongoose.model('course', courseSchema)

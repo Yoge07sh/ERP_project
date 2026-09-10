@@ -10,6 +10,7 @@ const faculty = require('./routes/faculty')
 const student = require('./routes/student')
 const user = require('./routes/user')
 const timeSlot = require('./routes/timeSlots')
+const facultyMapping = require('./routes/facultyMapping');
 const cors = require('cors');
 
 app.use(express.urlencoded({ extended: true }));
@@ -23,6 +24,7 @@ app.use(subjectmap)
 app.use(faculty)
 app.use(student)
 app.use(timeSlot)
+app.use(facultyMapping)
 
 app.use(user)
 

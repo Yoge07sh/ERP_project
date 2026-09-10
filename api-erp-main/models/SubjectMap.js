@@ -1,5 +1,4 @@
 const mongoose=require('mongoose')
-const timestamps=require('mongoose-timestamps')
 const Schema=mongoose.Schema
 const subjectmapSchema= new Schema({
     session:{type:String,required:true},
@@ -9,8 +8,5 @@ const subjectmapSchema= new Schema({
     year:{type:String,required:true},
     semester:{type:String,required:true},
     isActive:{type:String,default:'active',enum:['active','inActive']},
-    createdAt:Date,
-    updatedAt:Date
-})
-subjectmapSchema.plugin(timestamps,{index:true})
+},{timestamps: true})
 module.exports=mongoose.model('subjectmap',subjectmapSchema)

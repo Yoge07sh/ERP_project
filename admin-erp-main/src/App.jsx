@@ -27,6 +27,10 @@ import FacultyList from './pages/Faculty/FacultyList'
 import FacultyEdit from './pages/Faculty/FacultyEdit'
 import AdminLogin from './pages/LoginSignupPages/AdminLogin'
 
+//faculty mapping
+import AddFacultyMapping from './pages/FacultyMapping/AddFacultyMapping'
+
+
 // Student
 import AddStudent from './pages/Student/AddStudent'
 import StudentList from './pages/Student/StudentList'
@@ -97,6 +101,11 @@ function App() {
             <Route path="/timeslots" element={<TimeSlotList />} />
             <Route path="/add/timeslots" element={<AddTimeSlot />} />
             <Route path="/edit/timeslot/:id" element={<EditTimeSlot />} />
+
+            {/*facultyMapping*/}
+            <Route path='/add/facultymapping' element={< AddFacultyMapping ></AddFacultyMapping>}></Route>
+            <Route path='/add/facultymapping' element={< AddFacultyMapping ></AddFacultyMapping>}></Route>
+
 
           </Routes>
         </main>
