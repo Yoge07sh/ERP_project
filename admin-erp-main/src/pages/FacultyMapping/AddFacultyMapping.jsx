@@ -11,7 +11,7 @@ import {
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-
+import { useNavigate } from 'react-router-dom'
 const apiUrl = import.meta.env.VITE_API_URL;
 
 function AddFacultyMapping() {
@@ -31,7 +31,7 @@ function AddFacultyMapping() {
   const [subjects, setSubjects] = useState([]);
   const [branches, setBranches] = useState([]);
   const [faculties, setFaculties] = useState([]);
-
+  const navigate = useNavigate();
   // ================= SUCCESS MODAL =================
   const [show, setShow] = useState(false);
 
@@ -146,6 +146,7 @@ function AddFacultyMapping() {
           subjectId: "",
           loadPerWeek: "",
         });
+        navigate('/facultymapping')
       } else {
         alert(
           res.data.message || "Failed to add faculty mapping."

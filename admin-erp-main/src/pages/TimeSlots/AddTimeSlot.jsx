@@ -119,28 +119,13 @@ function AddTimeSlot() {
                         <Form.Label>Enter Time slot</Form.Label>
                         <Form.Control type='text' placeholder='Format 00:00-00:00'maxlength='11' value={timeSlot} onChange={handleTimeSlot}></Form.Control>
                     </Form.Group>
-                    <span className='mt-2 text-danger'>
+                    <span className='mt-2 text-secondary'>
                         <h6 style={{fontSize:'15px'}}>Example-- 09:10-10:00</h6>
                     </span>
                 </Row>
                 <div className="d-flex justify-content-center gap-2 mt-4">
-                    <Button
-                        onClick={() => navigate("/timeslots")}
-                        variant="secondary"
-                        type="button"
-                    >
-                        Cancel
-                    </Button>
-
-                    <Button
-                        disabled={buttonDisabled}
-                        variant="primary"
-                        type="submit"
-                    >
-                        {buttonDisabled
-                            ? "Adding..."
-                            : "Add Time Slot"}
-                    </Button>
+                    <Button onClick={() => navigate("/timeslots")} variant="danger" type="button" > Cancel</Button>
+                    <Button disabled={buttonDisabled} variant="success" type="submit"> {buttonDisabled? "Adding..." : "Add Time Slot"} </Button>
                 </div>
             </Form>
 

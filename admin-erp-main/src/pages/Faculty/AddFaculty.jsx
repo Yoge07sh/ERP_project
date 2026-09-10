@@ -348,7 +348,7 @@ function AddFaculty() {
                 </Form.Group>
               </Col>
               </Row>
-
+            <div className="d-flex justify-content-center gap-2 mt-4">
               <Button
                 className="me-2"
                 variant="danger"
@@ -363,6 +363,7 @@ function AddFaculty() {
               >
                 Add Faculty
               </Button>
+              </div>
               <span className="mx-4 text-secondary ">Or upload via csv</span>
               {/* <Button
                 variant="success"

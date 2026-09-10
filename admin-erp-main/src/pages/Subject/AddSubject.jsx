@@ -157,8 +157,8 @@ function AddSubject() {
                         </Col>
                     </Row>
 
-                    <div className="d-flex gap-2 mt-4">
-                        <Button onClick={() => navigate('/subjects')} variant="secondary" type="button">
+                    <div className="d-flex justify-content-center gap-2 mt-4">
+                        <Button onClick={() => navigate('/subjects')} variant="danger" type="button">
                             Cancel
                         </Button>
                         <Button onClick={doAddSubject} disabled={buttonDisabled} variant="success" type="submit">
