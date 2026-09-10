@@ -1,40 +1,122 @@
-import { NavLink,useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { ListGroup, Dropdown, Image, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import logo from "../assets/logo.png";
-import{useState,useEffect} from 'react'
+import { useState, useEffect } from "react";
 
 function Sidebar() {
-  let navigate=useNavigate()
-let [isloggedin,setIsloggedin]=useState(false)
-  let [username,setUserName]=useState('')
+  let navigate = useNavigate();
 
-  useEffect(()=>{
-    let token
-    token=localStorage.getItem('token')
-    if(token){
-      setIsloggedin(true)
-      setUserName(localStorage.getItem('name'))
+  let [isloggedin, setIsloggedin] = useState(false);
+  let [username, setUserName] = useState('');
+
+  // Added for live clock
+  let [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    let token;
+    token = localStorage.getItem('token');
+
+    if (token) {
+      setIsloggedin(true);
+      setUserName(localStorage.getItem('name'));
     }
-  },[isloggedin])
-  function doLogout(){
-    localStorage.setItem('name','')
-    localStorage.setItem('email','')
-    localStorage.setItem('token','')
-    setIsloggedin(false)
-    navigate('/')
+  }, [isloggedin]);
+
+  // Added for live clock
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  function doLogout() {
+    localStorage.setItem('name', '');
+    localStorage.setItem('email', '');
+    localStorage.setItem('token', '');
+    setIsloggedin(false);
+    navigate('/');
   }
+
   return (
     <>
-      <div className="d-flex flex-column justify-content-between border-end sticky-top" style={{ width: '18%', height: '100vh', borderRight: '1px solid #dee2e6', boxShadow:'2px 0 8px rgba(0, 0, 0, 0.1)'}}>
+      <div
+        className="d-flex flex-column justify-content-between border-end sticky-top"
+        style={{
+          width: '18%',
+          height: '100vh',
+          borderRight: '1px solid #dee2e6',
+          boxShadow: '2px 0 8px rgba(0, 0, 0, 0.1)'
+        }}
+      >
 
         <div className="p-3 border-bottom d-flex align-items-center">
           <Image src={logo} width={40} height={40} className="me-2" />
           <span className="fw-bold d-none d-md-inline fs-2">RDEC</span>
         </div>
 
-        
+        {/* Live Clock */}
+        <div className="px-3 pt-3">
+          <div
+            className="p-3 rounded-3 shadow-sm"
+            style={{
+              background: "#eef6ff",
+              border: "1px solid #d6e9ff"
+            }}
+          >
+            <div className="d-flex align-items-center">
+
+              <div
+                className="rounded-circle d-flex align-items-center justify-content-center me-3"
+                style={{
+                  width: "45px",
+                  height: "45px",
+                  background: "#0d6efd",
+                  color: "white"
+                }}
+              >
+                <i className="bi bi-clock fs-4"></i>
+              </div>
+
+              <div>
+                <div
+                  className="fw-bold"
+                  style={{
+                    fontSize: "20px",
+                    color: "#174a8b"
+                  }}
+                >
+                  {currentTime.toLocaleTimeString()}
+                </div>
+
+                <div
+                  className="small"
+                  style={{ color: "#3676b8" }}
+                >
+                  {currentTime.toLocaleDateString(undefined, {
+                    weekday: "long",
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric"
+                  })}
+                </div>
+
+                <div className="small text-success mt-1">
+                  <i
+                    className="bi bi-circle-fill me-1"
+                    style={{ fontSize: "7px" }}
+                  ></i>
+                  Live
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
         <div className="flex-grow-1 overflow-auto">
           <ListGroup variant="flush" className="pt-4 px-3 flex-grow-1 overflow-auto">
 
@@ -73,6 +155,7 @@ let [isloggedin,setIsloggedin]=useState(false)
               <i className='bi bi-diagram-2'></i>
               <span className="d-none d-md-inline">Subject Mapping</span>
             </ListGroup.Item>
+
             <ListGroup.Item
               as={NavLink}
               to="/faculties"
@@ -99,6 +182,7 @@ let [isloggedin,setIsloggedin]=useState(false)
               <i className='bi bi-person'></i>
               <span className="d-none d-md-inline">Student</span>
             </ListGroup.Item>
+
             <ListGroup.Item
               as={NavLink}
               to="/timeslots"
@@ -112,43 +196,48 @@ let [isloggedin,setIsloggedin]=useState(false)
         </div>
 
         {/* Profile Dropdown */}
-        <div className="border-top p-3 ">
+        <div className="border-top p-3">
           <Dropdown drop="up">
             <Dropdown.Toggle
               variant="light"
               className="w-100 d-flex align-items-center justify-content-between"
             >
               <div className="d-none d-md-inline d-flex align-items-center">
-                {/* <Image
-                  src={logo}
-                  roundedCircle
-                  width="40"
-                  height="40"
-                  className="me-2"
-                /> */}
                 <div>
-                  <h6 className="mb-0">{username} <small className="text-muted">Admin</small>   </h6>
-                  
-                  <Button className="mt-1" variant="danger" size='sm' onClick={doLogout}>Logout</Button>
+                  <h6 className="mb-0">
+                    {username} <small className="text-muted">Admin</small>
+                  </h6>
+
+                  <Button
+                    className="mt-1"
+                    variant="danger"
+                    size='sm'
+                    onClick={doLogout}
+                  >
+                    Logout
+                  </Button>
                 </div>
               </div>
-              {/* <i className="bi bi-chevron-up"></i> */}
             </Dropdown.Toggle>
 
             <Dropdown.Menu className="w-100">
               <Dropdown.Item as={NavLink} to="/profile">
                 <i className="bi bi-person me-2"></i> Profile
               </Dropdown.Item>
+
               <Dropdown.Item as={NavLink} to="/settings">
                 <i className="bi bi-gear me-2"></i> Settings
               </Dropdown.Item>
+
               <Dropdown.Divider />
+
               <Dropdown.Item onClick={() => alert("Logged out!")}>
                 <i className="bi bi-box-arrow-right me-2"></i> Logout
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </div>
+
       </div>
     </>
   );
