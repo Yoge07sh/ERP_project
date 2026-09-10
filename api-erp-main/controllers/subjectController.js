@@ -32,7 +32,6 @@ async function getSubject(req, res) {
     try {
         let subjectId = req.params.id;
         let subject = await Subject.findOne({ _id: subjectId })
-        console.log("Sahil "+subject);
         
         res.status(200).send({ success: true, data: subject })
     } catch (error) {
