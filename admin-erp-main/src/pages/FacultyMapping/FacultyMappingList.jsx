@@ -138,9 +138,9 @@ function FacultyMappingList() {
 
                     <InputGroup>
 
-                        <InputGroup.Text>
-                            <i className="bi bi-calendar3"></i>
-                        </InputGroup.Text>
+                        <option value="facultyName">
+                            Faculty Name 
+                        </option>
 
                         <Form.Control
                             type="text"

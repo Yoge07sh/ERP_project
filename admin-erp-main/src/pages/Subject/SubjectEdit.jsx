@@ -68,7 +68,7 @@ function SubjectEdit() {
                     <Row>
                         <Col md={6}>
                             <Form.Group className="mb-3">
-                                <Form.Label>Subject Code</Form.Label>
+                                <Form.Label>Subject Code :-</Form.Label>
                                 <Form.Control
                                     type="text"
                                     value={subject.subjectCode}
@@ -80,7 +80,7 @@ function SubjectEdit() {
                         </Col>
                         <Col md={6}>
                             <Form.Group className="mb-3">
-                                <Form.Label>Subject Full Name</Form.Label>
+                                <Form.Label>Subject Full Name :-</Form.Label>
                                 <Form.Control
                                     type="text"
                                     value={subject.subjectFullName}
@@ -95,7 +95,7 @@ function SubjectEdit() {
                     <Row>
                         <Col md={6}>
                             <Form.Group className="mb-3">
-                                <Form.Label>Subject Nick Name</Form.Label>
+                                <Form.Label>Subject Nick Name :-</Form.Label>
                                 <Form.Control
                                     type="text"
                                     value={subject.subjectNickName}
@@ -108,7 +108,7 @@ function SubjectEdit() {
 
                         <Col md={6}>
                             <Form.Group className="mb-3">
-                                <Form.Label>Subject Categiory</Form.Label>
+                                <Form.Label>Subject Category :-</Form.Label>
                                 <Form.Select
                                     value={subject.subjectCategory}
                                     onChange={handleChange}
@@ -126,7 +126,7 @@ function SubjectEdit() {
                     <Row>
                         <Col md={6}>
                             <Form.Group className="mb-3">
-                                <Form.Label>Subject type</Form.Label>
+                                <Form.Label>Subject Type :-</Form.Label>
                                 <Form.Select
                                     value={subject.subjectType}
                                     onChange={handleChange}
@@ -142,7 +142,7 @@ function SubjectEdit() {
                         </Col>
                         <Col md={6}>
                             <Form.Group className="mb-3">
-                                <Form.Label>Cradit Score</Form.Label>
+                                <Form.Label>Credit Score :-</Form.Label>
                                 <Form.Select
                                     value={subject.creditScore}
                                     onChange={handleChange}
@@ -179,7 +179,7 @@ function SubjectEdit() {
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Sucess</Modal.Title>
+                    <Modal.Title>Success</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>Subject Updated successfully</Modal.Body>
                 <Modal.Footer>

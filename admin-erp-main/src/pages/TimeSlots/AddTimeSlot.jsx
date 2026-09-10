@@ -75,7 +75,7 @@ function AddTimeSlot() {
 
                 <Row className="mb-3">
                     <Form.Group as={Col} controlId="session">
-                        <Form.Label>Session</Form.Label>
+                        <Form.Label>Session :-</Form.Label>
 
                         <Form.Select
                             value={session}
@@ -95,7 +95,7 @@ function AddTimeSlot() {
                     </Form.Group>
 
                     <Form.Group as={Col} controlId="lectureNo">
-                        <Form.Label>Lecture No.</Form.Label>
+                        <Form.Label>Lecture No :-</Form.Label>
 
                         <Form.Select
                             value={lectureNo}
@@ -116,11 +116,11 @@ function AddTimeSlot() {
                 </Row>
                 <Row>
                     <Form.Group>
-                        <Form.Label>Enter Time slot</Form.Label>
+                        <Form.Label>Enter Time slot :-</Form.Label>
                         <Form.Control type='text' placeholder='Format 00:00-00:00'maxlength='11' value={timeSlot} onChange={handleTimeSlot}></Form.Control>
                     </Form.Group>
-                    <span className='mt-2 text-secondary'>
-                        <h6 style={{fontSize:'15px'}}>Example-- 09:10-10:00</h6>
+                    <span className='mt-2 text-danger'>
+                        <h6 style={{fontSize:'15px'}}>Example :- 09:10-10:00</h6>
                     </span>
                 </Row>
                 <div className="d-flex justify-content-center gap-2 mt-4">

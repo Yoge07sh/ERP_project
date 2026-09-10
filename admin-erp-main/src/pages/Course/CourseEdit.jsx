@@ -66,7 +66,7 @@ function CourseEdit() {
                 <h3 className="text-center mb-4 py-2 text-white fw-bold bg-black">UPDATE COURSE</h3>
                 <Row className="mb-3">
                     <Form.Group as={Col} controlId="formGridEmail">
-                        <Form.Label>Course Code</Form.Label>
+                        <Form.Label>Course Code :-</Form.Label>
                         <Form.Control
                             type="text"
                             value={course.courseCode}
@@ -77,7 +77,7 @@ function CourseEdit() {
                     </Form.Group>
 
                     <Form.Group as={Col} controlId="formGridPassword">
-                        <Form.Label>Course Short Name</Form.Label>
+                        <Form.Label>Course Short Name :-</Form.Label>
                         <Form.Control
                             type="text"
                             value={course.courseShortName}
@@ -91,7 +91,7 @@ function CourseEdit() {
 
                 <Row className="mb-3">
                     <Form.Group as={Col} controlId="formGridEmail">
-                        <Form.Label>Course Full Name</Form.Label>
+                        <Form.Label>Course Full Name :-</Form.Label>
                         <Form.Control
                             type="text"
                             value={course.courseFullName}
@@ -102,7 +102,7 @@ function CourseEdit() {
                     </Form.Group>
 
                     <Form.Group as={Col} controlId="formGridPassword">
-                        <Form.Label>Total Intake</Form.Label>
+                        <Form.Label>Total Intake :-</Form.Label>
                         <Form.Control
                             type="number"
                             value={course.totalIntake}
@@ -116,7 +116,7 @@ function CourseEdit() {
 
                 <Row className="mb-3">
                     <Form.Group as={Col} controlId="formGridState">
-                        <Form.Label>Affiliated University</Form.Label>
+                        <Form.Label>Affiliated University :-</Form.Label>
                         <Form.Select
                             value={course.affiliatedUniversity}
                             onChange={handleChange}

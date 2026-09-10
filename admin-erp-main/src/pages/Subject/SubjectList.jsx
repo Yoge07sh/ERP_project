@@ -115,7 +115,7 @@ function SubjectList() {
                         <th>Subject Short Name</th>
                         <th>Subject Category</th>
                         <th>Subject Type</th>
-                        <th>Cradit Score</th>
+                        <th>Credit Score</th>
                         <th>Action</th>
                     </tr>
                 </thead>

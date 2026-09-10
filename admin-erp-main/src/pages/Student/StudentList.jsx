@@ -113,9 +113,9 @@ function StudentList() {
                 <thead>
                     <tr>
                         <th>Image</th>
-                        <th>Enrollment No.</th>
+                        <th>Enrollment No</th>
                         <th>Name</th>
-                        <th>Roll No.</th>
+                        <th>Roll No</th>
                         <th>Year</th>
                         <th>Address</th>
                         <th>Action</th>
