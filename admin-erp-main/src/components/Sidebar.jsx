@@ -43,7 +43,7 @@ let [isloggedin,setIsloggedin]=useState(false)
               to="/courses"
               className="d-flex align-items-center gap-2"
             >
-              <i className='bi bi-book'></i>
+              <i className='bi bi-mortarboard-fill'></i>
               <span className="d-none d-md-inline">Course</span>
             </ListGroup.Item>
 
@@ -52,7 +52,7 @@ let [isloggedin,setIsloggedin]=useState(false)
               to="/branches"
               className="d-flex align-items-center gap-2"
             >
-              <i className="bi bi-backpack4-fill"></i>
+              <i className="bi bi-building"></i>
               <span className="d-none d-md-inline">Branch</span>
             </ListGroup.Item>
 
@@ -61,7 +61,7 @@ let [isloggedin,setIsloggedin]=useState(false)
               to="/subjects"
               className="d-flex align-items-center gap-2"
             >
-              <i className="bi bi-collection"></i>
+              <i className="bi bi-journal-bookmark"></i>
               <span className="d-none d-md-inline">Subjects</span>
             </ListGroup.Item>
 
@@ -70,7 +70,7 @@ let [isloggedin,setIsloggedin]=useState(false)
               to="/subjectsmap"
               className="d-flex align-items-center gap-2"
             >
-              <i className='bi bi-book'></i>
+              <i className='bi bi-diagram-2'></i>
               <span className="d-none d-md-inline">Subject Mapping</span>
             </ListGroup.Item>
             <ListGroup.Item
@@ -78,16 +78,16 @@ let [isloggedin,setIsloggedin]=useState(false)
               to="/faculties"
               className="d-flex align-items-center gap-2"
             >
-              <i className='bi bi-person-square'></i>
+              <i className='bi bi-person-workspace'></i>
               <span className="d-none d-md-inline">Faculty</span>
             </ListGroup.Item>
 
             <ListGroup.Item
               as={NavLink}
-              to=""
+              to="/facultymapping"
               className="d-flex align-items-center gap-2"
             >
-              <i className='bi bi-person-square'></i>
+              <i className='bi bi-diagram-3'></i>
               <span className="d-none d-md-inline">Faculty Mapping</span>
             </ListGroup.Item>
 
@@ -96,7 +96,7 @@ let [isloggedin,setIsloggedin]=useState(false)
               to="/students"
               className="d-flex align-items-center gap-2"
             >
-              <i className='bi bi-eyedropper'></i>
+              <i className='bi bi-person'></i>
               <span className="d-none d-md-inline">Student</span>
             </ListGroup.Item>
             <ListGroup.Item
@@ -104,7 +104,7 @@ let [isloggedin,setIsloggedin]=useState(false)
               to="/timeslots"
               className="d-flex align-items-center gap-2"
             >
-              <i className='bi bi-book'></i>
+              <i className='bi bi-clock'></i>
               <span className="d-none d-md-inline">TimeSlot</span>
             </ListGroup.Item>
 

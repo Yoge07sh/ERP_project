@@ -6,17 +6,17 @@ const facultyMapSchema = new mongoose.Schema({
     },
     facultyId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Faculty',
+        ref: 'faculty',
         required: true
     },
     course: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Course',
+        ref: 'course',
         required: true
     },
     branch: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Branch',
+        ref: 'branch',
         required: true
     },
     year: {
@@ -33,7 +33,7 @@ const facultyMapSchema = new mongoose.Schema({
     },
     subjectId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Subject',
+        ref: 'subject',
         required: true
     },
     loadPerWeek: {
