@@ -83,7 +83,7 @@ function AddBranch() {
   return (
     <Container className="">
       <Form>
-        <h3 className="text-center mb-4 py-2 text-primary fw-bold">ADD NEW COURSE</h3>
+        <h3 className="text-center mb-4 py-2 text-primary fw-bold">ADD NEW BRANCH</h3>
         <br />
         <Row className="mb-3">
           <Form.Group as={Col} controlId="formGridState">

@@ -167,43 +167,53 @@ const addFacultyMapping = async (req, res) => {
     }
 };
 
+
 const getFacultyList = async (req, res) => {
 
     try {
 
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
-        const search = req.query.search || "";
-        const searchBy = req.query.searchBy || "facultyName";
         const skip = (page - 1) * limit;
+
+        const session = req.query.session || "";
+        const facultyName = req.query.facultyName || "";
+
         let searchCondition = {};
 
-        if (searchBy === "session" && search.trim() !== "") {
+        if (session.trim() !== "") {
+
             searchCondition.session = {
-                $regex: search.trim(),
+                $regex: session.trim(),
                 $options: "i"
             };
 
         }
-        if (searchBy === "facultyName" && search.trim() !== "") {
+
+        if (facultyName.trim() !== "") {
+
             searchCondition.$or = [
+
                 {
                     "facultyId.firstName": {
-                        $regex: search.trim(),
+                        $regex: facultyName.trim(),
                         $options: "i"
                     }
                 },
+
                 {
                     "facultyId.lastName": {
-                        $regex: search.trim(),
+                        $regex: facultyName.trim(),
                         $options: "i"
                     }
                 }
+
             ];
 
         }
 
         const totalRecords = await FacultyMap.aggregate([
+
             {
                 $lookup: {
                     from: "faculties",
@@ -212,14 +222,21 @@ const getFacultyList = async (req, res) => {
                     as: "facultyId"
                 }
             },
+
             {
-                $unwind: { path: "$facultyId", preserveNullAndEmptyArrays: true }
+                $unwind: {
+                    path: "$facultyId",
+                    preserveNullAndEmptyArrays: true
+                }
             },
 
-            { $match: searchCondition },
+            {
+                $match: searchCondition
+            },
 
-            { $count: "total" }
-
+            {
+                $count: "total"
+            }
 
         ]);
 
@@ -312,29 +329,36 @@ const getFacultyList = async (req, res) => {
             }
 
         ]);
+
         const totalPages = Math.ceil(total / limit);
 
         res.status(200).send({
+
             success: true,
             data: facultyMapping,
             totalRecords: total,
             totalPages: totalPages,
             currentPage: page,
             limit: limit
+
         });
 
     } catch (err) {
 
-        console.log(err);
+        console.error("Error fetching faculty mapping:", err);
 
         res.status(500).send({
+
             success: false,
             message: "Failed to get faculty mapping.",
             error: err.message
+
         });
 
     }
-}
+};
+
+
 module.exports = {
     getFacultyForMapping,
     getBranchsForMapping,

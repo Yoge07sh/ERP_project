@@ -29,7 +29,6 @@ async function getCourses(req, res) {
         let courses = await Course.find({
             courseFullName: { $regex: new RegExp(req.query.courseFullName, "i") }
         });
-        console.log(courses)
         res.status(200).send({ success: true, data: courses })
     } catch (error) {
         console.log(error)
@@ -72,9 +71,6 @@ async function getCourse(req, res) {
 async function editCourse(req, res) {
     try {
         let courseId = req.params.id;
-        console.log(courseId);
-        console.log(req.body);
-
         let course = await Course.findOne({ _id: courseId })
         Object.assign(course, req.body)
         await course.save();
