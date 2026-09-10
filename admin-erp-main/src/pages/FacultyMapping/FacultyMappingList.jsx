@@ -124,7 +124,7 @@ function FacultyMappingList() {
                     >
 
                         <option value="facultyName">
-                            Faculty Name
+                            Faculty Name 
                         </option>
 
                         <option value="session">

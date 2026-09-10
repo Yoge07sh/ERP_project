@@ -53,7 +53,7 @@ function SubjectMappingList() {
 
     return (
         <>
-            <h3 className="text-center mb-4 py-2 text-primary fw-bold">LIST OF SUBJECTS MAPPING</h3>
+            <h3 className="text-center mb-4 py-2 text-primary fw-bold">LIST OF SUBJECT MAPPING</h3>
 
             <InputGroup className="mb-3">
                 <InputGroup.Text>

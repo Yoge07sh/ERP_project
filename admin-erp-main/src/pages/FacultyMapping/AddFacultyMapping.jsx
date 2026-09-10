@@ -178,7 +178,7 @@ function AddFacultyMapping() {
           <Col md={4}>
             <Form.Group>
               <Form.Label>
-                Session <span className="text-danger">*</span>
+                Session :-<span className="text-danger">*</span>
               </Form.Label>
 
               <Form.Select
@@ -199,7 +199,7 @@ function AddFacultyMapping() {
           <Col md={4}>
             <Form.Group>
               <Form.Label>
-                Faculty <span className="text-danger">*</span>
+                Faculty :- <span className="text-danger">*</span>
               </Form.Label>
 
               <Form.Select
@@ -228,7 +228,7 @@ function AddFacultyMapping() {
           <Col md={4}>
             <Form.Group>
               <Form.Label>
-                Course <span className="text-danger">*</span>
+                Course :- <span className="text-danger">*</span>
               </Form.Label>
 
               <Form.Select
@@ -262,7 +262,7 @@ function AddFacultyMapping() {
             <Col md={4}>
               <Form.Group>
                 <Form.Label>
-                  Branch <span className="text-danger">*</span>
+                  Branch :- <span className="text-danger">*</span>
                 </Form.Label>
 
                 <Form.Select
@@ -289,7 +289,7 @@ function AddFacultyMapping() {
           <Col md={4}>
             <Form.Group>
               <Form.Label>
-                Year <span className="text-danger">*</span>
+                Year :- <span className="text-danger">*</span>
               </Form.Label>
 
               <Form.Select
@@ -311,7 +311,7 @@ function AddFacultyMapping() {
           <Col md={4}>
             <Form.Group>
               <Form.Label>
-                Semester <span className="text-danger">*</span>
+                Semester :- <span className="text-danger">*</span>
               </Form.Label>
 
               <Form.Select
@@ -342,7 +342,7 @@ function AddFacultyMapping() {
           <Col md={4}>
             <Form.Group>
               <Form.Label>
-                Section <span className="text-danger">*</span>
+                Section :- <span className="text-danger">*</span>
               </Form.Label>
 
               <Form.Select
@@ -364,7 +364,7 @@ function AddFacultyMapping() {
           <Col md={4}>
             <Form.Group>
               <Form.Label>
-                Subject <span className="text-danger">*</span>
+                Subject :- <span className="text-danger">*</span>
               </Form.Label>
 
               <Form.Select
@@ -391,7 +391,7 @@ function AddFacultyMapping() {
           <Col md={4}>
             <Form.Group>
               <Form.Label>
-                Load Per Week
+                Load Per Week :-
               </Form.Label>
 
               <Form.Control

@@ -55,7 +55,7 @@ function Sidebar() {
 
         <div className="p-3 border-bottom d-flex align-items-center">
           <Image src={logo} width={40} height={40} className="me-2" />
-          <span className="fw-bold d-none d-md-inline fs-2">RDEC</span>
+          <span style = {{ color : "#1a3c6e" }} className="fw-bold d-none d-md-inline fs-2">RDEC</span>
         </div>
 
         {/* Live Clock */}
@@ -126,7 +126,7 @@ function Sidebar() {
               className="d-flex align-items-center gap-2"
             >
               <i className='bi bi-mortarboard-fill'></i>
-              <span className="d-none d-md-inline">Course</span>
+              <span className="d-none d-md-inline">Courses</span>
             </ListGroup.Item>
 
             <ListGroup.Item
@@ -135,7 +135,7 @@ function Sidebar() {
               className="d-flex align-items-center gap-2"
             >
               <i className="bi bi-building"></i>
-              <span className="d-none d-md-inline">Branch</span>
+              <span className="d-none d-md-inline">Branches</span>
             </ListGroup.Item>
 
             <ListGroup.Item
@@ -162,7 +162,7 @@ function Sidebar() {
               className="d-flex align-items-center gap-2"
             >
               <i className='bi bi-person-workspace'></i>
-              <span className="d-none d-md-inline">Faculty</span>
+              <span className="d-none d-md-inline">Faculties</span>
             </ListGroup.Item>
 
             <ListGroup.Item
@@ -180,7 +180,7 @@ function Sidebar() {
               className="d-flex align-items-center gap-2"
             >
               <i className='bi bi-person'></i>
-              <span className="d-none d-md-inline">Student</span>
+              <span className="d-none d-md-inline">Students</span>
             </ListGroup.Item>
 
             <ListGroup.Item
@@ -189,7 +189,7 @@ function Sidebar() {
               className="d-flex align-items-center gap-2"
             >
               <i className='bi bi-clock'></i>
-              <span className="d-none d-md-inline">TimeSlot</span>
+              <span className="d-none d-md-inline">TimeSlots</span>
             </ListGroup.Item>
 
           </ListGroup>
@@ -205,7 +205,7 @@ function Sidebar() {
               <div className="d-none d-md-inline d-flex align-items-center">
                 <div>
                   <h6 className="mb-0">
-                    {username} <small className="text-muted">Admin</small>
+                    {username} :- <small className="text-muted">Admin</small>
                   </h6>
 
                   <Button

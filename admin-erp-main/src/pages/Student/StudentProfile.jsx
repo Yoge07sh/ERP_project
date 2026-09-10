@@ -68,46 +68,46 @@ function StudentProfile() {
 
             <Row>
               <Col sm={6} className="mb-2">
-                <strong>Enrollment No:</strong> {student.enrollmentNumber}
+                <strong>Enrollment No :-</strong> {student.enrollmentNumber}
               </Col>
               <Col sm={6} className="mb-2">
-                <strong>Date of Birth:</strong> {student.dob}
+                <strong>Date of Birth :-</strong> {student.dob}
               </Col>
               <Col sm={6} className="mb-2">
                 <strong>Gender:</strong> {student.gender}
               </Col>
               <Col sm={6} className="mb-2">
-                <strong>Personal Email:</strong> {student.personalEmailId}
+                <strong>Personal Email :-</strong> {student.personalEmailId}
               </Col>
               <Col sm={6} className="mb-2">
-                <strong>College Email:</strong> {student.collegeEmailId}
+                <strong>College Email :-</strong> {student.collegeEmailId}
               </Col>
               <Col sm={6} className="mb-2">
-                <strong>Father's Name:</strong> {student.fatherName}
+                <strong>Father's Name :-</strong> {student.fatherName}
               </Col>
               <Col sm={6} className="mb-2">
-                <strong>Mother's Name:</strong> {student.motherName}
+                <strong>Mother's Name :-</strong> {student.motherName}
               </Col>
               <Col sm={6} className="mb-2">
-                <strong>Admission Year:</strong> {student.admissionYear}
+                <strong>Admission Year :-</strong> {student.admissionYear}
               </Col>
               <Col sm={6} className="mb-2">
-                <strong>Year:</strong> {student.year}
+                <strong>Year :-</strong> {student.year}
               </Col>
               <Col sm={6} className="mb-2">
-                <strong>Semester:</strong> {student.semester}
+                <strong>Semester :-</strong> {student.semester}
               </Col>
               <Col sm={12} className="mb-2">
-                <strong>Address:</strong> {student.localAddressLine1}, {student.localAddressLine2}
+                <strong>Address :-</strong> {student.localAddressLine1}, {student.localAddressLine2}
               </Col>
               <Col sm={3} className="mb-2">
-                <strong>City:</strong> {student.localCity}
+                <strong>City :-</strong> {student.localCity}
               </Col>
               <Col sm={3} className="mb-2">
-                <strong>State:</strong> {student.localState}
+                <strong>State :-</strong> {student.localState}
               </Col>
               <Col sm={3} className="mb-2">
-                <strong>Pincode:</strong> {student.localPincode}
+                <strong>Pincode :-</strong> {student.localPincode}
               </Col>
             </Row>
 

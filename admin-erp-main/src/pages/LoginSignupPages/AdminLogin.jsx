@@ -71,7 +71,7 @@ function AdminLogin() {
 
               <Form onSubmit={handleLogin}>
                 <Form.Group className="mb-3" controlId="adminEmail">
-                  <Form.Label>Email</Form.Label>
+                  <Form.Label>Email :-</Form.Label>
                   <Form.Control
                     type="email"
                     placeholder="Enter admin email"
@@ -81,7 +81,7 @@ function AdminLogin() {
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="adminPassword">
-                  <Form.Label>Password</Form.Label>
+                  <Form.Label>Password :-</Form.Label>
                   <Form.Control
                     type="password"
                     placeholder="Enter password"
