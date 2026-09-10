@@ -154,6 +154,7 @@ async function deleteFaculty(req, res) {
         res.status(500).send({ success: false, message: 'Can not Delete, Something went wrong..!' });
       }
     }
+    
 async function editFaculty(req, res) {
     try {
         let facultyId = req.params.id;
