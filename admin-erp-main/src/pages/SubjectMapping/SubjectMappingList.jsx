@@ -1,3 +1,4 @@
+
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import axios from 'axios'
@@ -5,7 +6,7 @@ import { Modal, Button, Form, InputGroup } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 const apiUrl = import.meta.env.VITE_API_URL
-import { FaEdit } from "react-icons/fa"
+import { FaEdit, FaTrash } from "react-icons/fa"
 
 
 function SubjectMappingList() {
@@ -46,8 +47,8 @@ function SubjectMappingList() {
         setIsDelete(true)
     }
 
-    function goToEdit() {
-        navigate('/edit/subjectmapping')
+    function goToEdit(id) {
+        navigate('/edit/subjectMapping/'+ id)
     }
     return (
         <>
@@ -85,7 +86,6 @@ function SubjectMappingList() {
                                 <td>{subject.branch}</td>
                                 <td>{subject.year}</td>
                                 <td>{subject.semester}</td>
-
                                 <td>
                                     {/* <i className="bi bi-pencil me-3 " onClick={() => goToEdit(subject._id)} ></i> */}
                                     <Button
@@ -93,6 +93,11 @@ function SubjectMappingList() {
                                     onClick={() => goToEdit(subject._id)}
                                     >
                                         <FaEdit></FaEdit>
+                                    </Button>
+                                    <Button
+                                    variant="danger ms-2"
+                                    >
+                                        <FaTrash></FaTrash>
                                     </Button>
 
                                 </td>

@@ -77,7 +77,7 @@ function App() {
             {/* Subject Mapping */}
             <Route path="/subjectsmap" element={<SubjectMappingList />} />
             <Route path="/add/subjectmapping" element={<AddSubjectMapping />} />
-            <Route path="/edit/subjectmapping" element={<EditSubjectMapping />} />
+            <Route path="/edit/subjectMapping/:id" element={<EditSubjectMapping />} />
             <Route path="/add/faculty" element={<AddFaculty />} />
 
             <Route path="/edit/course/:id" element={<CourseEdit />} />

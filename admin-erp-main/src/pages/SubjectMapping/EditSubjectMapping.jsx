@@ -10,25 +10,34 @@ import {
 } from "react-bootstrap";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+
 const apiUrl = import.meta.env.VITE_API_URL;
+
 function EditSubjectMapping() {
     let navigate = useNavigate();
+    let params = useParams()
+    let id = params.id;
+
   let [subjects, setSubjects] = useState([]);
   let [courses, setCourses] = useState([]);
   let [branchs, setBranchs] = useState([]);
+
   const [show, setShow] = useState(false);
-  let [showForm, SetShowForm] = useState(true);
+  let [showForm, setShowForm] = useState(true);
   let [showSpinner, setShowSpinner] = useState(false);
   let [buttonDisabled, setButtonDisabled] = useState(false);
-  let [session, setSession] = useState("");
-  let [subject, setSubject] = useState("");
-  let [course, setCourse] = useState("");
-  let [branch, setBranch] = useState("");
-  let [year, setYear] = useState("1");
-  let [semester, setSemester] = useState("1");
-  let [subjectMapping, setSubjectMapping] = useState({})
 
+  let [subjectMapping, setSubjectMapping] = useState({
+    session: '',
+    subject: '',
+    course: '',
+    branch: '',
+    year: '',
+    semester: '',
+  })
+
+  //Get Courses.
   useEffect(() => {
     axios
       .get(apiUrl+"/courses/for/mapping")
@@ -43,6 +52,8 @@ function EditSubjectMapping() {
         console.error("Error fetching Courses:", err);
       });
   }, []);
+
+  //// Get Subjects.
   useEffect(() => {
     axios
       .get(apiUrl+"/subjects/for/mapping")
@@ -57,6 +68,8 @@ function EditSubjectMapping() {
         console.error("Error fetching Subjects:", err);
       });
   }, []);
+
+  // Get Branches.
   useEffect(() => {
     axios
       .get( apiUrl+"/branchs/for/mapping")
@@ -72,22 +85,24 @@ function EditSubjectMapping() {
       });
   }, []);
 
+  // Get Existing Subject Mapping.
   useEffect(() => {
     axios({
-        url: apiUrl + '/edit/subjectMapping' + id,
+        url: apiUrl + '/edit/for/subjectMapping/' + id,
         method: 'get'
     }).then((res) => {
         setSubjectMapping(res.data.data)
     })
     .catch((err) => {
-        alert("Error..")
+        alert("Error loading subject mapping");
     })
-  })
+  }, [id]);
 
   function manageUpdate(e) {
         let name = e.target.name
         let value = e.target.value
-        setMobile((prev) => {
+
+        setSubjectMapping((prev) => {
             return {
                 ...prev,
                 [name]: value
@@ -97,23 +112,23 @@ function EditSubjectMapping() {
 
   let doEditMapping = () => {
     setButtonDisabled(true);
-    SetShowForm(false);
+    setShowForm(false);
     setShowSpinner(true);
     axios({
-      url: apiUrl + "/Edit/subjectMapping",
+      url: apiUrl + "/Edit/subjectMapping/" + id,
       method: "put",
-      data: { session,subject, course, branch, year, semester },
+      data: subjectMapping,
     })
       .then((result) => {
         if (result.data.success) setButtonDisabled(false);
         setShow(true);
         setShowSpinner(false);
-        SetShowForm(true);
+        setShowForm(true);
       })
       .catch((err) => {
         setShowSpinner(false);
         setButtonDisabled(false);
-        SetShowForm(true);
+        setShowForm(true);
         alert(err);
       });
   };
@@ -137,8 +152,9 @@ function EditSubjectMapping() {
                 <Form.Group className="mb-3">
                   <Form.Label>Session</Form.Label>
                   <Form.Select
-                    onChange={(e) => setSession(e.target.value)}
-                    required
+                    name="session"
+                    value={subjectMapping.session}
+                    onChange={manageUpdate}
                   >
                     <option value="">-- Select Year--</option>
                     <option value="2024-25">2024-25</option>
@@ -152,9 +168,9 @@ function EditSubjectMapping() {
                 <Form.Group className="mb-3">
                   <Form.Label>Subjects</Form.Label>
                   <Form.Select
-                    value={subject}
-                    onChange={(e) => setSubject(e.target.value)}
-                    required
+                    name="subject"
+                    value={subjectMapping.subject}
+                    onChange={manageUpdate} 
                   >
                     <option value="">-- Select Subject --</option>
                     {subjects.map((c) => (
@@ -172,9 +188,9 @@ function EditSubjectMapping() {
                 <Form.Group className="mb-3">
                   <Form.Label>Courses</Form.Label>
                   <Form.Select
-                    value={course}
-                    onChange={(e) => setCourse(e.target.value)}
-                    required
+                    name="course"
+                    value={subjectMapping.course}
+                    onChange={manageUpdate}
                   >
                     <option value="">-- Select Course --</option>
                     {courses.map((c) => (
@@ -189,9 +205,9 @@ function EditSubjectMapping() {
                 <Form.Group className="mb-3">
                   <Form.Label>Branch</Form.Label>
                   <Form.Select
-                    value={branch}
-                    onChange={(e) => setBranch(e.target.value)}
-                    required
+                    name="branch"
+                    value={subjectMapping.branch}
+                    onChange={manageUpdate}
                   >
                     <option value="">-- Select Branch --</option>
                     {branchs.map((b) => (
@@ -211,8 +227,9 @@ function EditSubjectMapping() {
                 <Form.Group className="mb-3">
                   <Form.Label>Year</Form.Label>
                   <Form.Select
-                    onChange={(e) => setYear(e.target.value)}
-                    required
+                    name="year"
+                    value={subjectMapping.year}
+                    onChange={manageUpdate}
                   >
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -225,8 +242,9 @@ function EditSubjectMapping() {
                 <Form.Group className="mb-3">
                   <Form.Label>Semester</Form.Label>
                   <Form.Select
-                    onChange={(e) => setSemester(e.target.value)}
-                    required
+                    name="semester"
+                    value={subjectMapping.semester}
+                    onChange={manageUpdate}
                   >
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -245,7 +263,6 @@ function EditSubjectMapping() {
               <Button
                 onClick={() => navigate("/subjectsmap")}
                 variant="secondary"
-                type="button"
               >
                 Cancel
               </Button>
@@ -253,7 +270,6 @@ function EditSubjectMapping() {
                 onClick={doEditMapping}
                 disabled={buttonDisabled}
                 variant="success"
-                type="submit"
               >
                 Edit Mapping
               </Button>
@@ -262,6 +278,7 @@ function EditSubjectMapping() {
 
         </Container>
       )}
+
       {showSpinner && (
         <div className="d-flex justify-content-center align-items-center vh-100">
           <Spinner animation="border" role="status">
