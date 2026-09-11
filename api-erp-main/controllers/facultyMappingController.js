@@ -417,7 +417,6 @@ const editFacultyMapping = async (req, res) => {
         Object.assign(facultyMap, req.body);
         await facultyMap.save();
 
-        console.log("Updated Faculty Mapping:", facultyMap);
 
         res.status(200).send({
             success: true,
@@ -427,7 +426,6 @@ const editFacultyMapping = async (req, res) => {
 
     } catch (error) {
 
-        console.log(error);
 
         res.status(500).send({
             success: false,
