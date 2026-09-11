@@ -134,8 +134,8 @@ function EditTimeSlot() {
     return (
         <Container>
             <Form onSubmit={doEditTimeSlot}>
-                <h3 className="text-center mb-4 py-2 text-primary fw-bold">
-                    EDIT TIME SLOT
+                <h3 className="text-center mb-4 py-2 text-white fw-bold bg-black">
+                    UPDATE TIME SLOT
                 </h3>
 
                 <hr />
@@ -247,7 +247,7 @@ function EditTimeSlot() {
                 <div className="d-flex justify-content-center gap-2 mt-4">
                     <Button
                         onClick={() => navigate("/timeslots")}
-                        variant="secondary"
+                        variant="danger"
                         type="button"
                     >
                         Cancel
@@ -255,7 +255,7 @@ function EditTimeSlot() {
 
                     <Button
                         disabled={buttonDisabled}
-                        variant="primary"
+                        variant="success"
                         type="submit"
                     >
                         {buttonDisabled
@@ -281,7 +281,7 @@ function EditTimeSlot() {
 
                 <Modal.Footer>
                     <Button
-                        variant="primary"
+                        variant="danger"
                         onClick={() => {
                             handleClose();
                             navigate("/timeslots");

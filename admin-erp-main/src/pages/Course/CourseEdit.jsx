@@ -136,10 +136,10 @@ function CourseEdit() {
 
 
                 <div className="d-flex justify-content-center gap-2 mt-4">
-                    <Button onClick={() => navigate('/courses')} variant="secondary" type="button">
+                    <Button onClick={() => navigate('/courses')} variant="danger" type="button">
                         Cancel
                     </Button>
-                    <Button onClick={() => doEditCourse(course._id)}  variant="primary">
+                    <Button onClick={() => doEditCourse(course._id)}  variant="success">
                         Update
                     </Button>
                 </div>

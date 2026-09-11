@@ -62,7 +62,7 @@ function SubjectEdit() {
         <>
             <Container className="mt-5">
 
-                <h3 className="text-center mb-4 text-primary fw-bold">UPDATE SUBJECT</h3>
+                <h3 className="text-center mb-4 py-2 text-white fw-bold bg-black">UPDATE SUBJECT</h3>
 
                 <Form >
                     <Row>
