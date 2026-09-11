@@ -78,7 +78,7 @@ function SubjectList() {
 
     function goToDelete(id) {
         axios({
-            url: 'http://localhost:3000/delete/course/' + id,
+            url: 'http://localhost:3000/delete/subject/' + id,
             method: 'delete'
 
         }).then((result) => {

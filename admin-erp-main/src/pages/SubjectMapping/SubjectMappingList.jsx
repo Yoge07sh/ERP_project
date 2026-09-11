@@ -23,7 +23,7 @@ function SubjectMappingList() {
     useEffect(() => {
 
         axios({
-            //url: 'http://localhost:3000/subjectsMapped',
+            url: 'http://localhost:3000/subjectsMapped',
             url: apiUrl + '/subjectsMapped',
             method: 'get',
             params: {
@@ -103,7 +103,7 @@ function SubjectMappingList() {
                                 <td>{subject.semester}</td>
                                 <td>
                                     <Button
-                                        variant="warning"
+                                        variant="primary"
                                         onClick={() => goToEdit(subject._id)}
                                     >
                                         <FaEdit></FaEdit>

@@ -264,7 +264,7 @@ function EditSubjectMapping() {
             <div className="d-flex gap-2 mt-4">
               <Button
                 onClick={() => navigate("/subjectsmap")}
-                variant="secondary"
+                variant="danger"
               >
                 Cancel
               </Button>
@@ -294,7 +294,7 @@ function EditSubjectMapping() {
         </Modal.Header>
         <Modal.Body>Subject Mapping Updated Successfully</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="danger" onClick={handleClose}>
             Close
           </Button>
         </Modal.Footer>
