@@ -120,8 +120,10 @@ function EditSubjectMapping() {
       data: subjectMapping,
     })
       .then((result) => {
-        if (result.data.success) setButtonDisabled(false);
+        if (result.data.success) { 
         setShow(true);
+        }
+        setButtonDisabled(false);
         setShowSpinner(false);
         setShowForm(true);
       })

@@ -29,6 +29,6 @@ router.get('/edit/for/subjectMapping/:id', (req, res) => {
     SubjectMappingController.editForSubjectMapping(req, res)
 });
 router.put('/edit/subjectMapping/:id', (req, res)=> {
-    SubjectMappingController.editSubjectMapping;(req, res)
+    SubjectMappingController.editSubjectMapping(req, res)
 })
 module.exports=router
