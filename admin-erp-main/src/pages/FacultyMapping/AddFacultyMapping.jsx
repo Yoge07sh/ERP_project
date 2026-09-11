@@ -258,8 +258,7 @@ function AddFacultyMapping() {
         <Row className="mb-3">
 
           {/* Branch */}
-          {/* Branch */}
-          {facultyMapping.course && branches.length > 0 && (
+          
             <Col md={4}>
               <Form.Group>
                 <Form.Label>
@@ -285,7 +284,7 @@ function AddFacultyMapping() {
                 </Form.Select>
               </Form.Group>
             </Col>
-          )}
+          
           {/* Year */}
           <Col md={4}>
             <Form.Group>
@@ -353,10 +352,10 @@ function AddFacultyMapping() {
                 required
               >
                 <option value="">---Select Section---</option>
-                <option value="A">Section A</option>
-                <option value="B">Section B</option>
-                <option value="C">Section C</option>
-                <option value="D">Section D</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
               </Form.Select>
             </Form.Group>
           </Col>

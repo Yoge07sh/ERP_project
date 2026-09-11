@@ -1,83 +1,217 @@
-const Admin = require("../models/Admin");
 const User = require("../models/User");
+
 const bcrypt = require("bcrypt");
-// const nodemailer = require("nodemailer");
-const jwt = require('jsonwebtoken')
 
-async function doAdminLogin(req, res) {
+const jwt = require("jsonwebtoken");
+
+
+
+async function getMyProfile(req, res) {
+
   try {
-    console.log(req.body);
-    let admin = await Admin.findOne({ email: req.body.email });
-    console.log(admin)
-    if (!admin) {
-      res
-        .status(500)
-        .send({ success: false, message: "invalid UserName/Password" });
-    } else {
-      let validPassword = await bcrypt.compare(req.body.password, admin.password)
-      console.log(validPassword, 'valid password')
-      if (validPassword) {
-        admin.lastLogin = new Date();
-        await admin.save();
-        let secret_key = 'b2Vfb3ZlcnRoZXJlX29yX3NvbWV0aGluZ19lbHNld2hlcmU'
-        let token = jwt.sign({ _id: admin._id, email: admin.email }, secret_key, {
-          expiresIn: '1hr'
-        })
-        let data = {
-          name: admin.firstName,
-          email: admin.email,
-          token: token
-        }
-        res.status(200).send({ success: true, data: data })
-      } else {
-        res
-          .status(500)
-          .send({ success: false, message: "invalid username/passowrd" });
+
+    const user = await User.findById(
+      req.user._id,
+      {
+        firstName: 1,
+        lastName: 1,
+        email: 1,
+        userRole: 1,
+        mobNo: 1,
+        userImage: 1,
+        status: 1,
       }
-    }
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({ success: false, message: "something went wrong" });
-  }
-}
-async function doUserlogin(req, res) {
-  try {
+    );
 
-    let user = await User.findOne({ email: req.body.email })
+
     if (!user) {
-      res.status(500).send({ success: false, message: "invalid user email or password" })
-    } else {
-      let validPassword = await bcrypt.compare(req.body.password, user.password)
-      if (validPassword) {
-        user.lastLogin = new Date()
-        await user.save()
-        let secret_key = 'b2Vfb3ZlcnRoZXJlX29yX3NvbWV0aGluZ19lbHNld2hlcmU'
-        let token = jwt.sign({ _id: user._id, email: user.email }, secret_key, {
-          expiresIn: '1hr'
-        })
-        let data = {
-          name: user.firstName,
-          email: user.email,
-          token: token
-        }
-        res.status(200).send({ success: true, data: data })
-      } else {
-        res.status(500).send({ success: false, message: "invalid user email or password" })
-      }
+
+      return res.status(404).send({
+
+        success: false,
+
+        message: "User not found",
+
+      });
 
     }
+
+
+    return res.status(200).send({
+
+      success: true,
+
+      data: {
+
+        name: user.firstName,
+
+        lastName: user.lastName,
+
+        email: user.email,
+
+        userRole: user.userRole,
+
+        mobNo: user.mobNo,
+
+        userImage: user.userImage,
+
+        status: user.status,
+
+      },
+
+    });
+
   } catch (error) {
+
     console.log(error);
-    res.status(500).send({ success: false })
+
+    return res.status(500).send({
+
+      success: false,
+
+      message: "Something went wrong",
+
+    });
 
   }
+
 }
+
+
+
+async function doLogin(req, res) {
+
+  try {
+
+    const user = await User.findOne({
+
+      email: req.body.email,
+
+      status: "Active",
+
+    });
+
+
+    // User not found
+
+    if (!user) {
+
+      return res.status(401).send({
+
+        success: false,
+
+        message: "Invalid email or password",
+
+      });
+
+    }
+
+
+    // Check password
+
+    const validPassword = await bcrypt.compare(
+
+      req.body.password,
+
+      user.password
+
+    );
+
+
+    if (!validPassword) {
+
+      return res.status(401).send({
+
+        success: false,
+
+        message: "Invalid email or password",
+
+      });
+
+    }
+
+
+    // Update last login
+
+    user.lastLogin = new Date();
+
+    await user.save();
+
+
+    // JWT secret
+
+    const secret_key = process.env.JWT_SECRET;
+
+
+    // Create JWT
+
+    const token = jwt.sign(
+
+      {
+
+        _id: user._id,
+
+        email: user.email,
+
+        userRole: user.userRole,
+
+      },
+
+      secret_key,
+
+      {
+
+        expiresIn: "1h",
+
+      }
+
+    );
+
+
+    // Response data
+
+    const data = {
+
+      name: user.firstName,
+
+      email: user.email,
+
+      userRole: user.userRole,
+
+      token: token,
+
+    };
+
+
+    return res.status(200).send({
+
+      success: true,
+
+      data: data,
+
+    });
+
+  } catch (error) {
+
+    console.log(error);
+
+    return res.status(500).send({
+
+      success: false,
+
+      message: "Something went wrong",
+
+    });
+
+  }
+
+}
+
+
 module.exports = {
-  doAdminLogin,
-  //   addUser,
-  //   sendOtpForSignup,
-  doUserlogin,
-  //   verifyOtp,
-  //   sendResetOtp,
-  //   resetPassword
+
+  getMyProfile,
+
+  doLogin,
+
 };
