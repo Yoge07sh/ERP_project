@@ -264,7 +264,7 @@ function EditSubjectMapping() {
             <div className="d-flex gap-2 mt-4">
               <Button
                 onClick={() => navigate("/subjectsmap")}
-                variant="secondary"
+                variant="danger"
               >
                 Cancel
               </Button>

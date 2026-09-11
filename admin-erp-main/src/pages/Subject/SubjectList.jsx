@@ -75,21 +75,49 @@ function SubjectList() {
     function goToAddSubjectPage() {
         navigate('/add/subject')
     }
+    //  function goToDelete(id) {
+    //     axios({
+    //         url: 'http://localhost:3000/delete/subject/' + id,
+    //         method: 'delete'
 
+    //     }).then((result) => {
+    //         if (result.data.success) {
+    //             setShow(true)
+    //         }
+    //     }).catch((err) => {
+    //         console.log(err.message);
+    //     })
+    // }
+    
     function goToDelete(id) {
-        axios({
-            url: 'http://localhost:3000/delete/course/' + id,
-            method: 'delete'
 
-        }).then((result) => {
+    console.log("Deleting ID:", id);
+
+    axios.delete('http://localhost:3000/delete/subject/' + id)
+        .then((result) => {
+
+            console.log("Delete API Response:", result.data);
+
             if (result.data.success) {
-                setShow(true)
+                setShow(true);
+                setIsDelete(true);
+            } else {
+                alert(result.data.message || "Subject delete failed");
             }
-        }).catch((err) => {
-            console.log(err.message);
-        })
-    }
 
+        })
+        .catch((err) => {
+
+            console.log("DELETE ERROR:", err);
+            console.log("STATUS:", err.response?.status);
+            console.log("RESPONSE:", err.response?.data);
+
+            alert(
+                err.response?.data?.message ||
+                "Unable to delete subject"
+            );
+        });
+}
 
 
 

@@ -160,7 +160,7 @@ function SubjectEdit() {
                     </Row>
 
                     <div className="d-flex gap-2 mt-4">
-                        <Button onClick={() => navigate('/subjects')} variant="secondary" type="button">
+                        <Button onClick={() => navigate('/subjects')} variant="danger" type="button">
                             Cancel
                         </Button>
                         <Button onClick={() => doEditSubject(subject._id)} variant="success">

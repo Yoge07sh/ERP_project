@@ -61,7 +61,8 @@ function AddBranch() {
       });
 
       console.log(res.data);
-      setShow(true)
+      setShow(false);
+      navigate('/branches');
 
       // reset form
       setCourse('');

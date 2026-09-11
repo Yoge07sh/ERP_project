@@ -26,7 +26,8 @@ function AddCourse() {
     const doAddCourse = async (e) => {
         e.preventDefault();
         setButtonDisabled(true);
-
+        
+        
         try {
             const res = await axios.post('http://localhost:3000/add/course', {
                 courseCode,
@@ -37,7 +38,8 @@ function AddCourse() {
             }); // JSON payload
 
             console.log(res.data);
-            setShow(true);
+            setShow(false);
+            navigate('/courses');
 
             // reset form
             setCourseCode('');
@@ -51,6 +53,7 @@ function AddCourse() {
             // alert('Failed to add course');
         } finally {
             setButtonDisabled(false);
+           
         }
     };
 
