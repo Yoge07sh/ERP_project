@@ -80,7 +80,6 @@ try {
      let subjectmap=new Mapping(req.body)
        
         await subjectmap.save()
-        console.log("data saved sucessfully....");
         
         res.status(200).send({success:true,message:'data saved successfully'})
         
