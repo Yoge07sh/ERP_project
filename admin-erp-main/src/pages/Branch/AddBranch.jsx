@@ -83,11 +83,11 @@ function AddBranch() {
   return (
     <Container className="">
       <Form>
-        <h3 className="text-center mb-4 py-2 text-primary fw-bold">ADD NEW COURSE</h3>
+        <h3 className="text-center mb-4 py-2 fw-bold" style = {{ color : "#1a3c6e" }} >ADD NEW BRANCH</h3>
         <br />
         <Row className="mb-3">
           <Form.Group as={Col} controlId="formGridState">
-            <Form.Label>Select Course</Form.Label>
+            <Form.Label>Select Course :-</Form.Label>
             <Form.Select
               value={course}
               onChange={handleChange}
@@ -105,7 +105,7 @@ function AddBranch() {
 
         <Row className="mb-3">
           <Form.Group as={Col} controlId="formGridEmail">
-            <Form.Label>Branch Code</Form.Label>
+            <Form.Label>Branch Code :-</Form.Label>
             <Form.Control
               type="text"
               value={branchCode}
@@ -116,7 +116,7 @@ function AddBranch() {
           </Form.Group>
 
           <Form.Group as={Col} controlId="formGridPassword">
-            <Form.Label>Branch Short Name</Form.Label>
+            <Form.Label>Branch Short Name :-</Form.Label>
             <Form.Control
               type="text"
               value={branchShortName}
@@ -130,7 +130,7 @@ function AddBranch() {
 
         <Row className="mb-3">
           <Form.Group as={Col} controlId="formGridEmail">
-            <Form.Label>Branch Full Name</Form.Label>
+            <Form.Label>Branch Full Name :-</Form.Label>
             <Form.Control
               type="text"
               value={branchFullName}
@@ -141,7 +141,7 @@ function AddBranch() {
           </Form.Group>
 
           <Form.Group as={Col} controlId="formGridPassword">
-            <Form.Label>Total Intake</Form.Label>
+            <Form.Label>Total Intake :-</Form.Label>
             <Form.Control
               type="number"
               value={branchIntake}
@@ -154,10 +154,10 @@ function AddBranch() {
 
 
         <div className="d-flex justify-content-center gap-2 mt-4">
-          <Button onClick={() => navigate('/branches')} variant="secondary" type="button">
+          <Button onClick={() => navigate('/branches')} variant="danger" type="button">
             Cancel
           </Button>
-          <Button onClick={doAddBranch} disabled={buttonDisabled} variant="primary" type="submit">
+          <Button onClick={doAddBranch} disabled={buttonDisabled} variant="success" type="submit">
             Add Branch
           </Button>
         </div>

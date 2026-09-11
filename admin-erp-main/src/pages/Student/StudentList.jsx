@@ -14,10 +14,10 @@ function StudentList() {
     const [show, setShow] = useState(false)
     let [isDelete, setIsDelete] = useState(false)
     let [searchByFirstName, setSearchByFirstName] = useState('')
-    let [searchByLastName, setSearchByLastName] = useState('')
-    let [searchByEnrollment, setSearchByEnrollment] = useState('')
-    let [searchByRollno, setSearchByRollno] = useState('')
-    let [searchByFileno, setSearchByFileno] = useState('')
+    let [searchByLastName, ] = useState('')
+    let [searchByEnrollment, ] = useState('')
+    let [searchByRollno, ] = useState('')
+    let [searchByFileno, ] = useState('')
 
 
     useEffect(() => {
@@ -79,6 +79,19 @@ function StudentList() {
         navigate('/student/profile/' + id)
     }
 
+    function goToDelete(id) {
+        axios({
+            url: 'http://localhost:3000/delete/student/' + id,
+            method: 'delete'
+
+        }).then((result) => {
+            if (result.data.success) {
+                setShow(true)
+            }
+        }).catch((err) => {
+            console.log(err.message);
+        })
+    }
 
 
     return (
@@ -100,9 +113,9 @@ function StudentList() {
                 <thead>
                     <tr>
                         <th>Image</th>
-                        <th>Enrollment No.</th>
+                        <th>Enrollment No</th>
                         <th>Name</th>
-                        <th>Roll No.</th>
+                        <th>Roll No</th>
                         <th>Year</th>
                         <th>Address</th>
                         <th>Action</th>
@@ -128,9 +141,9 @@ function StudentList() {
                                 </td>
 
                                 <td>
-                                    <i className="bi bi-eye me-3" onClick={() => goToView(student._id)}></i>
-                                    <i className="bi bi-pencil me-3 " onClick={() => goToEdit(student._id)} ></i>
-                                    <i className="bi bi-trash" onClick={() => goToDelete(student._id)}></i>
+                                    <i className="bi bi-eye me-3 text-warning" onClick={() => goToView(student._id)}></i>
+                                    <i className="bi bi-pencil me-3 text-primary" onClick={() => goToEdit(student._id)} ></i>
+                                    <i className="bi bi-trash text-danger" onClick={() => goToDelete(student._id)}></i>
                                 </td>
                             </tr>
                         )

@@ -23,6 +23,6 @@ const facultySchema = new Schema({
     researchExperience: { type: Number, required:true },
     facultyImage: { type: String, required:false },
     status: { type:String, default:'active',enum:['active','inactive'] },
-    })
+    },{timestamps: true})
 
 module.exports = mongoose.model('faculty', facultySchema)

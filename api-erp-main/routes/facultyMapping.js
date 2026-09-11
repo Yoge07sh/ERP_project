@@ -1,0 +1,45 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const router = express.Router();
+const FacultyMappingController = require('../controllers/facultyMappingController');
+ 
+router.use(bodyParser.json());
+
+router.use(bodyParser.urlencoded({
+    extended: false
+}));
+
+router.get('/faculties/for/mapping', (req, res) => {
+    FacultyMappingController.getFacultyForMapping(req, res);
+});
+
+router.get('/courses/for/mapping', (req, res) => {
+    FacultyMappingController.getCoursesForMapping(req, res);
+});
+
+router.get('/subjects/for/mapping', (req, res) => {
+    FacultyMappingController.getSubjectsForMapping(req, res);
+});
+
+router.get('/branchs/for/mapping', (req, res) => {
+    FacultyMappingController.getBranchsForMapping(req, res);
+});
+
+router.post('/add/facultymapping', (req, res) => {
+    FacultyMappingController.addFacultyMapping(req, res);
+});
+router.get('/get/facultymapping',(req,res)=>{
+    FacultyMappingController.getFacultyList(req,res)
+})
+router.get('/facultyMapping/:id', (req, res) => {
+    FacultyMappingController.getFacultyMappingById(req, res);
+});
+router.put('/edit/facultyMapping/:id', (req, res) => {
+    FacultyMappingController.editFacultyMapping(req, res);
+});
+router.delete('/delete/facultyMapping/:id', (req, res) => {
+    FacultyMappingController.deleteFacultyMapping(req, res);
+});
+
+
+module.exports = router;

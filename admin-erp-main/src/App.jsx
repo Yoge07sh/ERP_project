@@ -27,6 +27,13 @@ import AddFaculty from './pages/Faculty/AddFaculty'
 import FacultyList from './pages/Faculty/FacultyList'
 import FacultyEdit from './pages/Faculty/FacultyEdit'
 import AdminLogin from './pages/LoginSignupPages/AdminLogin'
+import FacultyProfile from "./pages/Faculty/FacultyProfile";
+
+//faculty mapping
+import FacultyMappingList from './pages/FacultyMapping/FacultyMappingList'
+import AddFacultyMapping from './pages/FacultyMapping/AddFacultyMapping'
+import EditFacultyMapping from './pages/FacultyMapping/EditFacultyMapping'
+
 
 // Student
 import AddStudent from './pages/Student/AddStudent'
@@ -79,13 +86,15 @@ function App() {
             <Route path="/add/subjectmapping" element={<AddSubjectMapping />} />
             <Route path="/edit/subjectMapping/:id" element={<EditSubjectMapping />} />
             <Route path="/add/faculty" element={<AddFaculty />} />
+            <Route path="/faculty/:id" element={<FacultyProfile />}
+           
+/>
 
             <Route path="/edit/course/:id" element={<CourseEdit />} />
             <Route path="/edit/branch/:id" element={<BranchEdit />} />
             <Route path="/edit/subject/:id" element={<SubjectEdit />} />
             <Route path="/edit/faculty/:id" element={<FacultyEdit />} />
             <Route path='/students' element={<StudentList />}></Route>
-            <Route path='/faculties' element={<FacultyList />}></Route>
             <Route path='/add/student' element={<AddStudent />}></Route>
             <Route path='/edit/student/:id' element={<StudentEdit />}></Route>
 
@@ -100,6 +109,19 @@ function App() {
             <Route path="/timeslots" element={<TimeSlotList />} />
             <Route path="/add/timeslots" element={<AddTimeSlot />} />
             <Route path="/edit/timeslot/:id" element={<EditTimeSlot />} />
+
+            {/*facultyMapping*/}
+            <Route path='/facultymapping' element={<FacultyMappingList></FacultyMappingList>}></Route>
+            <Route path='/add/facultymapping' element={< AddFacultyMapping ></AddFacultyMapping>}></Route>
+            <Route path='/add/facultymapping' element={< AddFacultyMapping ></AddFacultyMapping>}></Route>
+            <Route path='/edit/facultymapping/:id' element={<EditFacultyMapping></EditFacultyMapping>}></Route>
+
+            {/*faculty*/}
+            <Route path='/faculties' element={<FacultyList />}></Route>
+            <Route path="/add/faculty" element={<AddFaculty />} />
+            <Route path="/edit/faculty/:id" element={<FacultyEdit />} />
+            <Route path="/faculty/profile/:id" element={<FacultyProfile />} />
+
 
           </Routes>
         </main>

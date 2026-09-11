@@ -120,13 +120,44 @@ function FacultyList() {
   function goToAddFacultyPage() {
         navigate('/add/faculty')
     }
+
      function goToEdit(id) {
         navigate('/edit/faculty/' + id);
     }
+    
+    function goToDelete(id) {
+    const confirmDelete = window.confirm("Are you sure you want to delete this faculty?")
+
+    if (!confirmDelete) {
+        return
+    }
+
+    axios({
+        url: 'http://localhost:3000/delete/faculty/' + id,
+        method: 'delete'
+    })
+    .then((result) => {
+        if (result.data.success) {
+            alert("Faculty deleted successfully")
+              setFaculties(
+              faculties.filter((faculty) => faculty._id !== id)
+            )
+          }
+        })
+    .catch((err) => {
+        console.log(err.message)
+        alert("Something went wrong while deleting faculty")
+    })
+}
+
+function goToView(id) {
+        navigate('/faculty/profile/' + id)
+    }
+
 
   return (
          <>
-            <h3 className="text-center mb-4 py-2 text-primary fw-bold">List Of Faculty</h3>
+            <h3 className="text-center mb-4 py-2 text-primary fw-bold">LIST OF FACULTIES</h3>
 
             <InputGroup className="mb-3">
                 <InputGroup.Text>
@@ -167,14 +198,17 @@ function FacultyList() {
                                 <td>{faculty.designation}</td>
                                 <td>{faculty.highestQualification}</td>
                                 <td>
-                                    <i className="bi bi-pencil me-3 " onClick={() => goToEdit(faculty._id)} ></i>
-                                    {/* <i className="bi bi-trash" onClick={() => goToDelete(faculty._id)}></i> */}
+                                    <i className="bi bi-eye me-3 text-primary" onClick={() => goToView(faculty._id)}></i> 
+                                    <i className="bi bi-pencil me-3 text-warning " onClick={() => goToEdit(faculty._id)} ></i>
+                                    <i className="bi bi-trash  text-danger" onClick={() => goToDelete(faculty._id)}></i>  
                                 </td>
                             </tr>
                         )
                     }
+                    
                 </tbody>
             </table>
+          
                     <div className='d-flex justify-content-center'>
       {totalFaculties > facultyPerPage&&
       <Pagination>{items}</Pagination>}

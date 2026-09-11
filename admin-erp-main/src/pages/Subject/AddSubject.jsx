@@ -71,7 +71,7 @@ function AddSubject() {
                     <Row>
                         <Col md={6}>
                             <Form.Group className="mb-3">
-                                <Form.Label>Subject Code</Form.Label>
+                                <Form.Label>Subject Code :-</Form.Label>
                                 <Form.Control
                                     type="text"
                                     onChange={(e) => setSubjectCode(e.target.value)}
@@ -82,7 +82,7 @@ function AddSubject() {
                         </Col>
                         <Col md={6}>
                             <Form.Group className="mb-3">
-                                <Form.Label>Subject Full Name</Form.Label>
+                                <Form.Label>Subject Full Name :-</Form.Label>
                                 <Form.Control
                                     type="text"
                                     onChange={(e) => setSubjectFullName(e.target.value)}
@@ -96,7 +96,7 @@ function AddSubject() {
                     <Row>
                         <Col md={6}>
                             <Form.Group className="mb-3">
-                                <Form.Label>Subject Nick Name</Form.Label>
+                                <Form.Label>Subject Nick Name :-</Form.Label>
                                 <Form.Control
                                     type="text"
                                     onChange={(e) => setSubjectNickName(e.target.value)}
@@ -108,7 +108,7 @@ function AddSubject() {
 
                         <Col md={6}>
                             <Form.Group className="mb-3">
-                                <Form.Label>Subject Categiory</Form.Label>
+                                <Form.Label>Subject Category :-</Form.Label>
                                 <Form.Select
                                     onChange={(e) => setSubjectCategory(e.target.value)}
                                     required
@@ -125,7 +125,7 @@ function AddSubject() {
                     <Row>
                         <Col md={6}>
                             <Form.Group className="mb-3">
-                                <Form.Label>Subject type</Form.Label>
+                                <Form.Label>Subject Type :-</Form.Label>
                                 <Form.Select
                                     onChange={(e) => setSubjectType(e.target.value)}
                                     required
@@ -140,7 +140,7 @@ function AddSubject() {
                         </Col>
                         <Col md={6}>
                             <Form.Group className="mb-3">
-                                <Form.Label>Cradit Score</Form.Label>
+                                <Form.Label>Credit Score :-</Form.Label>
                                 <Form.Select
                                     onChange={(e) => setCreditScore(e.target.value)}
                                     required
@@ -157,8 +157,8 @@ function AddSubject() {
                         </Col>
                     </Row>
 
-                    <div className="d-flex gap-2 mt-4">
-                        <Button onClick={() => navigate('/subjects')} variant="secondary" type="button">
+                    <div className="d-flex justify-content-center gap-2 mt-4">
+                        <Button onClick={() => navigate('/subjects')} variant="danger" type="button">
                             Cancel
                         </Button>
                         <Button onClick={doAddSubject} disabled={buttonDisabled} variant="success" type="submit">
@@ -175,7 +175,7 @@ function AddSubject() {
             </div>)}
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Sucess</Modal.Title>
+                    <Modal.Title>Success</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>Subject added successfully</Modal.Body>
                 <Modal.Footer>

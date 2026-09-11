@@ -293,7 +293,7 @@ function AddStudent() {
                 <Row>
                     <Col md={4}>
                         <Form.Group className="mb-3">
-                            <Form.Label>Enrollment Number</Form.Label>
+                            <Form.Label>Enrollment Number :-</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Enter enrollment number"
@@ -305,7 +305,7 @@ function AddStudent() {
                     </Col>
                     <Col md={4}>
                         <Form.Group className="mb-3">
-                            <Form.Label>File Number</Form.Label>
+                            <Form.Label>File Number :-</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Enter file number"
@@ -316,7 +316,7 @@ function AddStudent() {
                     </Col>
                     <Col md={4}>
                         <Form.Group className="mb-3">
-                            <Form.Label>Roll Number</Form.Label>
+                            <Form.Label>Roll Number :-</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Enter roll number"
@@ -330,7 +330,7 @@ function AddStudent() {
                 <Row>
                     <Col md={4}>
                         <Form.Group className="mb-3">
-                            <Form.Label>First Name</Form.Label>
+                            <Form.Label>First Name :-</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Enter first name"
@@ -342,7 +342,7 @@ function AddStudent() {
                     </Col>
                     <Col md={4}>
                         <Form.Group className="mb-3">
-                            <Form.Label>Last Name</Form.Label>
+                            <Form.Label>Last Name :-</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Enter last name"
@@ -354,7 +354,7 @@ function AddStudent() {
                     </Col>
                     <Col md={4}>
                         <Form.Group className="mb-3">
-                            <Form.Label>Date of Birth</Form.Label>
+                            <Form.Label>Date of Birth :-</Form.Label>
                             <Form.Control
                                 type="date"
                                 value={dob}
@@ -368,7 +368,7 @@ function AddStudent() {
                 <Row>
                     <Col md={4}>
                         <Form.Group className="mb-3">
-                            <Form.Label>Gender</Form.Label>
+                            <Form.Label>Gender :-</Form.Label>
                             <Form.Select value={gender} onChange={e => setGender(e.target.value)} required>
                                 <option value="">Select</option>
                                 <option value="Male">Male</option>
@@ -379,7 +379,7 @@ function AddStudent() {
                     </Col>
                     <Col md={4}>
                         <Form.Group className="mb-3">
-                            <Form.Label>Father's Name</Form.Label>
+                            <Form.Label>Father's Name :-</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Enter father's name"
@@ -391,7 +391,7 @@ function AddStudent() {
                     </Col>
                     <Col md={4}>
                         <Form.Group className="mb-3">
-                            <Form.Label>Mother's Name</Form.Label>
+                            <Form.Label>Mother's Name :-</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Enter mother's name"
@@ -407,7 +407,7 @@ function AddStudent() {
                 <Row>
                     <Col md={4}>
                         <Form.Group className="mb-3">
-                            <Form.Label>Personal Email</Form.Label>
+                            <Form.Label>Personal Email :-</Form.Label>
                             <Form.Control
                                 type="email"
                                 value={personalEmailId}
@@ -420,7 +420,7 @@ function AddStudent() {
 
                     <Col md={4}>
                         <Form.Group className="mb-3">
-                            <Form.Label>College Email</Form.Label>
+                            <Form.Label>College Email :-</Form.Label>
                             <Form.Control
                                 type="email"
                                 value={collegeEmailId}
@@ -433,7 +433,7 @@ function AddStudent() {
 
                     <Col md={4}>
                         <Form.Group className="mb-3">
-                            <Form.Label>Mobile Number</Form.Label>
+                            <Form.Label>Mobile Number :-</Form.Label>
                             <Form.Control
                                 type="text"
                                 value={mobileNumber}
@@ -448,7 +448,7 @@ function AddStudent() {
                 <Row>
                     <Col md={4}>
                         <Form.Group className="mb-3">
-                            <Form.Label>Select Course</Form.Label>
+                            <Form.Label>Select Course :-</Form.Label>
                             <Form.Select
                                 value={course}
                                 onChange={(e) => {
@@ -470,7 +470,7 @@ function AddStudent() {
                     <Col md={4}>
                         {course && branches.length > 0 && (
                             <Form.Group className="mb-3">
-                                <Form.Label>Select Branch</Form.Label>
+                                <Form.Label>Select Branch :-</Form.Label>
 
                                 <Form.Select
                                     value={branch}
@@ -505,7 +505,7 @@ function AddStudent() {
                 <Row>
                     <Col md={4}>
                         <Form.Group className="mb-3">
-                            <Form.Label>Emergency Number</Form.Label>
+                            <Form.Label>Emergency Number :-</Form.Label>
                             <Form.Control
                                 type="text"
                                 value={emergencyMobNumber}
@@ -517,7 +517,7 @@ function AddStudent() {
 
                     <Col md={4}>
                         <Form.Group className="mb-3">
-                            <Form.Label>Admission Year</Form.Label>
+                            <Form.Label>Admission Year :-</Form.Label>
                             <Form.Control
                                 type="number"
                                 value={admissionYear}
@@ -529,7 +529,7 @@ function AddStudent() {
 
                     <Col md={4}>
                         <Form.Group className="mb-3">
-                            <Form.Label>Current Session</Form.Label>
+                            <Form.Label>Current Session :-</Form.Label>
                             <Form.Control
                                 type="text"
                                 value={currentSession}
@@ -543,7 +543,7 @@ function AddStudent() {
                 <Row>
                     <Col md={4}>
                         <Form.Group className="mb-3">
-                            <Form.Label>Year</Form.Label>
+                            <Form.Label>Year :-</Form.Label>
                             <Form.Select
                                 value={year}
                                 onChange={e => setYear(e.target.value)}
@@ -560,7 +560,7 @@ function AddStudent() {
 
                     <Col md={4}>
                         <Form.Group className="mb-3">
-                            <Form.Label>Semester</Form.Label>
+                            <Form.Label>Semester :-</Form.Label>
                             <Form.Select
                                 value={semester}
                                 onChange={e => setSemester(e.target.value)}
@@ -582,7 +582,7 @@ function AddStudent() {
 
                     <Col md={4}>
                         <Form.Group className="mb-3">
-                            <Form.Label>Group</Form.Label>
+                            <Form.Label>Group :-</Form.Label>
                             <Form.Select
                                 value={group}
                                 onChange={e => setGroup(e.target.value)}
@@ -601,7 +601,7 @@ function AddStudent() {
 
                 {/* Local Address */}
                 <div className="p-3 mb-4 border rounded">
-                    <h5 className="mt-4 text-primary">Local Address</h5>
+                    <h5 className="mt-4 text-primary">Local Address :-</h5>
                     <Row>
                         <Col md={4}>
                             <Form.Control
@@ -659,7 +659,7 @@ function AddStudent() {
 
                 {/* Permanent Address */}
                 <div className="p-3 mb-4 border rounded">
-                    <h5 className="mt-4 text-primary">Permanent Address</h5>
+                    <h5 className="mt-4 text-primary">Permanent Address :-</h5>
                     <Row>
                         <Col md={4}>
                             <Form.Control
@@ -715,15 +715,15 @@ function AddStudent() {
                 <Row className="mt-4">
                     <Col md={4}>
                         <Form.Group className="mb-3">
-                            <Form.Label>Student Image</Form.Label>
+                            <Form.Label>Student Image :-</Form.Label>
                             <Form.Control type="file" onChange={e => setFile(e.target.files[0])} />
                         </Form.Group>
                     </Col>
                 </Row>
-
+                <div className="d-flex justify-content-center gap-2 mt-4">
                 <Button onClick={() => navigate('/students')} className="me-2" variant="danger">Cancel</Button>
                 <Button variant="success" disabled={buttonDisabled} type='submit'>Add Student</Button>
-
+                </div>
             </Form>
 
             <Modal show={show} onHide={handleClose}>
@@ -747,7 +747,7 @@ function AddStudent() {
                         <Row>
                             <Col md={4}>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Admission Year</Form.Label>
+                                    <Form.Label>Admission Year :-</Form.Label>
                                     <Form.Control
                                         type="number"
                                         value={admissionYear}
@@ -759,7 +759,7 @@ function AddStudent() {
 
                             <Col md={4}>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Select Course</Form.Label>
+                                    <Form.Label>Select Course :-</Form.Label>
                                     <Form.Select value={course} onChange={(e) => setCourse(e.target.value)} required>
                                         <option value="">Select</option>
                                         {courses.map((c) => (
@@ -771,7 +771,7 @@ function AddStudent() {
 
                             <Col md={4}>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Select Branch</Form.Label>
+                                    <Form.Label>Select Branch :-</Form.Label>
                                     <Form.Select value={branch} onChange={(e) => setBranch(e.target.value)} required>
                                         <option value="">Select</option>
                                         {branches.map((c) => (
@@ -785,7 +785,7 @@ function AddStudent() {
                         <Row>
                             <Col md={4}>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Select Section</Form.Label>
+                                    <Form.Label>Select Section :-</Form.Label>
                                     <Form.Select value={section} onChange={(e) => setSection(e.target.value)}>
                                         <option value="">Select</option>
                                         <option value="P1">P-1</option>
@@ -798,7 +798,7 @@ function AddStudent() {
 
                             <Col md={4}>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Year</Form.Label>
+                                    <Form.Label>Year :-</Form.Label>
                                     <Form.Select value={year} onChange={e => setYear(e.target.value)} required>
                                         <option value="">Select</option>
                                         <option value="1">1st</option>
@@ -811,7 +811,7 @@ function AddStudent() {
 
                             <Col md={4}>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Semester</Form.Label>
+                                    <Form.Label>Semester :-</Form.Label>
                                     <Form.Select value={semester} onChange={e => setSemester(e.target.value)} required>
                                         <option value="">Select</option>
                                         <option value="1">1st</option>

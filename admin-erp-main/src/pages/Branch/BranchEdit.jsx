@@ -1,7 +1,6 @@
 import  { useEffect, useState } from 'react'
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom'
-
 import { Container, Form, Button, Row, Col, Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -84,7 +83,7 @@ function BranchEdit() {
                 <h3 className="text-center mb-4 py-2 text-white fw-bold bg-black">EDIT BRANCH</h3>
                 <Row className="mb-3">
                     <Form.Group as={Col} controlId="formGridState">
-                        <Form.Label>Select Course</Form.Label>
+                        <Form.Label>Select Course :-</Form.Label>
                         <Form.Select
                             value={branch.course}
                             onChange={handleChange}
@@ -102,7 +101,7 @@ function BranchEdit() {
 
                 <Row className="mb-3">
                     <Form.Group as={Col} controlId="formGridEmail">
-                        <Form.Label>Branch Code</Form.Label>
+                        <Form.Label>Branch Code :-</Form.Label>
                         <Form.Control
                             type="text"
                             value={branch.branchCode}
@@ -113,7 +112,7 @@ function BranchEdit() {
                     </Form.Group>
 
                     <Form.Group as={Col} controlId="formGridPassword">
-                        <Form.Label>Branch Short Name</Form.Label>
+                        <Form.Label>Branch Short Name :-</Form.Label>
                         <Form.Control
                             type="text"
                             value={branch.branchShortName}
@@ -127,7 +126,7 @@ function BranchEdit() {
 
                 <Row className="mb-3">
                     <Form.Group as={Col} controlId="formGridEmail">
-                        <Form.Label>Branch Full Name</Form.Label>
+                        <Form.Label>Branch Full Name :-</Form.Label>
                         <Form.Control
                             type="text"
                             value={branch.branchFullName}
@@ -138,7 +137,7 @@ function BranchEdit() {
                     </Form.Group>
 
                     <Form.Group as={Col} controlId="formGridPassword">
-                        <Form.Label>Total Intake</Form.Label>
+                        <Form.Label>Total Intake :-</Form.Label>
                         <Form.Control
                             type="number"
                             value={branch.branchIntake}

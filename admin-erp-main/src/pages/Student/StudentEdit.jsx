@@ -272,7 +272,7 @@ function StudentEdit() {
           <Row>
             <Col md={4}>
               <Form.Group className="mb-3">
-                <Form.Label>Enrollment Number</Form.Label>
+                <Form.Label>Enrollment Number :-</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Enter enrollment number"
@@ -285,7 +285,7 @@ function StudentEdit() {
 
             <Col md={4}>
               <Form.Group className="mb-3">
-                <Form.Label>File Number</Form.Label>
+                <Form.Label>File Number :-</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Enter file number"
@@ -298,7 +298,7 @@ function StudentEdit() {
 
             <Col md={4}>
               <Form.Group className="mb-3">
-                <Form.Label>Roll Number</Form.Label>
+                <Form.Label>Roll Number :-</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Enter roll number"
@@ -316,7 +316,7 @@ function StudentEdit() {
           <Row>
             <Col md={4}>
               <Form.Group className="mb-3">
-                <Form.Label>First Name</Form.Label>
+                <Form.Label>First Name :-</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Enter first name"
@@ -329,7 +329,7 @@ function StudentEdit() {
 
             <Col md={4}>
               <Form.Group className="mb-3">
-                <Form.Label>Last Name</Form.Label>
+                <Form.Label>Last Name :-</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Enter last name"
@@ -342,7 +342,7 @@ function StudentEdit() {
 
             <Col md={4}>
               <Form.Group className="mb-3">
-                <Form.Label>Date of Birth</Form.Label>
+                <Form.Label>Date of Birth :-</Form.Label>
                 <Form.Control
                   type="date"
                   value={student.dob || ""}
@@ -359,7 +359,7 @@ function StudentEdit() {
           <Row>
             <Col md={4}>
               <Form.Group className="mb-3">
-                <Form.Label>Gender</Form.Label>
+                <Form.Label>Gender :-</Form.Label>
 
                 <Form.Select
                   value={student.gender || ""}
@@ -377,7 +377,7 @@ function StudentEdit() {
 
             <Col md={4}>
               <Form.Group className="mb-3">
-                <Form.Label>Father's Name</Form.Label>
+                <Form.Label>Father's Name :-</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Enter father's name"
@@ -390,7 +390,7 @@ function StudentEdit() {
 
             <Col md={4}>
               <Form.Group className="mb-3">
-                <Form.Label>Mother's Name</Form.Label>
+                <Form.Label>Mother's Name :-</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Enter mother's name"
@@ -408,7 +408,7 @@ function StudentEdit() {
           <Row>
             <Col md={4}>
               <Form.Group className="mb-3">
-                <Form.Label>Personal Email</Form.Label>
+                <Form.Label>Personal Email :-</Form.Label>
                 <Form.Control
                   type="email"
                   value={student.personalEmailId || ""}
@@ -421,7 +421,7 @@ function StudentEdit() {
 
             <Col md={4}>
               <Form.Group className="mb-3">
-                <Form.Label>College Email</Form.Label>
+                <Form.Label>College Email :-</Form.Label>
                 <Form.Control
                   type="email"
                   value={student.collegeEmailId || ""}
@@ -434,7 +434,7 @@ function StudentEdit() {
 
             <Col md={4}>
               <Form.Group className="mb-3">
-                <Form.Label>Mobile Number</Form.Label>
+                <Form.Label>Mobile Number :-</Form.Label>
                 <Form.Control
                   type="text"
                   value={student.mobileNumber || ""}
@@ -452,7 +452,7 @@ function StudentEdit() {
           <Row>
             <Col md={4}>
               <Form.Group className="mb-3">
-                <Form.Label>Emergency Number</Form.Label>
+                <Form.Label>Emergency Number :-</Form.Label>
                 <Form.Control
                   type="text"
                   value={student.emergencyMobNumber || ""}
@@ -465,7 +465,7 @@ function StudentEdit() {
 
             <Col md={4}>
               <Form.Group className="mb-3">
-                <Form.Label>Admission Year</Form.Label>
+                <Form.Label>Admission Year :-</Form.Label>
                 <Form.Control
                   type="number"
                   value={student.admissionYear || ""}
@@ -477,7 +477,7 @@ function StudentEdit() {
 
             <Col md={4}>
               <Form.Group className="mb-3">
-                <Form.Label>Current Session</Form.Label>
+                <Form.Label>Current Session :-</Form.Label>
                 <Form.Control
                   type="text"
                   value={student.currentSession || ""}
@@ -495,7 +495,7 @@ function StudentEdit() {
           <Row>
             <Col md={4}>
               <Form.Group className="mb-3">
-                <Form.Label>Year</Form.Label>
+                <Form.Label>Year :-</Form.Label>
 
                 <Form.Select
                   value={student.year || ""}
@@ -513,7 +513,7 @@ function StudentEdit() {
 
             <Col md={4}>
               <Form.Group className="mb-3">
-                <Form.Label>Semester</Form.Label>
+                <Form.Label>Semester :-</Form.Label>
 
                 <Form.Select
                   value={student.semester || ""}
@@ -535,7 +535,7 @@ function StudentEdit() {
 
             <Col md={4}>
               <Form.Group className="mb-3">
-                <Form.Label>Group</Form.Label>
+                <Form.Label>Group :-</Form.Label>
 
                 <Form.Select
                   value={student.group || ""}
@@ -558,12 +558,12 @@ function StudentEdit() {
               LOCAL ADDRESS
           ========================== */}
           <div className="p-3 mb-4 border rounded">
-            <h5 className="mt-2 text-primary">Local Address</h5>
+            <h5 className="mt-2 text-primary">Local Address :-</h5>
 
             <Row>
               <Col md={4}>
                 <Form.Group className="mb-2">
-                  <Form.Label>Address Line 1</Form.Label>
+                  <Form.Label>Address Line 1 :-</Form.Label>
                   <Form.Control
                     name="localAddressLine1"
                     placeholder="Address Line 1"
@@ -575,7 +575,7 @@ function StudentEdit() {
 
               <Col md={4}>
                 <Form.Group className="mb-2">
-                  <Form.Label>Address Line 2</Form.Label>
+                  <Form.Label>Address Line 2 :-</Form.Label>
                   <Form.Control
                     name="localAddressLine2"
                     placeholder="Address Line 2"
@@ -587,7 +587,7 @@ function StudentEdit() {
 
               <Col md={4}>
                 <Form.Group className="mb-2">
-                  <Form.Label>City</Form.Label>
+                  <Form.Label>City :-</Form.Label>
                   <Form.Control
                     name="localCity"
                     placeholder="City"
@@ -601,7 +601,7 @@ function StudentEdit() {
             <Row className="mt-2">
               <Col md={6}>
                 <Form.Group className="mb-2">
-                  <Form.Label>State</Form.Label>
+                  <Form.Label>State :-</Form.Label>
                   <Form.Control
                     name="localState"
                     placeholder="State"
@@ -613,7 +613,7 @@ function StudentEdit() {
 
               <Col md={6}>
                 <Form.Group className="mb-2">
-                  <Form.Label>Pincode</Form.Label>
+                  <Form.Label>Pincode :-</Form.Label>
                   <Form.Control
                     name="localPincode"
                     placeholder="Pincode"
@@ -640,12 +640,12 @@ function StudentEdit() {
               PERMANENT ADDRESS
           ========================== */}
           <div className="p-3 mb-4 border rounded">
-            <h5 className="mt-2 text-primary">Permanent Address</h5>
+            <h5 className="mt-2 text-primary">Permanent Address :-</h5>
 
             <Row>
               <Col md={4}>
                 <Form.Group className="mb-2">
-                  <Form.Label>Address Line 1</Form.Label>
+                  <Form.Label>Address Line 1 :-</Form.Label>
                   <Form.Control
                     name="permanentAddressLine1"
                     placeholder="Address Line 1"
@@ -658,7 +658,7 @@ function StudentEdit() {
 
               <Col md={4}>
                 <Form.Group className="mb-2">
-                  <Form.Label>Address Line 2</Form.Label>
+                  <Form.Label>Address Line 2 :-</Form.Label>
                   <Form.Control
                     name="permanentAddressLine2"
                     placeholder="Address Line 2"
@@ -671,7 +671,7 @@ function StudentEdit() {
 
               <Col md={4}>
                 <Form.Group className="mb-2">
-                  <Form.Label>City</Form.Label>
+                  <Form.Label>City :-</Form.Label>
                   <Form.Control
                     name="permanentCity"
                     placeholder="City"
@@ -686,7 +686,7 @@ function StudentEdit() {
             <Row className="mt-2">
               <Col md={6}>
                 <Form.Group className="mb-2">
-                  <Form.Label>State</Form.Label>
+                  <Form.Label>State :-</Form.Label>
                   <Form.Control
                     name="permanentState"
                     placeholder="State"
@@ -699,7 +699,7 @@ function StudentEdit() {
 
               <Col md={6}>
                 <Form.Group className="mb-2">
-                  <Form.Label>Pincode</Form.Label>
+                  <Form.Label>Pincode :-</Form.Label>
                   <Form.Control
                     name="permanentPincode"
                     placeholder="Pincode"
@@ -718,7 +718,7 @@ function StudentEdit() {
           <Row className="mt-4">
             <Col md={4}>
               <Form.Group className="mb-3">
-                <Form.Label>Student Image</Form.Label>
+                <Form.Label>Student Image :-</Form.Label>
 
                 <Form.Control
                   type="file"
@@ -781,7 +781,7 @@ function StudentEdit() {
         ========================== */}
         <Modal show={show} onHide={handleClose} centered>
           <Modal.Header closeButton>
-            <Modal.Title>Success</Modal.Title>
+            <Modal.Title>Success </Modal.Title>
           </Modal.Header>
 
           <Modal.Body>

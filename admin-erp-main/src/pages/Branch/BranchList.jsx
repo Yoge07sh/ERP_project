@@ -132,8 +132,8 @@ function BranchList() {
                                 <td>{branch.branchShortName}</td>
                                 <td>{branch.branchIntake}</td>
                                 <td>
-                                    <i className="bi bi-pencil me-3 " onClick={() => goToEdit(branch._id)} ></i>
-                                    <i className="bi bi-trash" onClick={() => goToDelete(branch._id)}></i>
+                                    <i className="bi bi-pencil me-3 text-primary" onClick={() => goToEdit(branch._id)} ></i>
+                                    <i className="bi bi-trash text-danger" onClick={() => goToDelete(branch._id)}></i>
                                 </td>
                             </tr>
                         )

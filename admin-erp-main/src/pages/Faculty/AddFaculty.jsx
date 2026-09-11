@@ -120,7 +120,7 @@ function AddFaculty() {
 
   return (
     <>
-        <h3 className="text-center mb-4 py-2 text-primary fw-bold ">ADD Faculty</h3>
+        <h3 className="text-center mb-4 py-2 text-primary fw-bold ">ADD FACULTY</h3>
         <hr />
    
         {showForm && (
@@ -129,7 +129,7 @@ function AddFaculty() {
               <Row>
                 <Col>
                   <Form.Group className="mb-3">
-                    <Form.Label>First Name</Form.Label>
+                    <Form.Label>First Name :-</Form.Label>
                     <Form.Control
                       type="text"
                       onChange={(e) => setFirstName(e.target.value)}
@@ -139,7 +139,7 @@ function AddFaculty() {
                 </Col>
                 <Col>
                   <Form.Group className="mb-3">
-                    <Form.Label>Last Name</Form.Label>
+                    <Form.Label>Last Name :-</Form.Label>
                     <Form.Control
                       type="text"
                       onChange={(e) => setLastName(e.target.value)}
@@ -151,7 +151,7 @@ function AddFaculty() {
               <Row>
                 <Col>
                   <Form.Group className="mb-3">
-                    <Form.Label>Personal Email</Form.Label>
+                    <Form.Label>Personal Email :-</Form.Label>
                     <Form.Control
                       type="text"
                       onChange={(e) => setPersonalEmail(e.target.value)}
@@ -162,7 +162,7 @@ function AddFaculty() {
 
                 <Col>
                   <Form.Group className="mb-3">
-                    <Form.Label>College Id</Form.Label>
+                    <Form.Label>College Id :-</Form.Label>
                     <Form.Control
                       type="text"
                       onChange={(e) => setCollegeId(e.target.value)}
@@ -175,7 +175,7 @@ function AddFaculty() {
                   
                 <Col>
                   <Form.Group className="mb-3">
-                    <Form.Label>Mobile No</Form.Label>
+                    <Form.Label>Mobile No :-</Form.Label>
                     <Form.Control
                       type="number"
                       onChange={(e) => setMobileNo(e.target.value)}
@@ -185,7 +185,7 @@ function AddFaculty() {
                 </Col>
                 <Col>
                   <Form.Group className="mb-3">
-                    <Form.Label>Emergency Mobile No</Form.Label>
+                    <Form.Label>Emergency Mobile No :-</Form.Label>
                     <Form.Control
                       type="number"
                       onChange={(e) => setEmergencyMobileNo(e.target.value)}
@@ -197,7 +197,7 @@ function AddFaculty() {
               <Row>
                 <Col>
                   <Form.Group className="mb-3">
-                    <Form.Label>Mother's Name</Form.Label>
+                    <Form.Label>Mother's Name :-</Form.Label>
                     <Form.Control
                       type="text"
                       onChange={(e) => setMotherName(e.target.value)}
@@ -207,7 +207,7 @@ function AddFaculty() {
                 </Col>
                 <Col>
                   <Form.Group className="mb-3">
-                    <Form.Label>Father's Name</Form.Label>
+                    <Form.Label>Father's Name :-</Form.Label>
                     <Form.Control
                       type="text"
                       onChange={(e) => setFatherName(e.target.value)}
@@ -218,7 +218,7 @@ function AddFaculty() {
               </Row>
               <Row>
                 <Col>
-                  <Form.Label>Gender</Form.Label>
+                  <Form.Label>Gender :-</Form.Label>
                   <Form.Select
                     aria-label="Gender"
                     onChange={(e) => setGender(e.target.value)}
@@ -228,7 +228,7 @@ function AddFaculty() {
                   </Form.Select>
                 </Col>
                 <Col>
-                  <Form.Label>Married Status</Form.Label>
+                  <Form.Label>Married Status :-</Form.Label>
                   <Form.Select
                     aria-label="marriedstatus"
                     onChange={(e) => setMarriedStatus(e.target.value)}
@@ -242,7 +242,7 @@ function AddFaculty() {
                 <Row>
                   <Col>
                   <Form.Group className="mb-3">
-                    <Form.Label>Date Of Birth</Form.Label>
+                    <Form.Label>Date Of Birth :-</Form.Label>
                     <Form.Control
                       type="date"
                       onChange={(e) => setDob(e.target.value)}
@@ -251,7 +251,7 @@ function AddFaculty() {
                 </Col>
                 <Col>
                   <Form.Group className="mb-3">
-                    <Form.Label>Thumb Id</Form.Label>
+                    <Form.Label>Thumb Id :-</Form.Label>
                     <Form.Control
                       type="text"
                       onChange={(e) => setThumbId(e.target.value)}
@@ -263,7 +263,7 @@ function AddFaculty() {
               <Row>
                  <Col>
                   <Form.Group className="mb-3">
-                    <Form.Label>College Email</Form.Label>
+                    <Form.Label>College Email :-</Form.Label>
                     <Form.Control
                       type="text"
                       onChange={(e) => setCollegeEmail(e.target.value)}
@@ -273,7 +273,7 @@ function AddFaculty() {
                 </Col>
                  <Col>
                   <Form.Group className="mb-3">
-                    <Form.Label>Designation</Form.Label>
+                    <Form.Label>Designation :-</Form.Label>
                     <Form.Control
                       type="text"
                       onChange={(e) => setDesignation(e.target.value)}
@@ -285,7 +285,7 @@ function AddFaculty() {
                <Row>
                 <Col>
                   <Form.Group className="mb-3">
-                    <Form.Label>Upload Highest Qualification</Form.Label>
+                    <Form.Label>Upload Highest Qualification :-</Form.Label>
                     <Form.Control
                       type="text"
                       onChange={(e) => setHighestQualification(e.target.value)}
@@ -295,7 +295,7 @@ function AddFaculty() {
                 </Col>
                  <Col>
                   <Form.Group className="mb-3">
-                    <Form.Label>Total Experience</Form.Label>
+                    <Form.Label>Total Experience :-</Form.Label>
                     <Form.Control
                       type="number"
                       onChange={(e) => setTotalExperience(e.target.value)}
@@ -307,7 +307,7 @@ function AddFaculty() {
               <Row>
                  <Col>
                   <Form.Group className="mb-3">
-                    <Form.Label>Teaching Experience</Form.Label>
+                    <Form.Label>Teaching Experience :-</Form.Label>
                     <Form.Control
                       type="number"
                       onChange={(e) => setTeachingExperience(e.target.value)}
@@ -317,7 +317,7 @@ function AddFaculty() {
                 </Col>
                  <Col>
                   <Form.Group className="mb-3">
-                    <Form.Label>Industry Experience</Form.Label>
+                    <Form.Label>Industry Experience :-</Form.Label>
                     <Form.Control
                       type="number"
                       onChange={(e) => setIndustryExperience(e.target.value)}
@@ -327,7 +327,7 @@ function AddFaculty() {
                 </Col>
                  <Col>
                   <Form.Group className="mb-3">
-                    <Form.Label>Research  Experience</Form.Label>
+                    <Form.Label>Research  Experience :-</Form.Label>
                     <Form.Control
                       type="number"
                       onChange={(e) => setResearchExperience(e.target.value)}
@@ -339,7 +339,7 @@ function AddFaculty() {
               <Row>
                  <Col>
                 <Form.Group className="mb-3">
-                  <Form.Label>Upload Faculty Image</Form.Label>
+                  <Form.Label>Upload Faculty Image :-</Form.Label>
                   <Form.Control
                     type="file"
                     onChange={(e) => setFile(e.target.files[0])}
@@ -348,7 +348,7 @@ function AddFaculty() {
                 </Form.Group>
               </Col>
               </Row>
-
+            <div className="d-flex justify-content-center gap-2 mt-4">
               <Button
                 className="me-2"
                 variant="danger"
@@ -363,6 +363,7 @@ function AddFaculty() {
               >
                 Add Faculty
               </Button>
+              </div>
               <span className="mx-4 text-secondary ">Or upload via csv</span>
               {/* <Button
                 variant="success"
@@ -385,7 +386,7 @@ function AddFaculty() {
           <Modal.Header closeButton>
             <Modal.Title>Success</Modal.Title>
           </Modal.Header>
-          <Modal.Body>Faculty added successfully</Modal.Body>
+          <Modal.Body>Faculty Added Successfully</Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
               Close

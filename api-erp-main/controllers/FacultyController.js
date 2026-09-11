@@ -130,14 +130,31 @@ async function getFaculties(req, res) {
 }
 async function getFaculty(req, res) {
     try {
-        let facultyId = req.params.id;
+         let facultyId = req.params.id;
         let faculty = await Faculty.findOne({ _id: facultyId });
         res.status(200).send({ success: true, data: faculty })
 
     } catch (error) {
         res.status(500).send({ success: false, message: 'Something went wrong...' });
     }
+//     this function is commented
 }
+async function deleteFaculty(req, res) {
+    try {
+        let facultyId = req.params.id;
+        const result = await Faculty.deleteOne({ _id: facultyId });
+
+        if (result) {
+            res.status(200).send({ success: true, message: 'Faculty Deleted Successfull...' });
+        } else {
+            res.status(500).send({ success: false, message: 'Can not Delete Faculty' });
+        }
+      } 
+      catch (error) {
+        console.log(error)
+        res.status(500).send({ success: false, message: 'Can not Delete, Something went wrong..!' });
+      }
+    }
 async function editFaculty(req, res) {
     try {
         let facultyId = req.params.id;
@@ -157,10 +174,40 @@ async function editFaculty(req, res) {
     }
 }
 
+async function getFacultyProfile(req, res) {
+    try {
+        const faculty = await Faculty.findById(req.params.id);
+
+        if (!faculty) {
+            return res.status(404).send({
+                success: false,
+                message: 'Faculty not found'
+            });
+        }
+
+        res.status(200).send({
+            success: true,
+            message: 'Faculty profile fetched successfully',
+            data: faculty
+        });
+
+    } catch (error) {
+        console.error('Get Faculty Profile Error:', error);
+
+        res.status(500).send({
+            success: false,
+            message: 'Server error',
+            error: error.message
+        });
+    }
+}
+
 module.exports = {
   addFaculty,
   addFaculties,
   getFaculties,
   getFaculty,
+  deleteFaculty,
   editFaculty,
+  getFacultyProfile
 };
