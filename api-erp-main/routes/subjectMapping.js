@@ -24,14 +24,11 @@ router.post('/add/subjectMapping',(req,res)=>{
 router.get('/subjectsMapped', (req, res) => {
     SubjectMappingController.getSubjectsMapped(req, res);
 })
-router.get('/subjectMapping/:id', (req, res) => {
-    SubjectMappingController.getSubjectMappingById(req, res);
-})
-router.put('/edit/subjectMapping/:id', (req, res) => {
-    console.log("ROUTE BODY:", req.body);
-    SubjectMappingController.editSubjectMapping(req, res);
-})
-router.delete('/delete/subjectMapping/:id', (req, res) => {
-    SubjectMappingController.deleteSubjectMapping(req, res);
+
+router.get('/edit/for/subjectMapping/:id', (req, res) => {
+    SubjectMappingController.editForSubjectMapping(req, res)
+});
+router.put('/edit/subjectMapping/:id', (req, res)=> {
+    SubjectMappingController.editSubjectMapping(req, res)
 })
 module.exports=router

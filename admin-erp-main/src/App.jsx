@@ -20,6 +20,7 @@ import SubjectEdit from './pages/Subject/SubjectEdit'
 // Subject Mapping
 import AddSubjectMapping from './pages/SubjectMapping/AddSubjectMapping'
 import SubjectMappingList from './pages/SubjectMapping/SubjectMappingList'
+import EditSubjectMapping from './pages/SubjectMapping/EditSubjectMapping'
 
 // Faculty
 import AddFaculty from './pages/Faculty/AddFaculty'
@@ -43,6 +44,7 @@ import StudentProfile from './pages/Student/StudentProfile'
 import TimeSlotList from './pages/TimeSlots/TimeSlotsList'
 import AddTimeSlot from './pages/TimeSlots/AddTimeSlot'
 import EditTimeSlot from './pages/TimeSlots/EditTimeSot'
+
 function App() {
   return (
     <BrowserRouter>
@@ -82,6 +84,7 @@ function App() {
             {/* Subject Mapping */}
             <Route path="/subjectsmap" element={<SubjectMappingList />} />
             <Route path="/add/subjectmapping" element={<AddSubjectMapping />} />
+            <Route path="/edit/subjectMapping/:id" element={<EditSubjectMapping />} />
             <Route path="/add/faculty" element={<AddFaculty />} />
             <Route path="/faculty/:id" element={<FacultyProfile />}
            
