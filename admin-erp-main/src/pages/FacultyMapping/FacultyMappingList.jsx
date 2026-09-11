@@ -18,6 +18,7 @@ const apiUrl = import.meta.env.VITE_API_URL
 function FacultyMappingList() {
 
     const navigate = useNavigate();
+    const [show, setShow] = useState(false)
 
     const handleAdd = () => {
         navigate('/add/facultymapping')
@@ -107,15 +108,16 @@ function FacultyMappingList() {
     }
     //handle edit
     const handleEdit = (id) => {
-        navigate('/edit/facultymapping' + id)
+        navigate('/edit/facultymapping/' + id)
     }
     //handle delete
     const handleDelete = (id) => {
         axios({
-            url: apiUrl + '/delete/facultyMapping' + id,
+            url: apiUrl + '/delete/facultyMapping/' + id,
             method: 'delete'
-        }).then(() => {
-            alert('success')
+        }).then(() => {    
+            alert("Faculty Mapping deleted successfully");
+            getFacultyMapping();
         }).catch((err) => { 
             alert(err);
         })
@@ -138,16 +140,16 @@ function FacultyMappingList() {
 
                     <InputGroup>
 
-                        <option value="facultyName">
-                            Faculty Name 
-                        </option>
+                        <InputGroup.Text>
+                          <i className="bi bi-calendar"></i>
+                        </InputGroup.Text>
 
-                        <Form.Control
-                            type="text"
-                            value={sessionSearch}
-                            onChange={handleSessionSearch}
-                            placeholder="Search by Session"
-                        />
+                            <Form.Control
+                                type="text"
+                                value={sessionSearch}
+                                onChange={handleSessionSearch}
+                                placeholder="Search by Session"
+                           />
 
                     </InputGroup>
 

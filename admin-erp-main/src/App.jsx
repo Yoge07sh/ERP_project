@@ -113,7 +113,6 @@ function App() {
             {/*facultyMapping*/}
             <Route path='/facultymapping' element={<FacultyMappingList></FacultyMappingList>}></Route>
             <Route path='/add/facultymapping' element={< AddFacultyMapping ></AddFacultyMapping>}></Route>
-            <Route path='/add/facultymapping' element={< AddFacultyMapping ></AddFacultyMapping>}></Route>
             <Route path='/edit/facultymapping/:id' element={<EditFacultyMapping></EditFacultyMapping>}></Route>
 
             {/*faculty*/}

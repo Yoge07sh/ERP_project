@@ -88,7 +88,7 @@ function EditSubjectMapping() {
   // Get Existing Subject Mapping.
   useEffect(() => {
     axios({
-        url: apiUrl + '/edit/for/subjectMapping/' + id,
+        url: apiUrl + '/subjectMapping/' + id,
         method: 'get'
     }).then((res) => {
         setSubjectMapping(res.data.data)
@@ -290,9 +290,9 @@ function EditSubjectMapping() {
       )}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Sucess</Modal.Title>
+          <Modal.Title>Success</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Subject mapping added successfully</Modal.Body>
+        <Modal.Body>Subject Mapping Updated Successfully</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close

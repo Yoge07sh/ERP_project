@@ -358,31 +358,86 @@ const getFacultyList = async (req, res) => {
     }
 }
 const getFacultyMappingById = async (req, res) => {
+
     try {
+
         let facultyId = req.params.id;
-        let facultyMap = await FacultyMap.findOne({ _id: facultyId })
-        console.log(facultyMap);      
-        res.status(200).send({ success: true, data: facultyMap })
+
+        let facultyMap = await FacultyMap.findOne({
+            _id: facultyId
+        });
+
+        console.log("Faculty Mapping:", facultyMap);
+
+         if (!facultyMap) {
+
+            return res.status(404).send({
+                success: false,
+                message: "Faculty Mapping not found"
+            });
+
+        }
+
+        res.status(200).send({
+            success: true,
+            data: facultyMap
+        });
+
     } catch (error) {
+
         console.log(error);
-        res.status(500).send({ success: false, message: 'Something went wrong...' });
+
+        res.status(500).send({
+            success: false,
+            message: "Something went wrong..."
+        });
+
     }
-}
+};
 
 const editFacultyMapping = async (req, res) => {
+
     try {
+
         let facultyId = req.params.id;
-        let facultyMap = await FacultyMap.findOne({ _id: facultyId })
-        Object.assign(facultyMap, req.body)
+
+        let facultyMap = await FacultyMap.findOne({
+            _id: facultyId
+        });
+
+        if (!facultyMap) {
+
+            return res.status(404).send({
+                success: false,
+                message: "Faculty Mapping not found"
+            });
+
+        }
+
+        Object.assign(facultyMap, req.body);
         await facultyMap.save();
-        console.log(facultyMap);
-        res.status(200).send({ success: true, message: 'FacultyMapping has been updated' })
+
+        console.log("Updated Faculty Mapping:", facultyMap);
+
+        res.status(200).send({
+            success: true,
+            message: "FacultyMapping has been updated",
+            data: facultyMap
+        });
 
     } catch (error) {
+
         console.log(error);
-        res.status(500).send({ success: false, message: 'Something went wrong in updating FacultyMapping' })
+
+        res.status(500).send({
+            success: false,
+            message: "Something went wrong in updating FacultyMapping"
+        });
+
     }
-}
+};
+
+
 
 const deleteFacultyMapping = async (req, res) => {
     try {
