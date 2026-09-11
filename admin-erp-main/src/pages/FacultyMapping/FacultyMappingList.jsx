@@ -25,8 +25,6 @@ function FacultyMappingList() {
         navigate('/add/facultymapping')
     }
 
-    const [show, setShow] = useState(false)
-
     const [facultyMapping, setFacultyMapping] = useState([]);
 
     // Separate search states
