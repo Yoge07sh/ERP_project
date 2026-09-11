@@ -19,6 +19,7 @@ const apiUrl = import.meta.env.VITE_API_URL
 function FacultyMappingList() {
 
     const navigate = useNavigate();
+    const [show, setShow] = useState(false)
 
     const handleAdd = () => {
         navigate('/add/facultymapping')
@@ -155,14 +156,16 @@ function FacultyMappingList() {
 
                     <InputGroup>
 
-                        
+                        <InputGroup.Text>
+                          <i className="bi bi-calendar"></i>
+                        </InputGroup.Text>
 
-                        <Form.Control
-                            type="text"
-                            value={sessionSearch}
-                            onChange={handleSessionSearch}
-                            placeholder="Search by Session"
-                        />
+                            <Form.Control
+                                type="text"
+                                value={sessionSearch}
+                                onChange={handleSessionSearch}
+                                placeholder="Search by Session"
+                           />
 
                     </InputGroup>
 

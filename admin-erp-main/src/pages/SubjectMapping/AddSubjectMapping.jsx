@@ -249,7 +249,7 @@ function SubjectMapping() {
         <Modal.Header closeButton>
           <Modal.Title>Success</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Subject mapping added successfully</Modal.Body>
+        <Modal.Body>Subject Mapping Added Successfully</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close

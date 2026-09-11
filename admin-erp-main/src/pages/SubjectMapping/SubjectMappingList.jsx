@@ -53,7 +53,7 @@ function SubjectMappingList() {
 
     function goToDelete(id) {
         axios({
-            url: 'http://localhost:3000/delete/subjectmapping/' + id,
+            url: apiUrl + '/delete/subjectMapping/' + id,
             method: 'delete'
 
         }).then((result) => {
@@ -109,8 +109,8 @@ function SubjectMappingList() {
                                         <FaEdit></FaEdit>
                                     </Button>
                                     <Button
-                                        variant="danger ms-2"
-                                        onClick={() => goToDelete(subject._id)}
+                                    variant="danger ms-2"
+                                    onClick={() => goToDelete(subject._id)}
                                     >
                                         <FaTrash></FaTrash>
                                     </Button>
@@ -128,7 +128,7 @@ function SubjectMappingList() {
                 <Modal.Header closeButton>
                     <Modal.Title>Success</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>subject Mapping has been Deleted successfully👍</Modal.Body>
+                <Modal.Body>Subject Mapping has been Deleted successfully👍</Modal.Body>
                 <Modal.Footer>
                     <Button variant="danger" onClick={handleClose}>
                         Close

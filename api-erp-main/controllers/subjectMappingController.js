@@ -102,7 +102,7 @@ async function getSubjectsMapped(req, res) {
     }
 }
 
-const editForSubjectMapping = async (req, res) => {
+const getSubjectMappingById = async (req, res) => {
   try{
     let id = req.params.id;
     let subjectMapping = await Mapping.findOne({_id: id})
@@ -133,6 +133,23 @@ const editSubjectMapping = async (req, res) => {
   }
 };
 
+const deleteSubjectMapping = async (req, res) => {
+  try {
+        let subjectId = req.params.id;
+        const result = await Mapping.deleteOne({ _id: subjectId });
+
+        if (result) {
+            res.status(200).send({ success: true, message: 'Subject Mapping Deleted Successfull' });
+        } else {
+            res.status(500).send({ success: false, message: 'Can not Delete Subject Mapping' });
+        }
+      } 
+      catch (error) {
+        console.log(error)
+        res.status(500).send({ success: false, message: 'Can not Delete, Something went wrong..!' });
+      }
+    } 
+
 
 module.exports = {
   getSubjectsForMapping,
@@ -141,5 +158,6 @@ module.exports = {
   addSubjectMapping,
   getSubjectsMapped,
   editSubjectMapping,
-  editForSubjectMapping,
+  getSubjectMappingById,
+  deleteSubjectMapping,
 };
