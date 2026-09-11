@@ -31,7 +31,7 @@ function AdminLogin() {
 
     try {
       setShowSpinner(true);
-      const res = await axios.post("http://localhost:3000/admin/login", {
+      const res = await axios.post("http://localhost:3000/login", {
         email,
         password,
       });

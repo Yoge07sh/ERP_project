@@ -1,30 +1,35 @@
-const Admin = require('./models/Admin');
-const bcrypt = require('bcrypt')
+const User = require("./models/User");
+const bcrypt = require("bcrypt");
 
 async function createAdmin() {
-    try {
+  try {
+    const adminExists = await User.findOne({
+      email: "admin@yopmail.com",
+    });
 
-        let adminExits = await Admin.findOne({ email: 'admin@yopmail.com' })
-        if (adminExits) {
-            console.log("Admin Updated...")
-        } else {
-
-            let admin = new Admin();
-
-            admin.firstName = 'Project';
-            admin.lastName = 'Admin';
-            admin.email = 'admin@yopmail.com';
-            let encryptedPassword = bcrypt.hashSync("123456", 10);
-            admin.password = encryptedPassword;
-            admin.adminType = 'admin'
-
-
-            await admin.save();
-        }
-
-    } catch (error) {
-        console.log(error);
+    if (adminExists) {
+      console.log("Admin already exists...");
+      return;
     }
+
+    const encryptedPassword = await bcrypt.hash("123456", 10);
+
+    const admin = new User({
+      firstName: "Project",
+      lastName: "Admin",
+      email: "admin@yopmail.com",
+      password: encryptedPassword,
+      userRole: "admin",
+      status: "Active",
+    });
+
+    await admin.save();
+
+    console.log("Admin created successfully...");
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 module.exports = createAdmin;
+

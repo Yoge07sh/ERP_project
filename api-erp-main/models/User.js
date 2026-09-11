@@ -1,15 +1,63 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
-const userSchema = new Schema({
-    firstName: { type: String, required: true },
-    lastName: { type: String, default: '' },
-    email: { type: String, unique: true, required: true },
-    password: { type: String, default: '' },
-    mobNo: { type: String, default: '' },
-    userRole: { type: String, default: '' },
-    lastLogin: { type: Date },
-    userImage: { type: String, default: '' },
-    status: { type: String, default: 'Active', enum: ['Active', 'InActive'] },
+const mongoose = require("mongoose");
 
-}, { timestamps: true })
-module.exports = mongoose.model('user', userSchema)
+const userSchema = new mongoose.Schema(
+    {
+        firstName: {
+            type: String,
+            required: true,
+            trim: true,
+        },
+
+        lastName: {
+            type: String,
+            default: "",
+            trim: true,
+        },
+
+        email: {
+            type: String,
+            required: true,
+            unique: true,
+            lowercase: true,
+            trim: true,
+        },
+
+        password: {
+            type: String,
+            required: true,
+        },
+
+        mobNo: {
+            type: String,
+            default: "",
+            trim: true,
+        },
+
+        userRole: {
+            type: String,
+            enum: ["student", "faculty", "admin"],
+            default: "student",
+        },
+
+        lastLogin: {
+            type: Date,
+            default: null,
+        },
+
+        userImage: {
+            type: String,
+            default: "",
+        },
+
+        status: {
+            type: String,
+            enum: ["Active", "InActive"],
+            default: "Active",
+        },
+    },
+    {
+        timestamps: true,
+    }
+);
+
+module.exports = mongoose.model("User", userSchema);
