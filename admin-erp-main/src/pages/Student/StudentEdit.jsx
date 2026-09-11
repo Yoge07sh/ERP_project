@@ -251,8 +251,8 @@ function StudentEdit() {
   return (
     <>
       <Container className="py-3">
-        <h4 className="text-center mb-4 py-2 text-primary fw-bold">
-          EDIT STUDENT
+        <h4 className="text-center mb-4 py-2 text-white fw-bold bg-black">
+          UPDATE STUDENT
         </h4>
 
         {error && (

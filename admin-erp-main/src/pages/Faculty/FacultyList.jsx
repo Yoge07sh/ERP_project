@@ -198,8 +198,8 @@ function goToView(id) {
                                 <td>{faculty.designation}</td>
                                 <td>{faculty.highestQualification}</td>
                                 <td>
-                                    <i className="bi bi-eye me-3 text-primary" onClick={() => goToView(faculty._id)}></i> 
-                                    <i className="bi bi-pencil me-3 text-warning " onClick={() => goToEdit(faculty._id)} ></i>
+                                    <i className="bi bi-eye me-3 text-warning" onClick={() => goToView(faculty._id)}></i> 
+                                    <i className="bi bi-pencil me-3 text-primary " onClick={() => goToEdit(faculty._id)} ></i>
                                     <i className="bi bi-trash  text-danger" onClick={() => goToDelete(faculty._id)}></i>  
                                 </td>
                             </tr>
