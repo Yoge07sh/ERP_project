@@ -94,9 +94,6 @@ function App() {
             <Route path="/edit/branch/:id" element={<BranchEdit />} />
             <Route path="/edit/subject/:id" element={<SubjectEdit />} />
             <Route path="/edit/faculty/:id" element={<FacultyEdit />} />
-            <Route path='/students' element={<StudentList />}></Route>
-            <Route path='/add/student' element={<AddStudent />}></Route>
-            <Route path='/edit/student/:id' element={<StudentEdit />}></Route>
 
             {/* Students */}
             <Route path="/students" element={<StudentList />} />

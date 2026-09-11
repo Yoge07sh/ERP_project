@@ -34,7 +34,7 @@ function StudentList() {
             }
         }).then((result) => {
             if (result.data.success) {
-                console.log(result.data.data);
+                // console.log(result.data.data);
                 setStudents(result.data.data);
 
             }
