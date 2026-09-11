@@ -6,7 +6,8 @@ import {
     Form,
     InputGroup,
     Container,
-    Pagination
+    Pagination,
+    Modal
 } from 'react-bootstrap'
 
 import { useEffect, useState } from 'react'
@@ -22,6 +23,8 @@ function FacultyMappingList() {
     const handleAdd = () => {
         navigate('/add/facultymapping')
     }
+
+    const [show, setShow] = useState(false)
 
     const [facultyMapping, setFacultyMapping] = useState([]);
 
@@ -52,7 +55,7 @@ function FacultyMappingList() {
                     page: page,
                     limit: limit,
                     session: sessionSearch,
-                    facultyName: facultyNameSearch
+                    facultyName: facultyNameSearch,
                 }
             });
 
@@ -82,7 +85,7 @@ function FacultyMappingList() {
 
         getFacultyMapping();
 
-    }, [page, sessionSearch, facultyNameSearch]);
+    }, [ page, sessionSearch, facultyNameSearch]);
 
 
     // Session search
@@ -93,6 +96,10 @@ function FacultyMappingList() {
         // Reset pagination
         setPage(1);
 
+    }
+
+    const handleClose = () => {
+        setShow(false)
     }
 
 
@@ -107,26 +114,36 @@ function FacultyMappingList() {
     }
     //handle edit
     const handleEdit = (id) => {
-        navigate('/edit/facultymapping' + id)
+        navigate('/edit/facultymapping/' + id)
     }
     //handle delete
-    const handleDelete = (id) => {
-        axios({
-            url: apiUrl + '/delete/facultyMapping' + id,
-            method: 'delete'
-        }).then(() => {
-            alert('success')
-        }).catch((err) => { 
-            alert(err);
-        })
-    }
+    const handleDelete = async (id) => {
+        try {
+            const res = await axios({
+                url: apiUrl + '/delete/facultyMapping/' + id,
+                method: 'delete'
+            });
 
+            if (res.data.success) {
+                setShow(true);
+                await getFacultyMapping();
+            }
+
+        } catch (err) {
+            console.log(err);
+
+            alert(
+                err.response?.data?.message ||
+                'Something went wrong'
+            );
+        }
+    };
     return (
 
         <Container>
 
             <h3 className="text-center mb-4 py-2 text-primary fw-bold">
-                LIST OF FACULTY MAPPING
+                FACULTY TEACHING DETAIL
             </h3>
 
 
@@ -138,9 +155,7 @@ function FacultyMappingList() {
 
                     <InputGroup>
 
-                        <option value="facultyName">
-                            Faculty Name 
-                        </option>
+                        
 
                         <Form.Control
                             type="text"
@@ -360,6 +375,19 @@ function FacultyMappingList() {
                 </div>
 
             )}
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Success</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Faculty Teaching Detail has been Deleted successfully👍</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="danger" onClick={handleClose}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+
 
         </Container>
     )

@@ -1,12 +1,26 @@
-const express =require('express')
-const router=express.Router()
-const UserController=require('../controllers/UserController')
-router.post('/admin/login',(req,res)=>{
-UserController.doAdminLogin(req,res)
-})
-router.post('/user/login',(req,res)=>{
-UserController.doUserlogin(req,res)
-})
+const express = require("express");
+
+const router = express.Router();
+
+const UserController = require("../controllers/UserController");
+
+const authMiddleware = require("../middleware/authMiddleware");
 
 
-module.exports=router
+
+router.post("/login", (req, res) => {
+
+    UserController.doLogin(req, res);
+
+});
+
+
+
+router.get("/me", authMiddleware, (req, res) => {
+
+    UserController.getMyProfile(req, res);
+
+});
+
+
+module.exports = router;

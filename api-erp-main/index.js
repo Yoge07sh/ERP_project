@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require('express');
 const app = express();
 const connect = require('./connection');
@@ -25,7 +26,6 @@ app.use(faculty)
 app.use(student)
 app.use(timeSlot)
 app.use(facultyMapping)
-
 app.use(user)
 
 connect();

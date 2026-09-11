@@ -56,20 +56,6 @@ function StudentList() {
     }
 
 
-    function goToDelete(id) {
-        axios({
-            url: 'http://localhost:3000/delete/student/' + id,
-            method: 'delete'
-
-        }).then((result) => {
-            if (result.data.success) {
-                setShow(true)
-            }
-        }).catch((err) => {
-            console.log(err.message);
-        })
-    }
-
 
     function goToEdit(id) {
         navigate('/edit/student/' + id);

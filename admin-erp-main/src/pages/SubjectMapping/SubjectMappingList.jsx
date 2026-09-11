@@ -48,7 +48,7 @@ function SubjectMappingList() {
     }
 
     function goToEdit(id) {
-        navigate('/edit/subjectMapping/'+ id)
+        navigate('/edit/subjectMapping/' + id)
     }
 
     function goToDelete(id) {
@@ -102,15 +102,15 @@ function SubjectMappingList() {
                                 <td>{subject.year}</td>
                                 <td>{subject.semester}</td>
                                 <td>
-                                    {/* <i className="bi bi-pencil me-3 " onClick={() => goToEdit(subject._id)} ></i> */}
                                     <Button
-                                    variant="warning"
-                                    onClick={() => goToEdit(subject._id)}
+                                        variant="warning"
+                                        onClick={() => goToEdit(subject._id)}
                                     >
                                         <FaEdit></FaEdit>
                                     </Button>
                                     <Button
-                                    variant="danger ms-2"
+                                        variant="danger ms-2"
+                                        onClick={() => goToDelete(subject._id)}
                                     >
                                         <FaTrash></FaTrash>
                                     </Button>
