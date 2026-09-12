@@ -17,7 +17,7 @@ function SubjectMappingList() {
     const [show, setShow] = useState(false)
     let [isDelete, setIsDelete] = useState(false)
     let [searchByCourse, setSearchByCourse] = useState('')
-    
+
 
 
 
@@ -110,8 +110,8 @@ function SubjectMappingList() {
                                         <FaEdit></FaEdit>
                                     </Button>
                                     <Button
-                                    variant="danger ms-2"
-                                    onClick={() => goToDelete(subject._id)}
+                                        variant="danger ms-2"
+                                        onClick={() => goToDelete(subject._id)}
                                     >
                                         <FaTrash></FaTrash>
                                     </Button>
