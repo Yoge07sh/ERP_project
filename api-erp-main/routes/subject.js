@@ -20,5 +20,8 @@ router.get('/subject/:id', (req, res) => {
 router.put('/edit/subject/:id', (req, res) => {
     SubjectController.editSubject(req, res);
 })
+router.delete('/delete/subject/:id', (req, res) => {
+    SubjectController.deleteSubject(req, res);
+})
 
 module.exports=router

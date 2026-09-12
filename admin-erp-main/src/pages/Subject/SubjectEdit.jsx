@@ -56,6 +56,19 @@ function SubjectEdit() {
     }, [params])
 
 
+function doDeleteSubject(id) {
+        axios({
+            url: 'http://localhost:3000/delete/subject/' + id,
+            method: 'delete'
+
+        }).then((result) => {
+            if (result.data.success) {
+                setShow(true)
+            }
+        }).catch((err) => {
+            console.log(err.message);
+        })
+    }
 
 
     return (
@@ -160,11 +173,14 @@ function SubjectEdit() {
                     </Row>
 
                     <div className="d-flex gap-2 mt-4">
-                        <Button onClick={() => navigate('/subjects')} variant="secondary" type="button">
+                        <Button onClick={() => navigate('/subjects')} variant="danger" type="button">
                             Cancel
                         </Button>
                         <Button onClick={() => doEditSubject(subject._id)} variant="success">
                             Update
+                        </Button>
+                        <Button onClick={() => doDeleteSubject(subject._id)} variant="danger">
+                            Delete
                         </Button>
                     </div>
                 </Form>
@@ -183,7 +199,7 @@ function SubjectEdit() {
                 </Modal.Header>
                 <Modal.Body>Subject Updated successfully</Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
+                    <Button variant="danger" onClick={handleClose}>
                         Close
                     </Button>
                 </Modal.Footer>
