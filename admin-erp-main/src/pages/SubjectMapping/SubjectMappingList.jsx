@@ -17,6 +17,7 @@ function SubjectMappingList() {
     const [show, setShow] = useState(false)
     let [isDelete, setIsDelete] = useState(false)
     let [searchByCourse, setSearchByCourse] = useState('')
+    
 
 
 
