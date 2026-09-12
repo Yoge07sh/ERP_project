@@ -12,6 +12,7 @@ function SubjectEdit() {
     let params = useParams()
     let [subject, setSubject] = useState('');
     let [show, setShow] = useState(false)
+    let [message, setMessage] = useState('');
 
 
     const handleClose = () => {
@@ -37,6 +38,7 @@ function SubjectEdit() {
             data: subject
         }).then((result) => {
             if (result.data.success) {
+                setMessage('Subject Updated successfully');
                 setShow(true)
             }
         }).catch((err) => {
@@ -63,6 +65,7 @@ function doDeleteSubject(id) {
 
         }).then((result) => {
             if (result.data.success) {
+                setMessage('Subject Deleted successfully');
                 setShow(true)
             }
         }).catch((err) => {
@@ -197,7 +200,7 @@ function doDeleteSubject(id) {
                 <Modal.Header closeButton>
                     <Modal.Title>Success</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Subject Updated successfully</Modal.Body>
+                <Modal.Body>{message}</Modal.Body>
                 <Modal.Footer>
                     <Button variant="danger" onClick={handleClose}>
                         Close

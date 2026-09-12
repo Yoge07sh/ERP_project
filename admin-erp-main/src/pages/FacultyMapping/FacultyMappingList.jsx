@@ -24,7 +24,6 @@ function FacultyMappingList() {
     const handleAdd = () => {
         navigate('/add/facultymapping')
     }
-
     const [facultyMapping, setFacultyMapping] = useState([]);
 
     // Separate search states
