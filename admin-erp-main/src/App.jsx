@@ -45,6 +45,10 @@ import TimeSlotList from './pages/TimeSlots/TimeSlotsList'
 import AddTimeSlot from './pages/TimeSlots/AddTimeSlot'
 import EditTimeSlot from './pages/TimeSlots/EditTimeSot'
 
+//Attendance
+import StudentListForAttendance from './pages/Attendance/StudentListForAttendance'
+import GetStudentForm from './pages/Attendance/GetStudentForm'
+
 function App() {
   return (
     <BrowserRouter>
@@ -86,16 +90,9 @@ function App() {
             <Route path="/add/subjectmapping" element={<AddSubjectMapping />} />
             <Route path="/edit/subjectMapping/:id" element={<EditSubjectMapping />} />
             <Route path="/add/faculty" element={<AddFaculty />} />
-            <Route path="/faculty/:id" element={<FacultyProfile />}
-           
-/>
-
-            <Route path="/edit/course/:id" element={<CourseEdit />} />
-            <Route path="/edit/branch/:id" element={<BranchEdit />} />
-            <Route path="/edit/subject/:id" element={<SubjectEdit />} />
-            <Route path="/edit/faculty/:id" element={<FacultyEdit />} />
-
+            <Route path="/faculty/:id" element={<FacultyProfile />} />
             {/* Students */}
+
             <Route path="/students" element={<StudentList />} />
             <Route path="/add/student" element={<AddStudent />} />
             <Route path="/edit/student/:id" element={<StudentEdit />} />
@@ -118,6 +115,9 @@ function App() {
             <Route path="/edit/faculty/:id" element={<FacultyEdit />} />
             <Route path="/faculty/profile/:id" element={<FacultyProfile />} />
 
+            {/*Attendance*/}
+            <Route path='/getstudents' element={<GetStudentForm></GetStudentForm>}></Route>
+            <Route path='/studentattendance' element={<StudentListForAttendance></StudentListForAttendance>}></Route>
 
           </Routes>
         </main>
