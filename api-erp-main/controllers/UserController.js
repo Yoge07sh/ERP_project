@@ -161,7 +161,7 @@ async function doLogin(req, res) {
 
       {
 
-        expiresIn: "1h",
+        expiresIn: "24h",
 
       }
 

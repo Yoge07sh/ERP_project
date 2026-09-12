@@ -46,8 +46,8 @@ import AddTimeSlot from './pages/TimeSlots/AddTimeSlot'
 import EditTimeSlot from './pages/TimeSlots/EditTimeSot'
 
 //Attendance
-import StudentListForAttendance from './pages/Attendance/StudentListForAttendance'
 import GetStudentForm from './pages/Attendance/GetStudentForm'
+import StudentListForAttendance from './pages/Attendance/StudentListForAttendance'
 
 function App() {
   return (
@@ -91,6 +91,9 @@ function App() {
             <Route path="/edit/subjectMapping/:id" element={<EditSubjectMapping />} />
             <Route path="/add/faculty" element={<AddFaculty />} />
             <Route path="/faculty/:id" element={<FacultyProfile />} />
+
+
+
             {/* Students */}
 
             <Route path="/students" element={<StudentList />} />
