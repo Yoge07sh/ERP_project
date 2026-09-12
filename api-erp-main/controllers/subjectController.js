@@ -54,9 +54,21 @@ async function editSubject(req, res) {
     }
 }
 
+async function deleteSubject(req, res) {
+    try {
+        let subjectId = req.params.id;
+        await Subject.findOneAndDelete({_id: subjectId});
+        res.status(200).send({ success: true, message: 'Subject has been deleted' });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ success: false, message: 'Something went wrong in deleted Subject.' })
+    }
+}
+
 module.exports = {
     addSubject,
     getSubjects,
     getSubject,
-    editSubject
+    editSubject,
+    deleteSubject
 }
