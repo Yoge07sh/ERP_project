@@ -81,9 +81,9 @@ async function addStudent(req, res) {
         if (req.file) {
             cloudinary.config({
 
-                // cloud_name: process.env.CLOUD_NAME,
-                // api_key: process.env.API_KEY,
-                // api_secret: process.env.API_SECRET,
+                // cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+                // api_key: process.env.CLOUDINARY_API_KEY,
+                // api_secret: process.env.CLOUDINARY_API_SECRET,
                 cloud_name: 'dezwajyx9',
                 api_key: '115759516773756',
                 api_secret: 'PKUY4ZGUKyon30Joriq4hDqrWls',
@@ -109,7 +109,12 @@ async function addStudent(req, res) {
             });
         }
 
-        let student = new Student(req.body);
+            const studentData = {
+                ...req.body,
+                branch: req.body.branch || null
+            };
+
+        let student = new Student(studentData);
 
         if (req.file && upload) {
             student.image = upload.secure_url;
@@ -200,13 +205,69 @@ async function getStudent(req, res) {
 
 async function editStudent(req, res) {
     try {
+
         let studentId = req.params.id;
-        let student = await Student.findOne({ _id: studentId })
-        Object.assign(student, req.body)
+
+        let student = await Student.findOne({ _id: studentId });
+
+        if (!student) {
+            return res.status(404).send({
+                success: false,
+                message: 'Student not found'
+            });
+        }
+
+        const studentData = {
+            ...req.body,
+            branch: req.body.branch || null
+        };
+
+        Object.assign(student, studentData);
+
+        if (req.file) {
+
+            cloudinary.config({
+                cloud_name: 'dezwajyx9',
+                api_key: '115759516773756',
+                api_secret: 'PKUY4ZGUKyon30Joriq4hDqrWls',
+            });
+
+            const upload = await new Promise((resolve, reject) => {
+
+                const stream = cloudinary.uploader.upload_stream(
+                    {
+                        folder: 'students'
+                    },
+                    (error, result) => {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve(result);
+                        }
+                    }
+                );
+
+                stream.end(req.file.buffer);
+            });
+
+            student.image = upload.secure_url;
+        }
+
         await student.save();
-        res.status(200).send({ success: true, message: 'Student Updated Successfully...' })
+
+        res.status(200).send({
+            success: true,
+            message: 'Student Updated Successfully...'
+        });
+
     } catch (error) {
-        res.status(500).send({ success: false, message: 'Something went wrong!' })
+
+        console.error("ERROR IN EDIT STUDENT:", error);
+
+        res.status(500).send({
+            success: false,
+            message: error.message || 'Something went wrong!'
+        });
     }
 }
 
