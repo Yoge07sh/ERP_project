@@ -143,17 +143,17 @@ function AddCourse() {
             </Form>
 
             {/* ---------Modal code ------------- */}
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Success</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>Course Added successfully👍</Modal.Body>
-                <Modal.Footer>
-                    <Button variant="danger" onClick={handleClose}>
+                  <Modal show={show} onHide={handleClose}>
+                    <Modal.Header closeButton>
+                      <Modal.Title>Success</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>Course Added successfully👍</Modal.Body>
+                    <Modal.Footer>
+                      <Button variant="danger" onClick={handleClose}>
                         Close
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+                      </Button>
+                    </Modal.Footer>
+                  </Modal>
         </Container>
     )
 }
