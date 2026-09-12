@@ -8,8 +8,6 @@ const bcrypt = require('bcrypt')
 
 const xlsx = require('xlsx');
 
-
-
 async function getCourseForStudent(req, res) {
     try {
         let courses = await Course.find(
@@ -91,32 +89,62 @@ async function addStudent(req, res) {
                 api_secret: 'PKUY4ZGUKyon30Joriq4hDqrWls',
 
             })
-            upload = await cloudinary.uploader.upload(req.file.path);
+
+            upload = await new Promise((resolve, reject) => {
+
+                const stream = cloudinary.uploader.upload_stream(
+                    {
+                        folder: 'students'
+                    },
+                    (error, result) => {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve(result);
+                        }
+                    }
+                );
+
+                stream.end(req.file.buffer);
+            });
         }
+
         let student = new Student(req.body);
+
         if (req.file && upload) {
             student.image = upload.secure_url;
         }
-        await student.save();
-        let encryptedPassword = bcrypt.hashSync('123456', 10);
-        let user = new User(
-            {
-                firstName: student.firstName,
-                lastName: student.lastName,
-                email: student.collegeEmailId,
-                password: encryptedPassword,
-                mobNo: student.mobileNo,
-                userRole: 'student',
-                userImage: student.facultyImage || 'https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png',
-            }
-        )
-        await user.save()
 
-        res.status(200).send({ success: true, message: 'Student Add Successfully' })
+        await student.save();
+
+        let encryptedPassword = bcrypt.hashSync('123456', 10);
+
+        let user = new User({
+            firstName: student.firstName,
+            lastName: student.lastName,
+            email: student.collegeEmailId,
+            password: encryptedPassword,
+            mobNo: student.mobileNumber,
+            userRole: 'student',
+            userImage: student.image ||
+                'https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png'
+        });
+
+        await user.save();
+
+        res.status(200).send({
+            success: true,
+            message: 'Student Add Successfully'
+        });
 
     } catch (error) {
+
         console.error("ERROR IN ADD STUDENT:", error);
-        res.status(500).send({ success: false, message: "Something went wrong!" })
+
+        res.status(500).send({
+            success: false,
+            message: error.message || "Something went wrong!"
+        });
     }
 }
 

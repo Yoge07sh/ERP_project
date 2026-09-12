@@ -14,6 +14,7 @@ function AddStudent() {
 
     const handleClose = () => {
         setShow(false);
+        navigate('/students');
     }
 
     const handleCloseBulkModal = () => {
@@ -48,9 +49,10 @@ function AddStudent() {
 
         try {
             setUploading(true);
-            const res = await axios.post(`${apiUrl}/students/upload`, formData, {
-                headers: { "Content-Type": "multipart/form-data" },
-            });
+            const res = await axios.post(`${apiUrl}/students/upload`, formData );
+            //     headers: { "Content-Type": "multipart/form-data" },
+            // });
+
             alert(res.data.message || "File uploaded successfully");
             setBulkFile(null);
             navigate('/students')
@@ -200,7 +202,9 @@ function AddStudent() {
         formData.append('year', year);
         formData.append('semester', semester);
         formData.append('group', group);
+        if(file) {
         formData.append('file', file);
+        }
         formData.append('filename', file.name);
 
         formData.append('localAddressLine1', localAddressLine1);
@@ -217,7 +221,7 @@ function AddStudent() {
 
 
         axios({
-            url: 'http://localhost:3000/add/student',
+            url: `${apiUrl}/add/student`,
             method: 'post',
             data: formData,
             headers: {
@@ -265,7 +269,7 @@ function AddStudent() {
                 setPermanentPincode('');
 
                 setSameAsLocal(false);
-                navigate('/students');
+                //navigate('/students');
             }
 
         }).catch((err) => {
