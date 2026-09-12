@@ -24,7 +24,7 @@ function SubjectMappingList() {
     useEffect(() => {
 
         axios({
-            url: 'http://localhost:3000/subjectsMapped',
+            //url: 'http://localhost:3000/subjectsMapped',
             url: apiUrl + '/subjectsMapped',
             method: 'get',
             params: {
