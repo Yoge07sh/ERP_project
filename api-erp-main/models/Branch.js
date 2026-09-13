@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
 const branchSchema = new Schema({
-    course: { type: mongoose.Schema.Types.ObjectId, ref: 'Course', required: true },
+    course: { type: mongoose.Schema.Types.ObjectId, ref: 'course', required: true },
     branchCode: { type: String, unique: true,  uppercase: true, trim: true },
     branchShortName: { type: String, unique: true,  uppercase: true, trim: true },
     branchFullName: { type: String, },

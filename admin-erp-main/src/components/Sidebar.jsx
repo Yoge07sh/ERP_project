@@ -376,6 +376,21 @@ function Sidebar() {
 
                 </ListGroup.Item>
 
+                <ListGroup.Item
+                  as={NavLink}
+                  to="/getstudents"
+                  className="d-flex align-items-center gap-2"
+                >
+
+                  <i className="bi bi-person"></i>
+
+                  <span className="d-none d-md-inline">
+                    Attendance
+                  </span>
+
+                </ListGroup.Item>
+
+
               </>
             )}
 
@@ -429,6 +444,22 @@ function Sidebar() {
                   </span>
 
                 </ListGroup.Item>
+
+                <ListGroup.Item
+                  as={NavLink}
+                  to="/getstudents"
+                  className="d-flex align-items-center gap-2"
+                >
+
+                  <i className="bi bi-person"></i>
+
+                  <span className="d-none d-md-inline">
+                    Attendance
+                  </span>
+
+                </ListGroup.Item>
+
+
 
               </>
             )}

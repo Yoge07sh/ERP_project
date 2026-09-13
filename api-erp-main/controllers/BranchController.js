@@ -4,31 +4,42 @@ const Course =require('../models/Course')
 
 
 async function getCoursesForBranch(req, res) {
-  try {
-    let courses = await Course.find(
-      { courseFullName: { $regex: new RegExp(req.query.courseFullName, "i") } },
-      {
-        _id: 1,
-        courseFullName: 1,
-      }
-    );
-    let sendCourses=[]
-    for(let i=0;i<courses.length;i++){
-        sendCourses.push({
-            value:courses[i]._id,
-            label:courses[i].courseFullName,
-        })
-    }
-    res.status(200).send({success:true,data:sendCourses})
-} catch (error) {
-      res.status(500).send({success:false,message:'something went wrong'})
-    console.log(error);
-    
-  }
-}
+    try {
+        let courses = await Course.find(
+            {},
+            {
+                _id: 1,
+                courseFullName: 1,
+            }
+        );
 
+        let sendCourses = [];
+
+        for (let i = 0; i < courses.length; i++) {
+            sendCourses.push({
+                value: courses[i]._id,
+                label: courses[i].courseFullName,
+            });
+        }
+
+        res.status(200).send({
+            success: true,
+            data: sendCourses
+        });
+
+    } catch (error) {
+        console.log(error);
+
+        res.status(500).send({
+            success: false,
+            message: 'Something went wrong'
+        });
+    }
+}
 async function addBranch(req, res) {
     try {
+        console.log("ACTUAL POST BODY:", req.body);
+
         let branch = new Branch(req.body);
         await branch.save();
         res.status(200).send({ success: true, message: 'Data Saved Successfully' })

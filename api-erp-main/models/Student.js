@@ -28,8 +28,8 @@ const studentSchema = new mongoose.Schema({
 
   // Below three attributes are used in modal for uploading students through CSV files.
   course: { type: mongoose.Schema.Types.ObjectId, ref: 'Course', required: true },
-  branch: { type: mongoose.Schema.Types.ObjectId, ref: 'Branch', required: false, default:null },
-  section: { type: String, default: 'P1', enum: ['P1', 'P2', 'C1', 'C2'] },
+  branch: { type: mongoose.Schema.Types.ObjectId, ref: 'Branch', required: false, default: null },
+  section: { type: String, default: 'A', enum: ['A', 'B', 'C', 'D'] },
 
   admissionYear: { type: Number, required: false },
   currentSession: { type: String, trim: true },
@@ -53,7 +53,7 @@ const studentSchema = new mongoose.Schema({
   permanentPincode: { type: String, trim: true },
 
   status: { type: String, enum: ['Active', 'InActive'], default: 'Active' },
-},{timestamps: true});
+}, { timestamps: true });
 
 
 module.exports = mongoose.model('student', studentSchema);

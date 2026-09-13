@@ -202,6 +202,7 @@ async function getFacultyProfile(req, res) {
     }
 }
 
+
 module.exports = {
   addFaculty,
   addFaculties,
@@ -209,5 +210,5 @@ module.exports = {
   getFaculty,
   deleteFaculty,
   editFaculty,
-  getFacultyProfile
+  getFacultyProfile,
 };
