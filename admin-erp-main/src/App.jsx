@@ -95,6 +95,7 @@ function App() {
 
 
             {/* Students */}
+
             <Route path="/students" element={<StudentList />} />
             <Route path="/add/student" element={<AddStudent />} />
             <Route path="/edit/student/:id" element={<StudentEdit />} />

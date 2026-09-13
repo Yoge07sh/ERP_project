@@ -12,7 +12,7 @@ return (
                     Student Attendance
                 </h3>
 
-                <Button variant="primary">
+                <Button variant="success">
                     Post Student
                 </Button>
 
