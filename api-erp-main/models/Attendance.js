@@ -5,53 +5,28 @@ const attendanceSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-
-    date: {
-        type: Date,
-        required: true
-    },
-
-    lectureNo: {
-        type: Number,
-        required: true
-    },
-
-    facultyId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'faculty',
-        required: true
-    },
-
-    course: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'course',
-        required: true
-    },
-
-    branch: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'branch',
-        required: true
-    },
-
     year: {
         type: String,
         required: true
     },
-
     semester: {
         type: String,
         required: true
     },
-
     section: {
         type: String,
         required: true
     },
-
-    subjectId: {
+    facultyMapId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'subject',
+        ref: 'FacultyMap',
+        required: true
+    },
+
+
+    timeSlotId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'timeSlots',
         required: true
     },
 

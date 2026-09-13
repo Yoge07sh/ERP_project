@@ -6,9 +6,17 @@ const authMiddleware = require('../middleware/authMiddleware')
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }))
 
+router.get('/courses/for/student', (req, res) => {
+    AttendanceController.getCourseForStudent(req, res);
+});
 
-router.get('', (req, res) => {
+router.get('/branches/for/student', (req, res) => {
+    AttendanceController.getBranchForStudent(req, res);
+});
 
+
+router.get('/getstudentsdata', (req, res) => {
+    AttendanceController.getStudentsData(req,res);
 })
 router.post(
     '/add/attendance',

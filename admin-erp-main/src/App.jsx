@@ -47,7 +47,7 @@ import EditTimeSlot from './pages/TimeSlots/EditTimeSot'
 
 //Attendance
 import GetStudentForm from './pages/Attendance/GetStudentForm'
-import StudentListForAttendance from './pages/Attendance/StudentListForAttendance'
+import StudentsAttendance from './pages/Attendance/StudentsAttendance'
 
 function App() {
   return (
@@ -120,7 +120,7 @@ function App() {
 
             {/*Attendance*/}
             <Route path='/getstudents' element={<GetStudentForm></GetStudentForm>}></Route>
-            <Route path='/studentattendance' element={<StudentListForAttendance></StudentListForAttendance>}></Route>
+            <Route path='/studentsattendance' element={<StudentsAttendance></StudentsAttendance>}></Route>
 
           </Routes>
         </main>

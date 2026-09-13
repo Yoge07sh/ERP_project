@@ -49,7 +49,7 @@ function AddStudent() {
 
         try {
             setUploading(true);
-            const res = await axios.post(`${apiUrl}/students/upload`, formData );
+            const res = await axios.post(`${apiUrl}/students/upload`, formData);
             //     headers: { "Content-Type": "multipart/form-data" },
             // });
 
@@ -202,8 +202,8 @@ function AddStudent() {
         formData.append('year', year);
         formData.append('semester', semester);
         formData.append('group', group);
-        if(file) {
-        formData.append('file', file);
+        if (file) {
+            formData.append('file', file);
         }
         formData.append('filename', file.name);
 
@@ -497,10 +497,10 @@ function AddStudent() {
                             <Form.Label>Select Section</Form.Label>
                             <Form.Select value={section} onChange={(e) => setSection(e.target.value)}>
                                 <option value="">Select</option>
-                                <option value="P1">P-1</option>
-                                <option value="P2">P-2</option>
-                                <option value="C1">C-1</option>
-                                <option value="C2">C-2</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
                             </Form.Select>
                         </Form.Group>
                     </Col>
@@ -725,8 +725,8 @@ function AddStudent() {
                     </Col>
                 </Row>
                 <div className="d-flex justify-content-center gap-2 mt-4">
-                <Button onClick={() => navigate('/students')} className="me-2" variant="danger">Cancel</Button>
-                <Button variant="success" disabled={buttonDisabled} type='submit'>Add Student</Button>
+                    <Button onClick={() => navigate('/students')} className="me-2" variant="danger">Cancel</Button>
+                    <Button variant="success" disabled={buttonDisabled} type='submit'>Add Student</Button>
                 </div>
             </Form>
 

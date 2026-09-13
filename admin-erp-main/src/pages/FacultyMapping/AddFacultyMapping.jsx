@@ -251,7 +251,6 @@ function AddFacultyMapping() {
               </Form.Select>
             </Form.Group>
           </Col>
-
         </Row>
 
         {/* ================= ROW 2 ================= */}

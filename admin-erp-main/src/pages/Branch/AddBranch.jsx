@@ -31,6 +31,7 @@ function AddBranch() {
     axios.get("http://localhost:3000/courses/for/branch")
       .then((res) => {
         if (res.data.success) {
+          console.log(res.data.data)
           setCourses(res.data.data);
         } else {
           alert("Failed to load Branch.");
@@ -40,7 +41,7 @@ function AddBranch() {
         console.error("Error fetching Branches:", err);
       });
   }, []);
-  
+
   function handleChange(e) {
     setCourse(e.target.value);
   }
@@ -82,8 +83,8 @@ function AddBranch() {
 
   return (
     <Container className="">
-      <Form>
-        <h3 className="text-center mb-4 py-2 fw-bold" style = {{ color : "#1a3c6e" }} >ADD NEW BRANCH</h3>
+      <Form onSubmit={doAddBranch}>
+        <h3 className="text-center mb-4 py-2 fw-bold" style={{ color: "#1a3c6e" }} >ADD NEW BRANCH</h3>
         <br />
         <Row className="mb-3">
           <Form.Group as={Col} controlId="formGridState">
@@ -93,12 +94,13 @@ function AddBranch() {
               onChange={handleChange}
               required
             >
-              {
-                courses.map((c) => (
-                  <option key={c.value} value={c.value}>{c.label}</option>
-                ))
-              }
+              <option value="">Select Course</option>
 
+              {courses.map((c) => (
+                <option key={c.value} value={c.value}>
+                  {c.label}
+                </option>
+              ))}
             </Form.Select>
           </Form.Group>
         </Row>
@@ -157,7 +159,7 @@ function AddBranch() {
           <Button onClick={() => navigate('/branches')} variant="danger" type="button">
             Cancel
           </Button>
-          <Button onClick={doAddBranch} disabled={buttonDisabled} variant="success" type="submit">
+          <Button disabled={buttonDisabled} variant="success" type="submit">
             Add Branch
           </Button>
         </div>

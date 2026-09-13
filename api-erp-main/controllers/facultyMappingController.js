@@ -369,7 +369,7 @@ const getFacultyMappingById = async (req, res) => {
 
         console.log("Faculty Mapping:", facultyMap);
 
-         if (!facultyMap) {
+        if (!facultyMap) {
 
             return res.status(404).send({
                 success: false,
@@ -447,13 +447,50 @@ const deleteFacultyMapping = async (req, res) => {
         } else {
             res.status(500).send({ success: false, message: 'Can not Delete Faculty Mapping' });
         }
-      } 
-      catch (error) {
+    }
+    catch (error) {
         console.log(error)
         res.status(500).send({ success: false, message: 'Can not Delete, Something went wrong..!' });
-      }
     }
+}
 
+
+const getFacultyMapForAttendance = async (req, res) => {
+    try {
+        const {
+            session,
+            course,
+            branch,
+            year,
+            semester,
+            section
+        } = req.query;
+
+        const facultyMaps = await FacultyMap.find({
+            session: session,
+            course: course,
+            branch: branch,
+            year: year,
+            semester: semester,
+            section: section
+        })
+            .populate('facultyId')
+            .populate('subjectId');
+
+        res.status(200).json({
+            success: true,
+            data: facultyMaps
+        });
+
+    } catch (error) {
+        console.error("Faculty Mapping Error:", error);
+
+        res.status(500).json({
+            success: false,
+            message: "Failed to fetch faculty mapping"
+        });
+    }
+};
 module.exports = {
     getFacultyForMapping,
     getBranchsForMapping,
@@ -464,5 +501,6 @@ module.exports = {
     getFacultyMappingById,
     editFacultyMapping,
     deleteFacultyMapping,
+    getFacultyMapForAttendance
 
 };
