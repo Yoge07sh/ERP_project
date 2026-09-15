@@ -110,29 +110,29 @@ function Sidebar() {
           >
             RDEC
           </span>
+        </div>
+
+        <div className="sidebar-clock-wrapper mt-1">
+          <div className="sidebar-clock-box">
+            <div className="sidebar-clock-icon">
+              <i className="bi bi-watch"></i>
+            </div>
+
+            <div className="sidebar-clock-info">
+              <div className="sidebar-clock-time">
+                {currentTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+              </div>
+
+              <div className="sidebar-clock-date">
+                {currentTime.toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" })}
+              </div>
+
+              <div className="sidebar-clock-live">
+                <i className="bi bi-circle-fill"></i> Live
+              </div>
+            </div>
           </div>
-
-<div className="sidebar-clock-wrapper mt-1">
-  <div className="sidebar-clock-box">
-    <div className="sidebar-clock-icon">
-      <i className="bi bi-watch"></i>
-    </div>
-
-    <div className="sidebar-clock-info">
-      <div className="sidebar-clock-time">
-        {currentTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
-      </div>
-
-      <div className="sidebar-clock-date">
-        {currentTime.toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" })}
-      </div>
-
-      <div className="sidebar-clock-live">
-        <i className="bi bi-circle-fill"></i> Live
-      </div>
-    </div>
-  </div>
-</div>
+        </div>
 
         {/* ================= SIDEBAR MENU ================= */}
 
@@ -141,7 +141,7 @@ function Sidebar() {
             variant="flush"
             className="pt-4 px-3 flex-grow-1 overflow-auto"
           >
-            
+
             {/* ================= ADMIN ================= */}
 
             {isAdmin && (
@@ -169,7 +169,7 @@ function Sidebar() {
                 <ListGroup.Item
                   as={NavLink}
                   to="/subjects"
-className="sidebar-menu-item d-flex align-items-center gap-2"
+                  className="sidebar-menu-item d-flex align-items-center gap-2"
                 >
                   <i className="bi bi-journal-bookmark"></i>
 
@@ -225,7 +225,18 @@ className="sidebar-menu-item d-flex align-items-center gap-2"
 
                   <span className="d-none d-md-inline">TimeSlots</span>
                 </ListGroup.Item>
+
+                <ListGroup.Item
+                  as={NavLink}
+                  to="/getstudents"
+                  className="sidebar-menu-item sidebar-menu-item d-flex align-items-center gap-2"
+                >
+                  <i className="bi bi-clock"></i>
+
+                  <span className="d-none d-md-inline">Attendance</span>
+                </ListGroup.Item>
               </>
+
             )}
 
             {/* ================= FACULTY ================= */}
@@ -261,6 +272,17 @@ className="sidebar-menu-item d-flex align-items-center gap-2"
 
                   <span className="d-none d-md-inline">TimeSlots</span>
                 </ListGroup.Item>
+
+                <ListGroup.Item
+                  as={NavLink}
+                  to="/getstudents"
+                  className="sidebar-menu-item sidebar-menu-item d-flex align-items-center gap-2"
+                >
+                  <i className="bi bi-clock"></i>
+
+                  <span className="d-none d-md-inline">Attendance</span>
+                </ListGroup.Item>
+
               </>
             )}
 

@@ -48,6 +48,7 @@ import EditTimeSlot from './pages/TimeSlots/EditTimeSot'
 //Attendance
 import GetStudentForm from './pages/Attendance/GetStudentForm'
 import StudentsAttendance from './pages/Attendance/StudentsAttendance'
+import ViewAttendance from './pages/Attendance/ViewAttendance'
 
 function App() {
   return (
@@ -121,7 +122,7 @@ function App() {
             {/*Attendance*/}
             <Route path='/getstudents' element={<GetStudentForm></GetStudentForm>}></Route>
             <Route path='/studentsattendance' element={<StudentsAttendance></StudentsAttendance>}></Route>
-
+            <Route path="/viewattendance"element={<ViewAttendance></ViewAttendance>}/>
           </Routes>
         </main>
       </div>
