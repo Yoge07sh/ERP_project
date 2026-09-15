@@ -3,7 +3,6 @@ const TimeSlots = require('../models/TimeSlot');
 const getTimeSlots = async (req, res) => {
     try {
         const timeSlots = await TimeSlots.find({});
-
         res.status(200).send({
             success: true,
             data: timeSlots

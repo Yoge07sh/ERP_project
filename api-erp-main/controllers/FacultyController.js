@@ -76,8 +76,6 @@ async function addFaculties(req, res) {
       return res.status(400).send({ success: false, message: 'No CSV file uploaded' });
     }
 
-    console.log(req.file);
-    console.log(req.file.path);
 
     // ✅ Parse CSV into JSON array
     const jsonArray = await csv().fromFile(req.file.path);

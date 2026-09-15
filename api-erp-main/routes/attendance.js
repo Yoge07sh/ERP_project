@@ -8,21 +8,19 @@ router.use(bodyParser.urlencoded({ extended: false }))
 
 
 
-router.get('/getfacultymappings',authMiddleware, (req, res) => {
+router.get('/getfacultymappings', authMiddleware, (req, res) => {
     AttendanceController.getFacultyMappings(req, res);
 });
 
 
-router.get('/getstudentsdata', authMiddleware,(req, res) => {
-    AttendanceController.getStudentsData(req,res);
+router.get('/getstudentsdata', authMiddleware, (req, res) => {
+    AttendanceController.getStudentsData(req, res);
 })
-router.post(
-    '/add/attendance',
-    authMiddleware,
-    (req, res) => {
-
-    }
-);
-
+router.post('/attendance', authMiddleware, (req, res) => {
+    AttendanceController.submitAttendance(req,res);
+});
+router.get('/viewattendance', authMiddleware, (req, res) => {
+    AttendanceController.viewAttendance(req, res);
+});
 
 module.exports = router

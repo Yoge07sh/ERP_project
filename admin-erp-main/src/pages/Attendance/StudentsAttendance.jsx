@@ -1,22 +1,79 @@
-import { Container, Form, Button, Table, Card } from "react-bootstrap";
-
+import { Container, Button, Table, Card } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-
 import { useState } from "react";
-
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+const apiUrl = import.meta.env.VITE_API_URL;
 
 function StudentsAttendance() {
-
+    const navigate = useNavigate();
     const location = useLocation();
-
     const {
         students = [],
-        formData = {}
+        formData = {},
+        facultyMapId = "",
+        timeSlotId = "",
     } = location.state || {};
 
     const [attendance, setAttendance] = useState({});
+    const [submitting, setSubmitting] = useState(false);
 
+    const handleSubmit = async () => {
+        if (!facultyMapId) {
+            alert("Mapping information is missing.");
+            return;
+        }
+
+        if (!timeSlotId) {
+            alert("Time slot is missing.");
+            return;
+        }
+
+        if (students.length === 0) {
+            alert("No students found.");
+            return;
+        }
+
+        try {
+            setSubmitting(true);
+
+            const token = localStorage.getItem("token");
+
+            const attendanceData = students.map((student) => ({
+                studentId: student._id,
+                status: attendance[student._id] || "Present"
+            }));
+
+            const response = await axios.post(
+                `${apiUrl}/attendance`,
+                {
+                    facultyMapId: facultyMapId,
+                    timeSlotId: timeSlotId,
+                    students: attendanceData
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            if (response.data.success) {
+                alert("Attendance submitted successfully!");
+                navigate('/getstudents')
+            }
+
+        } catch (err) {
+            console.error("Attendance submission error:", err);
+
+            alert(
+                err.response?.data?.message ||
+                "Failed to submit attendance"
+            );
+        } finally {
+            setSubmitting(false);
+        }
+    };
     return (
 
         <Container className="py-3">
@@ -114,33 +171,42 @@ function StudentsAttendance() {
                                         </td>
 
                                         <td>
-
-                                            <Form.Select
-                                                size="sm"
-                                                value={
-                                                    attendance[student._id] ||
-                                                    "Present"
-                                                }
-                                                onChange={(e) =>
-                                                    setAttendance({
-                                                        ...attendance,
-                                                        [student._id]: e.target.value
-                                                    })
-                                                }
-                                            >
-
-                                                <option value="Present">
+                                            <div className="d-flex justify-content-center gap-2">
+                                                <Button
+                                                    size="sm"
+                                                    variant={
+                                                        (attendance[student._id] || "Present") === "Present"
+                                                            ? "success"
+                                                            : "outline-success"
+                                                    }
+                                                    onClick={() =>
+                                                        setAttendance({
+                                                            ...attendance,
+                                                            [student._id]: "Present"
+                                                        })
+                                                    }
+                                                >
                                                     Present
-                                                </option>
+                                                </Button>
 
-                                                <option value="Absent">
+                                                <Button
+                                                    size="sm"
+                                                    variant={
+                                                        (attendance[student._id] || "Present") === "Absent"
+                                                            ? "danger"
+                                                            : "outline-danger"
+                                                    }
+                                                    onClick={() =>
+                                                        setAttendance({
+                                                            ...attendance,
+                                                            [student._id]: "Absent"
+                                                        })
+                                                    }
+                                                >
                                                     Absent
-                                                </option>
-
-                                            </Form.Select>
-
+                                                </Button>
+                                            </div>
                                         </td>
-
                                     </tr>
 
                                 ))
@@ -173,12 +239,12 @@ function StudentsAttendance() {
 
                 <Button
                     variant="primary"
-                    disabled={students.length === 0}
+                    disabled={students.length === 0 || submitting}
                     className="px-4"
+                    onClick={handleSubmit}
                 >
-                    Submit Attendance
+                    {submitting ? "Submitting..." : "Submit Attendance"}
                 </Button>
-
             </div>
 
         </Container>
