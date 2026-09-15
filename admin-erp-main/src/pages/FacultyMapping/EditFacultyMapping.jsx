@@ -678,9 +678,16 @@ function EditFacultyMapping() {
                     </Col>
 
                 </Row>
+                <div className="d-flex justify-content-center gap-2 mt-4">
+                <Button
+                onClick={() => navigate("/facultymapping")}
+                variant="danger"
+                type="button"
+                 >
+            Cancel
+          </Button>
 
                 <Button
-                    className="mt-4"
                     type="submit"
                     disabled={loading}
                 >
@@ -691,7 +698,7 @@ function EditFacultyMapping() {
                     }
 
                 </Button>
-
+                    </div>
             </Form>
             <Modal
                 show={show}
