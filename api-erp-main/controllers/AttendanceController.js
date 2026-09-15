@@ -1,110 +1,118 @@
 const Student = require('../models/Student');
-const Course = require('../models/Course');
-const Branch = require('../models/Branch')
-
-async function getCourseForStudent(req, res) {
+const Faculty = require('../models/Faculty');
+const FacultyMap = require('../models/FacultyMap')
+// Get Faculty Mappings for logged-in Faculty
+const getFacultyMappings = async (req, res) => {
     try {
-        let courses = await Course.find(
-            { courseFullName: { $regex: new RegExp(req.query.courseFullName, "i") } },
-            {
-                _id: 1,
-                courseFullName: 1,
-            }
-        );
-        let sendCourses = []
-        for (let i = 0; i < courses.length; i++) {
-            sendCourses.push({
-                value: courses[i]._id,
-                label: courses[i].courseFullName,
-            })
-        }
-        res.status(200).send({ success: true, data: sendCourses })
-    } catch (error) {
-        res.status(500).send({ success: false, message: 'something went wrong' })
-        console.log(error);
 
-    }
-}
+        // User ID comes from JWT
+        const userId = req.user._id;
+        console.log("Logged in User ID:", userId);
 
-async function getBranchForStudent(req, res) {
-    try {
-        const { courseId } = req.query;
-
-        if (!courseId) {
-            return res.status(200).send({
-                success: true,
-                data: []
+        // Find Faculty connected with this User
+        const faculty = await Faculty.findOne({
+            userId: userId
+        });
+console.log(faculty)
+        if (!faculty) {
+            return res.status(404).json({
+                success: false,
+                message: "Faculty profile not found"
             });
         }
 
-        const branches = await Branch.find(
-            {
-                course: courseId,
-                status: 'Active'
-            },
-            {
-                _id: 1,
-                branchFullName: 1
-            }
-        ).sort({ branchFullName: 1 });
-        console.log(branches)
-        const sendBranches = branches.map(branch => ({
-            value: branch._id,
-            label: branch.branchFullName
-        }));
+        // Get mappings of this faculty
+        const mappings = await FacultyMap.find({
+            facultyId: faculty._id
+        })
+            .populate("course", "courseShortName")
+            .populate("branch", "branchShortName")
+            .populate("subjectId", "subjectFullName");
 
-        res.status(200).send({
+        return res.status(200).json({
             success: true,
-            data: sendBranches
+            data: mappings
         });
 
     } catch (error) {
-        console.error("Error fetching branches:", error);
 
-        res.status(500).send({
+        console.error(error);
+
+        return res.status(500).json({
             success: false,
-            message: 'Something went wrong'
+            message: "Failed to fetch faculty mappings"
         });
     }
-}
+};
 
+
+// Get Students according to selected Faculty Mapping
 const getStudentsData = async (req, res) => {
     try {
-        const {
-            session,
-            course,
-            branch,
-            year,
-            semester,
-            section
-        } = req.query;
+
+        const { mappingId } = req.query;
+
+        if (!mappingId) {
+            return res.status(400).json({
+                success: false,
+                message: "Mapping ID is required"
+            });
+        }
+
+        // Get logged-in User ID from JWT
+        const userId = req.user._id;
+
+        // Find connected Faculty
+        const faculty = await Faculty.findOne({
+            userId: userId
+        });
+
+        if (!faculty) {
+            return res.status(404).json({
+                success: false,
+                message: "Faculty profile not found"
+            });
+        }
+
+        const mapping = await FacultyMap.findOne({
+            _id: mappingId,
+            facultyId: faculty._id
+        });
+
+        if (!mapping) {
+            return res.status(403).json({
+                success: false,
+                message: "This class is not assigned to you"
+            });
+        }
 
         const students = await Student.find({
-            currentSession: session,
-            course: course,
-            branch: branch,
-            year: year,
-            semester: semester,
-            section: section,
+            currentSession: mapping.session,
+            course: mapping.course,
+            branch: mapping.branch,
+            year: mapping.year,
+            semester: mapping.semester,
+            section: mapping.section,
             status: "Active"
-        });
-        res.status(200).json({
+        })
+
+        return res.status(200).json({
             success: true,
             data: students
         });
 
     } catch (error) {
+
         console.error(error);
 
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: "Failed to fetch students"
         });
     }
 };
-
 module.exports = {
     getStudentsData,
-    getCourseForStudent,
-    getBranchForStudent
+    getFacultyMappings
+
 }
