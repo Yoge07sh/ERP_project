@@ -179,7 +179,7 @@ function FacultyEdit() {
               type="date"
               name="dob"
               onChange={handleChange}
-              value={faculty.dob}
+              value={faculty.dob ? faculty.dob.split("T")[0] : ""}
             />
           </Form.Group>
           <Form.Group className="mb-3" as={Col} >

@@ -345,7 +345,7 @@ function StudentEdit() {
                 <Form.Label>Date of Birth :-</Form.Label>
                 <Form.Control
                   type="date"
-                  value={student.dob || ""}
+                  value={student.dob ? student.dob.split("T")[0] : ""}
                   onChange={handleChange}
                   name="dob"
                 />
