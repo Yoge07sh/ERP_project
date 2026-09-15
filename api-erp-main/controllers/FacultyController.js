@@ -5,43 +5,70 @@ const User = require("../models/User");
 const bcrypt =require('bcrypt')
 
 async function addFaculty(req, res) {
-  try {
-    let upload;
-    console.log(req.body);
-    console.log(req.file);
-    if (req.file) {
-      cloudinary.config({
-        cloud_name:'ddkkn8epl',
-        api_key:'759348446893726',
-        api_secret:'6nL-k2epUb9uwZggWYXF6By6YkI'
-      });
-      upload = await cloudinary.uploader.upload(req.file.path);
-    }
-    let faculty = new Faculty(req.body);
-    if (req.file && upload) {
-      faculty.facultyImage = upload.secure_url;
-    }
-    await faculty.save();
-    let encryptedPassword = bcrypt.hashSync('123456', 10);
-    let user= new User(
-      {
-        firstName: faculty.firstName,
-        lastName: faculty.lastName,
-        email: faculty.collegeEmail,
-        password:encryptedPassword,
-        mobNo: faculty.mobileNo,
-        userRole:'faculty',
-        userImage: faculty.facultyImage || 'https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png',
-      }
-    )
-    await user.save()
-    console.log("data saved sucessfully....");
+    try {
 
-    res.status(200).send({ success: true, message: "data saved successfully" });
-  } catch (error) {
-    res.status(500).send({ success: false, message: "something went wrong" });
-    console.log(error);
-  }
+        let upload;
+
+        console.log(req.body);
+        console.log(req.file);
+
+        // Upload faculty image
+        if (req.file) {
+            cloudinary.config({
+                cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+                api_key: process.env.CLOUDINARY_API_KEY,
+                api_secret: process.env.CLOUDINARY_API_SECRET
+            });
+
+            upload = await cloudinary.uploader.upload(req.file.path);
+        }
+
+        // Create encrypted password
+        let encryptedPassword = bcrypt.hashSync("123456", 10);
+
+        // Create User first
+        let user = new User({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email: req.body.collegeEmail,
+            password: encryptedPassword,
+            mobNo: req.body.mobileNo,
+            userRole: "faculty",
+            userImage: upload
+                ? upload.secure_url
+                : "https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png"
+        });
+
+        await user.save();
+
+        // Create Faculty
+        let faculty = new Faculty(req.body);
+
+        // Connect Faculty with User
+        faculty.userId = user._id;
+
+        if (req.file && upload) {
+            faculty.facultyImage = upload.secure_url;
+        }
+
+        await faculty.save();
+
+        console.log("Faculty and User saved successfully.");
+
+        return res.status(200).send({
+            success: true,
+            message: "Faculty added successfully"
+        });
+
+    } catch (error) {
+
+        console.log(error);
+
+        return res.status(500).send({
+            success: false,
+            message: "Something went wrong"
+        });
+    }
 }
 async function addFaculties(req, res) {
   try {
@@ -137,8 +164,9 @@ async function getFaculty(req, res) {
     } catch (error) {
         res.status(500).send({ success: false, message: 'Something went wrong...' });
     }
-//     this function is commented
 }
+
+
 async function deleteFaculty(req, res) {
     try {
         let facultyId = req.params.id;

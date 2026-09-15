@@ -1,12 +1,18 @@
 import { Container, Form, Row, Col, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
-const apiUrl = import.meta.env.VITE_API_URL
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
+const apiUrl = import.meta.env.VITE_API_URL;
+
 function GetStudentForm() {
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  const [mappings, setMappings] = useState([]);
+  const [selectedMapping, setSelectedMapping] = useState("");
+
   const [formData, setFormData] = useState({
     session: "",
     course: "",
@@ -14,221 +20,323 @@ function GetStudentForm() {
     year: "",
     semester: "",
     section: "",
-
   });
-  const [courses, setCourses] = useState([]);
-  const [branches, setBranches] = useState([]);
-  const selectedCourse = courses.find(
-    course => course.value === formData.course
-  );
-  const selectedBranch = branches.find(
-    branch => branch.value === formData.branch
-  );
+
+  // Get faculty mappings
   useEffect(() => {
-    axios({
-      url: apiUrl + '/courses/for/student',
-      method: 'get'
-    }).then((res) => {
-      if (res.data.success) {
-        setCourses(res.data.data);
-      } else {
-        alert("Failed to load Courses.");
+
+    const token = localStorage.getItem("token");
+
+    axios.get(`${apiUrl}/getfacultymappings`, {
+      headers: {
+        Authorization: `Bearer ${token}`
       }
     })
+      .then((res) => {
+
+        if (res.data.success) {
+          setMappings(res.data.data);
+        } else {
+          alert("Failed to load faculty mappings.");
+        }
+
+      })
       .catch((err) => {
-        console.error("Error fetching Courses:", err);
+        console.error("Error fetching faculty mappings:", err);
+        alert("Failed to load faculty mappings.");
       });
+
   }, []);
 
-  useEffect(() => {
-    if (!formData.course) {
-      setBranches([]);
+
+  // When faculty selects a mapping
+  const handleMappingChange = (e) => {
+
+    const mappingId = e.target.value;
+
+    setSelectedMapping(mappingId);
+
+    const mapping = mappings.find(
+      (item) => item._id === mappingId
+    );
+
+    if (mapping) {
+
+      setFormData({
+        session: mapping.session,
+
+        course: mapping.course?._id || "",
+        courseName: mapping.course?.courseShortName || "",
+
+        branch: mapping.branch?._id || "",
+        branchName: mapping.branch?.branchShortName || "",
+
+        year: mapping.year,
+        semester: mapping.semester,
+        section: mapping.section,
+      });
+
+    } else {
+
+      setFormData({
+        session: "",
+        course: "",
+        branch: "",
+        year: "",
+        semester: "",
+        section: "",
+      });
+
+    }
+  };
+
+
+  const handleSubmit = async (e) => {
+
+    e.preventDefault();
+
+    if (!selectedMapping) {
+      alert("Please select a class.");
       return;
     }
 
-    axios
-      .get(`${apiUrl}/branches/for/student`, {
-        params: {
-          courseId: formData.course
-        }
-      })
-      .then((res) => {
-        if (res.data.success) {
-          setBranches(res.data.data);
-        }
-      })
-      .catch((err) => {
-        console.error("Error fetching Branches:", err);
-        setBranches([]);
-      });
-  }, [formData.course]);
-
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setFormData({
-      ...formData,
-      [name]: value
-    });
-  };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
     try {
-      const response = await axios.get(`${apiUrl}/getstudentsdata`, {
-        params: {
-          session: formData.session,
-          course: formData.course,
-          branch: formData.branch,
-          year: formData.year,
-          semester: formData.semester,
-          section: formData.section,
 
+      const token = localStorage.getItem("token");
+
+      const response = await axios.get(
+        `${apiUrl}/getstudentsdata`,
+        {
+          params: {
+            mappingId: selectedMapping
+          },
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         }
-      });
-      navigate('/studentsattendance', {
+      );
+
+      navigate("/studentsattendance", {
         state: {
           students: response.data.data,
           formData: formData,
-          course: selectedCourse,
-          branch: selectedBranch
+          mappingId: selectedMapping
         }
-      })
+      });
+
     } catch (err) {
-      console.log(err);
+
+      console.error(err);
+
+      alert(
+        err.response?.data?.message ||
+        "Failed to fetch students"
+      );
     }
   };
+
+
   return (
+
     <Container>
+
       <h3 className="text-center mb-4 py-2 text-primary fw-bold">
-        GET STUDENT LIST
+        FIND ATTENDANCE FORM
       </h3>
 
       <hr />
 
       <Form onSubmit={handleSubmit}>
+
+        {/* Faculty Mapping */}
+
+        <Row>
+
+          <Col md={12}>
+
+            <Form.Group className="mb-4">
+
+              <Form.Label>
+                Select Class / Lecture :-
+              </Form.Label>
+
+              <Form.Select
+                value={selectedMapping}
+                onChange={handleMappingChange}
+              >
+
+                <option value="">
+                  Select Class
+                </option>
+
+                {mappings.map((mapping) => (
+
+                  <option
+                    key={mapping._id}
+                    value={mapping._id}
+                  >
+
+                    {mapping.session} |{" "}
+                    {mapping.course?.courseShortName} |{" "}
+                    {mapping.branch?.branchShortName} |{" "}
+                    Year {mapping.year} |{" "}
+                    Semester {mapping.semester} |{" "}
+                    Section {mapping.section} |{" "}
+                    {mapping.subjectId?.subjectFullName}
+
+                  </option>
+
+                ))}
+
+              </Form.Select>
+
+            </Form.Group>
+
+          </Col>
+
+        </Row>
+
+
+        {/* Automatically filled fields */}
+
         <Row>
 
           {/* Session */}
+
           <Col md={4}>
+
             <Form.Group className="mb-4">
-              <Form.Label>Session :-</Form.Label>
-              <Form.Select
-                name="session"
+
+              <Form.Label>
+                Session :-
+              </Form.Label>
+
+              <Form.Control
                 value={formData.session}
-                onChange={handleChange}
-              >
-                <option value="">Select Session</option>
-                <option value="2026-27">2026-27</option>
-                <option value="2025-26">2025-26</option>
-                <option value="2024-25">2024-25</option>
-              </Form.Select>
+                readOnly
+              />
+
             </Form.Group>
+
           </Col>
+
 
           {/* Course */}
+
           <Col md={4}>
+
             <Form.Group className="mb-4">
-              <Form.Label>Course :-</Form.Label>
-              <Form.Select
-                name="course"
-                value={formData.course}
-                onChange={handleChange}
-              >
-                <option value="">Select Course</option>
-                {courses.map((course) => (
-                  <option key={course.value} value={course.value}>
-                    {course.label}
-                  </option>
-                ))}
-              </Form.Select>
+
+              <Form.Label>
+                Course :-
+              </Form.Label>
+
+              <Form.Control
+                value={mappings.find(
+                  m => m._id === selectedMapping
+                )?.course?.courseShortName || ""}
+                readOnly
+              />
+
             </Form.Group>
+
           </Col>
+
 
           {/* Branch */}
+
           <Col md={4}>
+
             <Form.Group className="mb-4">
-              <Form.Label>Branch :-</Form.Label>
-              <Form.Select
-                name="branch"
-                value={formData.branch}
-                onChange={handleChange}
-              >
-                <option value="">Select Branch</option>
-                {branches.map((branch) => (
-                  <option key={branch.value} value={branch.value}>
-                    {branch.label}
-                  </option>
-                ))}
-              </Form.Select>
+
+              <Form.Label>
+                Branch :-
+              </Form.Label>
+
+              <Form.Control
+                value={mappings.find(
+                  m => m._id === selectedMapping
+                )?.branch?.branchShortName || ""}
+                readOnly
+              />
+
             </Form.Group>
+
           </Col>
+
 
           {/* Year */}
+
           <Col md={4}>
+
             <Form.Group className="mb-4">
-              <Form.Label>Year :-</Form.Label>
-              <Form.Select
-                name="year"
+
+              <Form.Label>
+                Year :-
+              </Form.Label>
+
+              <Form.Control
                 value={formData.year}
-                onChange={handleChange}
-              >
-                <option value="">Select Year</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-              </Form.Select>
+                readOnly
+              />
+
             </Form.Group>
+
           </Col>
+
 
           {/* Semester */}
+
           <Col md={4}>
+
             <Form.Group className="mb-4">
-              <Form.Label>Semester :-</Form.Label>
-              <Form.Select
-                name="semester"
+
+              <Form.Label>
+                Semester :-
+              </Form.Label>
+
+              <Form.Control
                 value={formData.semester}
-                onChange={handleChange}
-              >
-                <option value="">Select Semester</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-              </Form.Select>
+                readOnly
+              />
+
             </Form.Group>
+
           </Col>
+
 
           {/* Section */}
+
           <Col md={4}>
+
             <Form.Group className="mb-4">
-              <Form.Label>Section :-</Form.Label>
-              <Form.Select
-                name="section"
+
+              <Form.Label>
+                Section :-
+              </Form.Label>
+
+              <Form.Control
                 value={formData.section}
-                onChange={handleChange}
-              >
-                <option value="">Select Section</option>
-                <option value="A">A</option>
-                <option value="B">B</option>
-                <option value="C">C</option>
-                <option value="D">D</option>
-              </Form.Select>
+                readOnly
+              />
+
             </Form.Group>
+
           </Col>
+
         </Row>
 
-        {/* Get Students Button */}
-        <Button type="submit" variant="primary">
+
+        <Button
+          type="submit"
+          variant="primary"
+          disabled={!selectedMapping}
+        >
           Get Students
         </Button>
+
       </Form>
+
     </Container>
   );
 }
