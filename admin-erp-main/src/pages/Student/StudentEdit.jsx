@@ -345,7 +345,7 @@ function StudentEdit() {
                 <Form.Label>Date of Birth :-</Form.Label>
                 <Form.Control
                   type="date"
-                  value={student.dob || ""}
+                  value={student.dob ? student.dob.split("T")[0] : ""}
                   onChange={handleChange}
                   name="dob"
                 />
@@ -732,7 +732,7 @@ function StudentEdit() {
                   </Form.Text>
                 )}
 
-                {!file && student.studentImage && (
+                {!file && student.image && (
                   <Form.Text className="text-muted">
                     Existing image will be kept unless a new image is selected.
                   </Form.Text>

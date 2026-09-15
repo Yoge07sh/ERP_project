@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const router = express.Router();
 const FacultyMappingController = require('../controllers/facultyMappingController');
- 
+
 router.use(bodyParser.json());
 
 router.use(bodyParser.urlencoded({
@@ -28,8 +28,8 @@ router.get('/branchs/for/mapping', (req, res) => {
 router.post('/add/facultymapping', (req, res) => {
     FacultyMappingController.addFacultyMapping(req, res);
 });
-router.get('/get/facultymapping',(req,res)=>{
-    FacultyMappingController.getFacultyList(req,res)
+router.get('/get/facultymapping', (req, res) => {
+    FacultyMappingController.getFacultyList(req, res)
 })
 router.get('/facultyMapping/:id', (req, res) => {
     FacultyMappingController.getFacultyMappingById(req, res);
@@ -40,6 +40,11 @@ router.put('/edit/facultyMapping/:id', (req, res) => {
 router.delete('/delete/facultyMapping/:id', (req, res) => {
     FacultyMappingController.deleteFacultyMapping(req, res);
 });
+router.get('/faculty/for/attendance', (req, res) => {
+    FacultyMappingController.getFacultyMapForAttendance(req, res);
+}
+);
+
 
 
 module.exports = router;
