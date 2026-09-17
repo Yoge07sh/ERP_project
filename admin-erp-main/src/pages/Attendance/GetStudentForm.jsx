@@ -13,7 +13,7 @@ function GetStudentForm() {
   const [selectedMapping, setSelectedMapping] = useState("");
   const [timeslots, setTimeSlots] = useState([]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
-
+  const [selectedDate, setSelectedDate] = useState("");
   const [formData, setFormData] = useState({
     session: "",
     course: "",
@@ -67,9 +67,7 @@ function GetStudentForm() {
 
     setSelectedMapping(mappingId);
 
-    const mapping = mappings.find(
-      (item) => item._id === mappingId
-    );
+    const mapping = mappings.find((item) => item._id === mappingId);
 
     if (mapping) {
       setFormData({
@@ -112,33 +110,27 @@ function GetStudentForm() {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await axios.get(
-        `${apiUrl}/getstudentsdata`,
-        {
-          params: {
-            mappingId: selectedMapping,
-          },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`${apiUrl}/getstudentsdata`, {
+        params: {
+          mappingId: selectedMapping,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       navigate("/studentsattendance", {
         state: {
           students: response.data.data,
           formData: formData,
           facultyMapId: selectedMapping,
-          timeSlotId: selectedTimeSlot
-        }
+          timeSlotId: selectedTimeSlot,
+        },
       });
     } catch (err) {
       console.error(err);
 
-      alert(
-        err.response?.data?.message ||
-        "Failed to fetch students"
-      );
+      alert(err.response?.data?.message || "Failed to fetch students");
     }
   };
 
@@ -155,29 +147,19 @@ function GetStudentForm() {
         <Row>
           <Col md={6}>
             <Form.Group className="mb-4">
-              <Form.Label>
-                Select Class / Lecture :-
-              </Form.Label>
+              <Form.Label>Select Class / Lecture :-</Form.Label>
 
               <Form.Select
                 value={selectedMapping}
                 onChange={handleMappingChange}
               >
-                <option value="">
-                  Select Class
-                </option>
+                <option value="">Select Class</option>
 
                 {mappings.map((mapping) => (
-                  <option
-                    key={mapping._id}
-                    value={mapping._id}
-                  >
-                    {mapping.session} |{" "}
-                    {mapping.course?.courseShortName} |{" "}
-                    {mapping.branch?.branchShortName} |{" "}
-                    Year {mapping.year} |{" "}
-                    Semester {mapping.semester} |{" "}
-                    Section {mapping.section} |{" "}
+                  <option key={mapping._id} value={mapping._id}>
+                    {mapping.session} | {mapping.course?.courseShortName} |{" "}
+                    {mapping.branch?.branchShortName} | Year {mapping.year} |{" "}
+                    Semester {mapping.semester} | Section {mapping.section} |{" "}
                     {mapping.subjectId?.subjectFullName}
                   </option>
                 ))}
@@ -190,59 +172,61 @@ function GetStudentForm() {
         <Row>
           <Col md={6}>
             <Form.Group className="mb-4">
-              <Form.Label>
-                Select TimeSlot
-              </Form.Label>
+              <Form.Label>Select TimeSlot</Form.Label>
 
               <Form.Select
                 value={selectedTimeSlot}
-                onChange={(e) =>
-                  setSelectedTimeSlot(e.target.value)
-                }
+                onChange={(e) => setSelectedTimeSlot(e.target.value)}
               >
-                <option value="">
-                  --Select TimeSlot--
-                </option>
+                <option value="">--Select TimeSlot--</option>
 
                 {timeslots.map((t) => (
-                  <option
-                    key={t._id}
-                    value={t._id}
-                  >
+                  <option key={t._id} value={t._id}>
                     Lecture {t.lectureNo} - {t.timeSlot}
                   </option>
                 ))}
               </Form.Select>
             </Form.Group>
           </Col>
-
-          <Col></Col>
         </Row>
+        <Row>
+          <Col md={6}>
+            <Form.Group className="mb-4">
+              <Form.Label>Select Date</Form.Label>
 
-        
-          <Button
+              <Form.Control
+                type="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+        <Button
           type="submit"
           variant="primary"
           disabled={!selectedMapping || !selectedTimeSlot}
         >
           Get Students
         </Button>
-        
-          <Button
-          className="ms-3"
-            variant="secondary"
-            onClick={() =>
-              navigate("/viewattendance", {
-                state: {
-                  formData: formData,
-                  facultyMapId: selectedMapping
-                }
-              })
-            }
-          >
-            View Attendance
-          </Button>
 
+        <Button
+          className="ms-3"
+          variant="secondary"
+          disabled={!selectedMapping || !selectedTimeSlot || !selectedDate}
+          onClick={() =>
+            navigate("/viewattendance", {
+              state: {
+                formData: formData,
+                facultyMapId: selectedMapping,
+                SingletimeSlot: selectedTimeSlot,
+                selectedDate: selectedDate,
+              },
+            })
+          }
+        >
+          View Attendance
+        </Button>
       </Form>
     </Container>
   );
