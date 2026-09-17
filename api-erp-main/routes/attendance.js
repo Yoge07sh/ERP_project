@@ -22,5 +22,8 @@ router.post('/attendance', authMiddleware, (req, res) => {
 router.get('/viewattendance', authMiddleware, (req, res) => {
     AttendanceController.viewAttendance(req, res);
 });
+router.put('/edit/attendance', authMiddleware, (req, res) => {
+    AttendanceController.updateAttendance(req, res);
+});
 
 module.exports = router

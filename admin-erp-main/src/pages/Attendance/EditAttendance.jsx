@@ -7,35 +7,98 @@ import {
   Col,
   Badge,
 } from "react-bootstrap";
+
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+
+import { useEffect, useState } from "react";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
-function StudentsAttendance() {
-  const navigate = useNavigate();
+function EditAttendance() {
+  const { facultyMapId, SingletimeSlot, selectedDate } = useParams();
+
   const location = useLocation();
+  const navigate = useNavigate();
 
-  const {
-    students = [],
-    formData = {},
-    facultyMapId = "",
-    timeSlotId = "",
-  } = location.state || {};
+  const { formData = {} } = location.state || {};
 
+  const [students, setStudents] = useState([]);
   const [attendance, setAttendance] = useState({});
   const [submitting, setSubmitting] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const handleSubmit = async () => {
+  // Get existing attendance
+  const getAttendance = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await axios.get(`${apiUrl}/viewattendance`, {
+        params: {
+          mappingId: facultyMapId,
+          SingletimeSlot: SingletimeSlot,
+          date: selectedDate,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.data.success) {
+        const records = response.data.data || [];
+
+        if (records.length === 0) {
+          alert("No attendance record found for this date and time slot.");
+          navigate(-1);
+          return;
+        }
+
+        const record = records[0];
+
+        setStudents(
+          record.students?.map((item) => item.studentId).filter(Boolean) || [],
+        );
+
+        const attendanceData = {};
+
+        record.students?.forEach((item) => {
+          if (item.studentId?._id) {
+            attendanceData[item.studentId._id] = item.status;
+          }
+        });
+
+        setAttendance(attendanceData);
+      }
+    } catch (err) {
+      console.error("Error fetching attendance:", err);
+
+      alert(err.response?.data?.message || "Failed to fetch attendance");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (facultyMapId && SingletimeSlot && selectedDate) {
+      getAttendance();
+    }
+  }, [facultyMapId, SingletimeSlot, selectedDate]);
+
+  // Update attendance
+  const handleUpdate = async () => {
     if (!facultyMapId) {
       alert("Mapping information is missing.");
       return;
     }
 
-    if (!timeSlotId) {
+    if (!SingletimeSlot) {
       alert("Time slot is missing.");
+      return;
+    }
+
+    if (!selectedDate) {
+      alert("Date is missing.");
       return;
     }
 
@@ -54,11 +117,12 @@ function StudentsAttendance() {
         status: attendance[student._id] || "Present",
       }));
 
-      const response = await axios.post(
-        `${apiUrl}/attendance`,
+      const response = await axios.put(
+        `${apiUrl}/edit/attendance`,
         {
           facultyMapId: facultyMapId,
-          timeSlotId: timeSlotId,
+          timeSlotId: SingletimeSlot,
+          date: selectedDate,
           students: attendanceData,
         },
         {
@@ -69,34 +133,51 @@ function StudentsAttendance() {
       );
 
       if (response.data.success) {
-        alert("Attendance submitted successfully!");
-        navigate("/getstudents");
+        alert("Attendance updated successfully!");
+
+        navigate(
+          '/viewattendance',
+          {
+            state: {
+              formData: formData,
+              facultyMapId,SingletimeSlot,selectedDate
+            },
+          },
+        );
       }
     } catch (err) {
-      console.error("Attendance submission error:", err);
+      console.error("Attendance update error:", err);
 
-      alert(err.response?.data?.message || "Failed to submit attendance");
+      alert(err.response?.data?.message || "Failed to update attendance");
     } finally {
       setSubmitting(false);
     }
   };
 
   const presentCount = students.filter(
-    (student) => (attendance[student._id] || "Present") === "Present",
+    (student) => attendance[student._id] === "Present",
   ).length;
 
   const absentCount = students.filter(
     (student) => attendance[student._id] === "Absent",
   ).length;
 
+  if (loading) {
+    return (
+      <Container className="py-5 text-center">
+        <div className="text-muted">Loading attendance...</div>
+      </Container>
+    );
+  }
+
   return (
     <Container fluid className="py-3 px-4">
       {/* Page Heading */}
       <div className="text-center mb-3">
-        <h3 className="text-primary fw-bold mb-1">STUDENT ATTENDANCE</h3>
+        <h3 className="text-primary fw-bold mb-1">EDIT ATTENDANCE</h3>
 
         <div className="text-muted small">
-          Mark attendance for the selected class
+          Update attendance for the selected class
         </div>
       </div>
 
@@ -152,6 +233,18 @@ function StudentsAttendance() {
                   </span>
                 </div>
 
+                <div>
+                  <small className="text-muted">Date</small>
+
+                  <span className="fw-semibold ms-2">
+                    {selectedDate
+                      ? new Date(`${selectedDate}T00:00:00`).toLocaleDateString(
+                          "en-IN",
+                        )
+                      : "-"}
+                  </span>
+                </div>
+
                 <div className="ms-auto d-flex gap-2">
                   <Badge bg="primary" pill>
                     Total: {students.length}
@@ -180,7 +273,7 @@ function StudentsAttendance() {
                   <h5 className="fw-bold mb-1">Student List</h5>
 
                   <small className="text-muted">
-                    Mark attendance for each student
+                    Edit attendance for each student
                   </small>
                 </div>
 
@@ -284,15 +377,19 @@ function StudentsAttendance() {
                 </Table>
               </div>
 
-              {/* Submit Button */}
-              <div className="text-end p-3 border-top">
+              {/* Buttons */}
+              <div className="d-flex justify-content-end gap-2 p-3 border-top">
+                <Button variant="secondary" onClick={() => navigate(-1)}>
+                  Back
+                </Button>
+
                 <Button
                   variant="primary"
                   disabled={students.length === 0 || submitting}
                   className="px-4"
-                  onClick={handleSubmit}
+                  onClick={handleUpdate}
                 >
-                  {submitting ? "Submitting..." : "Submit Attendance"}
+                  {submitting ? "Updating..." : "Update Attendance"}
                 </Button>
               </div>
             </Card.Body>
@@ -303,4 +400,4 @@ function StudentsAttendance() {
   );
 }
 
-export default StudentsAttendance;
+export default EditAttendance;
