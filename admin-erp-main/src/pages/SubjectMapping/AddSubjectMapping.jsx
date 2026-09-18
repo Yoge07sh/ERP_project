@@ -119,7 +119,7 @@ const token = localStorage.getItem("token")
                     onChange={(e) => setSession(e.target.value)}
                     required
                   >
-                    <option value="">-- Select Year--</option>
+                    <option value="">Select Year</option>
                     <option value="2024-25">2024-25</option>
                     <option value="2025-26">2025-26</option>
                     <option value="2026-27">2026-27</option>
@@ -135,7 +135,7 @@ const token = localStorage.getItem("token")
                     onChange={(e) => setSubject(e.target.value)}
                     required
                   >
-                    <option value="">-- Select Subject --</option>
+                    <option value="">Select Subject</option>
                     {subjects.map((c) => (
                       <option key={c.value} value={c.label}>
                         {c.label}
@@ -155,7 +155,7 @@ const token = localStorage.getItem("token")
                     onChange={(e) => setCourse(e.target.value)}
                     required
                   >
-                    <option value="">-- Select Course --</option>
+                    <option value="">Select Course</option>
                     {courses.map((c) => (
                       <option key={c.value} value={c.label}>
                         {c.label}
@@ -172,7 +172,7 @@ const token = localStorage.getItem("token")
                     onChange={(e) => setBranch(e.target.value)}
                     required
                   >
-                    <option value="">-- Select Branch --</option>
+                    <option value="">Select Branch</option>
                     {branchs.map((b) => (
                       <option key={b.value} value={b.label}>
                         {b.label}
