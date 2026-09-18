@@ -93,7 +93,7 @@ function EditSubjectMapping() {
     }).then((res) => {
         setSubjectMapping(res.data.data)
     })
-    .catch((err) => {
+    .catch(() => {
         alert("Error loading subject mapping");
     })
   }, [id]);
@@ -158,7 +158,6 @@ function EditSubjectMapping() {
                     value={subjectMapping.session}
                     onChange={manageUpdate}
                   >
-                    <option value="">-- Select Year--</option>
                     <option value="2024-25">2024-25</option>
                     <option value="2025-26">2025-26</option>
                     <option value="2026-27">2026-27</option>
@@ -174,7 +173,6 @@ function EditSubjectMapping() {
                     value={subjectMapping.subject}
                     onChange={manageUpdate} 
                   >
-                    <option value="">-- Select Subject --</option>
                     {subjects.map((c) => (
                       <option key={c.value} value={c.label}>
                         {c.label}
@@ -194,7 +192,6 @@ function EditSubjectMapping() {
                     value={subjectMapping.course}
                     onChange={manageUpdate}
                   >
-                    <option value="">-- Select Course --</option>
                     {courses.map((c) => (
                       <option key={c.value} value={c.label}>
                         {c.label}
@@ -211,7 +208,6 @@ function EditSubjectMapping() {
                     value={subjectMapping.branch}
                     onChange={manageUpdate}
                   >
-                    <option value="">-- Select Branch --</option>
                     {branchs.map((b) => (
                       <option key={b.value} value={b.label}>
                         {b.label}
