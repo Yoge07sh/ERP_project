@@ -27,7 +27,7 @@ function SubjectMapping() {
   let [branch, setBranch] = useState("");
   let [year, setYear] = useState("1");
   let [semester, setSemester] = useState("1");
-
+const token = localStorage.getItem("token")
   useEffect(() => {
     axios
       .get(apiUrl+"/courses/for/mapping")
@@ -78,7 +78,10 @@ function SubjectMapping() {
     axios({
       url: apiUrl + "/add/subjectMapping",
       method: "post",
-      data: { session,subject, course, branch, year, semester },
+      data: { session, subject, course, branch, year, semester },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
       .then((result) => {
         if (result.data.success) setButtonDisabled(false);

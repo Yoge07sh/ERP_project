@@ -14,7 +14,7 @@ function CourseList() {
     const [show, setShow] = useState(false)
     let [isDelete, setIsDelete] = useState(false)
     let [searchByCourseName, setSearchByCourseName] = useState('')
-
+const token = localStorage.getItem("token")
 
 
     useEffect(() => {
@@ -42,7 +42,6 @@ function CourseList() {
     function searchCourse(coursename) {
         setSearchByCourseName(coursename)
         axios({
-            // url: 'http://localhost:3000',
             url: 'http://localhost:3000/course/search/' + coursename,
             method: 'get',
             params: {
@@ -73,16 +72,20 @@ function CourseList() {
 
     function goToDelete(id) {
         axios({
-            url: 'http://localhost:3000/delete/course/' + id,
-            method: 'delete'
-
-        }).then((result) => {
-            if (result.data.success) {
-                setShow(true)
-            }
-        }).catch((err) => {
-            console.log(err.message);
+          url: "http://localhost:3000/delete/course/" + id,
+          method: "delete",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         })
+          .then((result) => {
+            if (result.data.success) {
+              setShow(true);
+            }
+          })
+          .catch((err) => {
+            console.log(err.message);
+          });
     }
 
 

@@ -1,5 +1,5 @@
 const TimeSlots = require('../models/TimeSlot');
-
+const User = require('../models/User')
 const getTimeSlots = async (req, res) => {
     try {
         const timeSlots = await TimeSlots.find({});
@@ -21,6 +21,21 @@ const getTimeSlots = async (req, res) => {
 
 const AddTimeSlots = async (req, res) => {
     try {
+        const user = await User.findById(req.user._id);
+
+        if (!user) {
+            return res.status(401).send({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        if (user.userRole !== 'admin') {
+            return res.status(403).send({
+                success: false,
+                message: 'Only admin can perform this operation'
+            });
+        }
         const timeslot = new TimeSlots(req.body);
 
         console.log(timeslot);
@@ -60,6 +75,21 @@ const getTimeSlotById = async (req, res) => {
 
 const editTimeSlot = async (req, res) => {
     try {
+        const user = await User.findById(req.user._id);
+
+        if (!user) {
+            return res.status(401).send({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        if (user.userRole !== 'admin') {
+            return res.status(403).send({
+                success: false,
+                message: 'Only admin can perform this operation'
+            });
+        }
         const id = req.params.id;
         let data = req.body
         await TimeSlots.updateOne({ _id: id, }, { $set: data });
@@ -75,6 +105,22 @@ const editTimeSlot = async (req, res) => {
 
 const deleteTimeSlots = async (req, res) => {
     try {
+
+        const user = await User.findById(req.user._id);
+
+        if (!user) {
+            return res.status(401).send({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        if (user.userRole !== 'admin') {
+            return res.status(403).send({
+                success: false,
+                message: 'Only admin can perform this operation'
+            });
+        }
         let id = req.params.id;
         await TimeSlots.deleteOne({ _id: id });
         res.status(200).send({

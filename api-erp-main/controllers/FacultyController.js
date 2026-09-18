@@ -167,6 +167,22 @@ async function getFaculty(req, res) {
 
 async function deleteFaculty(req, res) {
     try {
+
+        const user = await User.findById(req.user._id);
+        
+                if (!user) {
+                    return res.status(401).send({
+                        success: false,
+                        message: 'User not found'
+                    });
+                }
+        
+                if (user.userRole !== 'admin') {
+                    return res.status(403).send({
+                        success: false,
+                        message: 'Only admin can perform this operation'
+                    });
+                }
         let facultyId = req.params.id;
         const result = await Faculty.deleteOne({ _id: facultyId });
 
