@@ -13,7 +13,7 @@ function SubjectEdit() {
     let [subject, setSubject] = useState('');
     let [show, setShow] = useState(false)
     let [message, setMessage] = useState('');
-
+const token = localStorage.getItem("token")
 
     const handleClose = () => {
         setShow(false);
@@ -33,17 +33,22 @@ function SubjectEdit() {
 
     function doEditSubject(id) {
         axios({
-            url: 'http://localhost:3000/edit/subject/' + id,
-            method: 'put',
-            data: subject
-        }).then((result) => {
-            if (result.data.success) {
-                setMessage('Subject Updated successfully');
-                setShow(true)
-            }
-        }).catch((err) => {
-            console.log(err);
+          url: "http://localhost:3000/edit/subject/" + id,
+          method: "put",
+          data: subject,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         })
+          .then((result) => {
+            if (result.data.success) {
+              setMessage("Subject Updated successfully");
+              setShow(true);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
     }
 
     useEffect(() => {

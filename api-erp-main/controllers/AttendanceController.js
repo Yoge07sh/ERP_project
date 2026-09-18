@@ -322,14 +322,16 @@ const viewAttendance = async (req, res) => {
                 message: "This class is not assigned to you"
             });
         }
+        const startDate = new Date(`${date}T00:00:00+05:30`);
+        const endDate = new Date(`${date}T23:59:59.999+05:30`);
 
         // Get attendance only for selected time slot
         const attendance = await Attendance.find({
             facultyMapId: mappingId,
             timeSlotId: SingletimeSlot,
             date: {
-                $gte: new Date(`${date}T00:00:00.000Z`),
-                $lt: new Date(`${date}T23:59:59.999Z`)
+                $gte: startDate,
+                $lt: endDate
             }
         })
             .populate("timeSlotId")

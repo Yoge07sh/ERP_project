@@ -25,6 +25,7 @@ function BranchList() {
             <Pagination.Item key={i} onClick={() => setPageNo(i)} >{i}</Pagination.Item>
         )
     }
+    const token = localStorage.getItem("token");
 
 
     useEffect(() => {
@@ -82,16 +83,20 @@ function BranchList() {
 
     function goToDelete(id) {
         axios({
-            url: 'http://localhost:3000/delete/branch/' + id,
-            method: 'delete'
-
-        }).then((result) => {
-            if (result.data.success) {
-                setShow(true)
-            }
-        }).catch((err) => {
-            console.log(err.message);
+          url: "http://localhost:3000/delete/branch/" + id,
+          method: "delete",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         })
+          .then((result) => {
+            if (result.data.success) {
+              setShow(true);
+            }
+          })
+          .catch((err) => {
+            console.log(err.message);
+          });
     }
 
 

@@ -10,7 +10,7 @@ function FacultyList() {
   const [showModal, setShowModal] = useState(false);
   let [showSpinner, setShowSpinner] = useState(false);
   let [buttonDisabled, setButtonDisabled] = useState(false);
- 
+ const token = localStorage.getItem("token")
   let [file, setFile] = useState("");
   let[nop,setNop]=useState(1)
   let[pageNo,setPageNo]=useState(1)
@@ -133,21 +133,22 @@ function FacultyList() {
     }
 
     axios({
-        url: 'http://localhost:3000/delete/faculty/' + id,
-        method: 'delete'
+      url: "http://localhost:3000/delete/faculty/" + id,
+      method: "delete",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
-    .then((result) => {
+      .then((result) => {
         if (result.data.success) {
-            alert("Faculty deleted successfully")
-              setFaculties(
-              faculties.filter((faculty) => faculty._id !== id)
-            )
-          }
-        })
-    .catch((err) => {
-        console.log(err.message)
-        alert("Something went wrong while deleting faculty")
-    })
+          alert("Faculty deleted successfully");
+          setFaculties(faculties.filter((faculty) => faculty._id !== id));
+        }
+      })
+      .catch((err) => {
+        console.log(err.message);
+        alert("Something went wrong while deleting faculty");
+      });
 }
 
 function goToView(id) {

@@ -33,17 +33,24 @@ function BranchEdit() {
     }
 
     function doEditBranch(id) {
-        axios({
-            url: 'http://localhost:3000/edit/branch/' + id,
-            method: 'put',
-            data: branch
-        }).then((result) => {
-            if (result.data.success) {
-                setShow(true);
-            }
-        }).catch((err) => {
-            console.log(err);
+      const token = localStorage.getItem("token");
+
+      axios({
+        url: "http://localhost:3000/edit/branch/" + id,
+        method: "put",
+        data: branch,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((result) => {
+          if (result.data.success) {
+            setShow(true);
+          }
         })
+        .catch((err) => {
+          console.log(err.response?.data || err);
+        });
     }
 
     useEffect(() => {
