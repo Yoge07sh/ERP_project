@@ -97,8 +97,7 @@ function SubjectList() {
         <>
             <h3 className="text-center mb-4 py-2 text-primary fw-bold">LIST OF SUBJECTS</h3>
 
-            <InputGroup className="mb-3">
-                <InputGroup.Text>
+            <InputGroup  className="mb-3" style={{ width: "300px" }}>                <InputGroup.Text>
                     <i className="bi bi-search"></i>
                 </InputGroup.Text>
                 <Form.Control type="text" placeholder=" Type Subject Name to search" onChange={(e) => searchSubject(e.target.value)} />

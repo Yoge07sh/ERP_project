@@ -119,7 +119,7 @@ function AddCourse() {
                             onChange={(e) => setAffiliatedUniversity(e.target.value)}
                             required
                         >
-                            <option value="">-- Select University --</option>
+                            <option value="">Select University</option>
                             {
                                 universityData.map((uni) => (
 

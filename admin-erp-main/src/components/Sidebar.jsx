@@ -231,7 +231,7 @@ function Sidebar() {
                   to="/getstudents"
                   className="sidebar-menu-item sidebar-menu-item d-flex align-items-center gap-2"
                 >
-                  <i className="bi bi-clock"></i>
+                  <i className="bi bi-clipboard-check"></i>
 
                   <span className="d-none d-md-inline">Attendance</span>
                 </ListGroup.Item>
@@ -278,7 +278,7 @@ function Sidebar() {
                   to="/getstudents"
                   className="sidebar-menu-item sidebar-menu-item d-flex align-items-center gap-2"
                 >
-                  <i className="bi bi-clock"></i>
+                  <i className="bi bi-clipboard-check"></i>
 
                   <span className="d-none d-md-inline">Attendance</span>
                 </ListGroup.Item>

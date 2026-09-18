@@ -94,13 +94,12 @@ function CourseList() {
         <>
             <h3 className="text-center mb-4 py-2 text-primary fw-bold">LIST OF COURSES</h3>
 
-            <InputGroup className="mb-3">
-                <InputGroup.Text>
+            <InputGroup  className="mb-3" style={{ width: "300px" }}>                  <InputGroup.Text>
                     <i className="bi bi-search"></i>
                 </InputGroup.Text>
                 <Form.Control type="text" placeholder=" Type Course Name to search" onChange={(e) => searchCourse(e.target.value)} />
             </InputGroup>
-
+ 
             <button className="btn btn-success ms-3 mt-2 float-end" onClick={goToAddCoursePage}>Add Course +</button>
 
 

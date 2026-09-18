@@ -83,7 +83,7 @@ function AddTimeSlot() {
                             required
                         >
                             <option value="">
-                                -- Select Session --
+                                Select Session
                             </option>
 
                             {sessions.map((item) => (
@@ -103,7 +103,7 @@ function AddTimeSlot() {
                             required
                         >
                             <option value="">
-                                -- Select Lecture No. --
+                                Select Lecture No.
                             </option>
 
                             {lectureNumbers.map((number) => (

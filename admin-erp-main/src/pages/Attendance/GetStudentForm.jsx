@@ -178,7 +178,7 @@ function GetStudentForm() {
                 value={selectedTimeSlot}
                 onChange={(e) => setSelectedTimeSlot(e.target.value)}
               >
-                <option value="">--Select TimeSlot--</option>
+                <option value="">Select TimeSlot</option>
 
                 {timeslots.map((t) => (
                   <option key={t._id} value={t._id}>
