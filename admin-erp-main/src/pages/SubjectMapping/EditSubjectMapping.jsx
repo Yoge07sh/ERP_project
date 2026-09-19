@@ -1,4 +1,4 @@
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Container,
   Row,
@@ -15,10 +15,10 @@ import { useNavigate, useParams } from "react-router-dom";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 function EditSubjectMapping() {
-    let navigate = useNavigate();
-    let params = useParams()
-    let id = params.id;
-
+  let navigate = useNavigate();
+  let params = useParams();
+  let id = params.id;
+  const token = localStorage.getItem("token");
   let [subjects, setSubjects] = useState([]);
   let [courses, setCourses] = useState([]);
   let [branchs, setBranchs] = useState([]);
@@ -29,18 +29,18 @@ function EditSubjectMapping() {
   let [buttonDisabled, setButtonDisabled] = useState(false);
 
   let [subjectMapping, setSubjectMapping] = useState({
-    session: '',
-    subject: '',
-    course: '',
-    branch: '',
-    year: '',
-    semester: '',
-  })
+    session: "",
+    subject: "",
+    course: "",
+    branch: "",
+    year: "",
+    semester: "",
+  });
 
   //Get Courses.
   useEffect(() => {
     axios
-      .get(apiUrl+"/courses/for/mapping")
+      .get(apiUrl + "/courses/for/mapping")
       .then((res) => {
         if (res.data.success) {
           setCourses(res.data.data);
@@ -56,7 +56,7 @@ function EditSubjectMapping() {
   //// Get Subjects.
   useEffect(() => {
     axios
-      .get(apiUrl+"/subjects/for/mapping")
+      .get(apiUrl + "/subjects/for/mapping")
       .then((res) => {
         if (res.data.success) {
           setSubjects(res.data.data);
@@ -72,7 +72,7 @@ function EditSubjectMapping() {
   // Get Branches.
   useEffect(() => {
     axios
-      .get( apiUrl+"/branchs/for/mapping")
+      .get(apiUrl + "/branchs/for/mapping")
       .then((res) => {
         if (res.data.success) {
           setBranchs(res.data.data);
@@ -88,27 +88,28 @@ function EditSubjectMapping() {
   // Get Existing Subject Mapping.
   useEffect(() => {
     axios({
-        url: apiUrl + '/subjectMapping/' + id,
-        method: 'get'
-    }).then((res) => {
-        setSubjectMapping(res.data.data)
+      url: apiUrl + "/subjectMapping/" + id,
+      method: "get",
     })
-    .catch(() => {
+      .then((res) => {
+        setSubjectMapping(res.data.data);
+      })
+      .catch((err) => {
         alert("Error loading subject mapping");
-    })
+      });
   }, [id]);
 
   function manageUpdate(e) {
-        let name = e.target.name
-        let value = e.target.value
+    let name = e.target.name;
+    let value = e.target.value;
 
-        setSubjectMapping((prev) => {
-            return {
-                ...prev,
-                [name]: value
-            }
-        })
-    }
+    setSubjectMapping((prev) => {
+      return {
+        ...prev,
+        [name]: value,
+      };
+    });
+  }
 
   let doEditMapping = () => {
     setButtonDisabled(true);
@@ -118,10 +119,13 @@ function EditSubjectMapping() {
       url: apiUrl + "/Edit/subjectMapping/" + id,
       method: "put",
       data: subjectMapping,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
       .then((result) => {
-        if (result.data.success) { 
-        setShow(true);
+        if (result.data.success) {
+          setShow(true);
         }
         setButtonDisabled(false);
         setShowSpinner(false);
@@ -140,12 +144,13 @@ function EditSubjectMapping() {
     navigate("/subjectsmap");
   };
 
-  return(
+  return (
     <>
       {showForm && (
         <Container className="mt-5">
-
-          <h3 className="text-center mb-4 py-2 text-primary fw-bold ">EDIT SUBJECT MAPPING</h3>
+          <h3 className="text-center mb-4 py-2 text-primary fw-bold ">
+            EDIT SUBJECT MAPPING
+          </h3>
           <hr />
 
           <Form>
@@ -171,7 +176,7 @@ function EditSubjectMapping() {
                   <Form.Select
                     name="subject"
                     value={subjectMapping.subject}
-                    onChange={manageUpdate} 
+                    onChange={manageUpdate}
                   >
                     {subjects.map((c) => (
                       <option key={c.value} value={c.label}>
@@ -216,8 +221,6 @@ function EditSubjectMapping() {
                   </Form.Select>
                 </Form.Group>
               </Col>
-
-              
             </Row>
 
             <Row>
@@ -273,7 +276,6 @@ function EditSubjectMapping() {
               </Button>
             </div>
           </Form>
-
         </Container>
       )}
 
@@ -298,6 +300,5 @@ function EditSubjectMapping() {
     </>
   );
 }
-    
 
-export default EditSubjectMapping
+export default EditSubjectMapping;

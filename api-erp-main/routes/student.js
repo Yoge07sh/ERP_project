@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const bodyParser = require('body-parser');
 const StudentController = require('../controllers/StudentController');
-
+const authMiddleware = require('../middleware/authMiddleware')
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
 
@@ -34,7 +34,7 @@ router.post('/students/upload', upload.single('bulkFile'), (req, res) => {
 
 // ✅ CRUD routes
 router.get('/students', (req, res) => StudentController.getStudents(req, res));
-router.delete('/delete/student/:id', (req, res) => StudentController.deleteStudent(req, res));
+router.delete('/delete/student/:id',authMiddleware, (req, res) => StudentController.deleteStudent(req, res));
 router.get('/student/:id', (req, res) => StudentController.getStudent(req, res));
 router.put('/edit/student/:id', upload.single('studentImage'), (req, res) => {
     StudentController.editStudent(req, res);

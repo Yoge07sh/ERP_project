@@ -1,9 +1,23 @@
 const Course = require('../models/Course');
-
+const User = require('../models/User')
 
 async function addCourse(req, res) {
     try {
+        const user = await User.findById(req.user._id);
 
+        if (!user) {
+            return res.status(401).send({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        if (user.userRole !== 'admin') {
+            return res.status(403).send({
+                success: false,
+                message: 'Only admin can perform this operation'
+            });
+        }
         let course = new Course(req.body);
         await course.save();
         res.status(200).send({ success: true, message: 'Data saved successfully' })
@@ -40,6 +54,22 @@ async function getCourses(req, res) {
 async function deleteCourse(req, res) {
     try {
 
+        const user = await User.findById(req.user._id);
+
+        if (!user) {
+            return res.status(401).send({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        if (user.userRole !== 'admin') {
+            return res.status(403).send({
+                success: false,
+                message: 'Only admin can perform this operation'
+            });
+        }
+
         let courseId = req.params.id;
         const result = await Course.deleteOne({ _id: courseId });
 
@@ -70,6 +100,22 @@ async function getCourse(req, res) {
 
 async function editCourse(req, res) {
     try {
+
+        const user = await User.findById(req.user._id);
+
+        if (!user) {
+            return res.status(401).send({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        if (user.userRole !== 'admin') {
+            return res.status(403).send({
+                success: false,
+                message: 'Only admin can perform this operation'
+            });
+        }
         let courseId = req.params.id;
         let course = await Course.findOne({ _id: courseId })
         Object.assign(course, req.body)

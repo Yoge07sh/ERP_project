@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const router = express.Router();
 const FacultyMappingController = require('../controllers/facultyMappingController');
+const authMiddleware = require('../middleware/authMiddleware')
 
 router.use(bodyParser.json());
 
@@ -34,10 +35,10 @@ router.get('/get/facultymapping', (req, res) => {
 router.get('/facultyMapping/:id', (req, res) => {
     FacultyMappingController.getFacultyMappingById(req, res);
 });
-router.put('/edit/facultyMapping/:id', (req, res) => {
+router.put('/edit/facultyMapping/:id', authMiddleware, (req, res) => {
     FacultyMappingController.editFacultyMapping(req, res);
 });
-router.delete('/delete/facultyMapping/:id', (req, res) => {
+router.delete('/delete/facultyMapping/:id', authMiddleware, (req, res) => {
     FacultyMappingController.deleteFacultyMapping(req, res);
 });
 router.get('/faculty/for/attendance', (req, res) => {

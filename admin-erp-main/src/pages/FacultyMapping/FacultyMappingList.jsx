@@ -1,5 +1,5 @@
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap-icons/font/bootstrap-icons.css'
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 import {
   Button,
@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { FaEdit, FaTrash } from 'react-icons/fa'
 
-const apiUrl = import.meta.env.VITE_API_URL
+const apiUrl = import.meta.env.VITE_API_URL;
 
 function FacultyMappingList () {
   const navigate = useNavigate()

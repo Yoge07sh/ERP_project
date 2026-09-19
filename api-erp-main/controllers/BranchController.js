@@ -1,6 +1,6 @@
 const Branch = require('../models/Branch')
 const Course =require('../models/Course')
-
+const User = require('../models/User')
 
 
 async function getCoursesForBranch(req, res) {
@@ -38,7 +38,21 @@ async function getCoursesForBranch(req, res) {
 }
 async function addBranch(req, res) {
     try {
-        console.log("ACTUAL POST BODY:", req.body);
+        const user = await User.findById(req.user._id);
+
+        if (!user) {
+            return res.status(401).send({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        if (user.userRole !== 'admin') {
+            return res.status(403).send({
+                success: false,
+                message: 'Only admin  can perform this action'
+            });
+        }
 
         let branch = new Branch(req.body);
         await branch.save();
@@ -74,6 +88,23 @@ async function getBranches(req, res) {
 
 async function deleteBranch(req, res) {
     try {
+
+        const user = await User.findById(req.user._id);
+
+        if (!user) {
+            return res.status(401).send({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        if (user.userRole !== 'admin') {
+            return res.status(403).send({
+                success: false,
+                message: 'Only admin can delete branch'
+            });
+        }
+
         let branchId = req.params.id;
         const result = await Branch.deleteOne({ _id: branchId })
 
@@ -103,6 +134,22 @@ async function getBranch(req, res) {
 
 async function editBranch(req, res) {
     try {
+
+        const user = await User.findById(req.user._id);
+
+        if (!user) {
+            return res.status(401).send({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        if (user.userRole !== 'admin') {
+            return res.status(403).send({
+                success: false,
+                message: 'Only admin can edit branch'
+            });
+        }
 
         let branchId = req.params.id;
         let branch = await Branch.findOne({ _id: branchId })

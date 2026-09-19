@@ -16,7 +16,7 @@ function CourseEdit() {
     let [show, setShow] = useState(false)
     // let [buttonDisabled, setButtonDisabled] = useState(false);
 
-
+const token = localStorage.getItem("token")
 
     const handleClose = () => {
         setShow(false);
@@ -35,16 +35,21 @@ function CourseEdit() {
 
     function doEditCourse(id) {
         axios({
-            url: 'http://localhost:3000/edit/course/' + id,
-            method: 'put',
-            data: course
-        }).then((result) => {
-            if (result.data.success) {
-                setShow(true)
-            }
-        }).catch((err) => {
-            console.log(err);
+          url: "http://localhost:3000/edit/course/" + id,
+          method: "put",
+          data: course,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         })
+          .then((result) => {
+            if (result.data.success) {
+              setShow(true);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
     }
 
     useEffect(() => {

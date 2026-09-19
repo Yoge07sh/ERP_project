@@ -167,4 +167,4 @@ function SubjectList () {
   )
 }
 
-export default SubjectList
+export default SubjectList;

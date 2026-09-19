@@ -269,31 +269,103 @@ function EditTimeSlot() {
                 show={show}
                 onHide={handleClose}
             >
-                <Modal.Header closeButton>
-                    <Modal.Title>
-                        Success
-                    </Modal.Title>
-                </Modal.Header>
+              <option value="">-- Select Lecture No. --</option>
 
-                <Modal.Body>
-                    Time Slot Updated successfully 👍
-                </Modal.Body>
+              {lectureNumbers.map((number) => (
+                <option key={number} value={number}>
+                  Lecture {number}
+                </option>
+              ))}
+            </Form.Select>
+          </Form.Group>
+        </Row>
 
-                <Modal.Footer>
-                    <Button
-                        variant="danger"
-                        onClick={() => {
-                            handleClose();
-                            navigate("/timeslots");
-                        }}
-                    >
-                        Close
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-        </Container>
-    );
+        <Row className="mb-3">
+          <Form.Group as={Col} md={6} controlId="startTime">
+            <Form.Label>Start Time</Form.Label>
+
+            <Form.Control
+              type="time"
+              name="startTime"
+              value={TimeSlot.startTime}
+              onChange={handleChange}
+              required
+            />
+
+            {TimeSlot.startTime && (
+              <Form.Text className="text-primary">
+                Selected: {formatTime(TimeSlot.startTime)}
+              </Form.Text>
+            )}
+          </Form.Group>
+
+          <Form.Group as={Col} md={6} controlId="endTime">
+            <Form.Label>End Time</Form.Label>
+
+            <Form.Control
+              type="time"
+              name="endTime"
+              value={TimeSlot.endTime}
+              onChange={handleChange}
+              required
+            />
+
+            {TimeSlot.endTime && (
+              <Form.Text className="text-primary">
+                Selected: {formatTime(TimeSlot.endTime)}
+              </Form.Text>
+            )}
+          </Form.Group>
+        </Row>
+
+        {TimeSlot.startTime && TimeSlot.endTime && (
+          <Row className="mb-3">
+            <Col>
+              <div className="alert alert-info">
+                <strong>Time Slot:</strong>
+
+                <span className="ms-2">{formatTimeSlot(timeSlot)}</span>
+              </div>
+            </Col>
+          </Row>
+        )}
+
+        <div className="d-flex justify-content-center gap-2 mt-4">
+          <Button
+            onClick={() => navigate("/timeslots")}
+            variant="danger"
+            type="button"
+          >
+            Cancel
+          </Button>
+
+          <Button disabled={buttonDisabled} variant="success" type="submit">
+            {buttonDisabled ? "Updating..." : "Update Time Slot"}
+          </Button>
+        </div>
+      </Form>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Success</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>Time Slot Updated successfully 👍</Modal.Body>
+
+        <Modal.Footer>
+          <Button
+            variant="danger"
+            onClick={() => {
+              handleClose();
+              navigate("/timeslots");
+            }}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </Container>
+  );
 }
 
 export default EditTimeSlot;
-

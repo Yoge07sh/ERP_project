@@ -1,30 +1,31 @@
-const Mapping=require('../models/SubjectMap')
-const Subject =require('../models/Subject')
-const Course =require('../models/Course')
-const Branch =require('../models/Branch')
-
+const Mapping = require("../models/SubjectMap");
+const Subject = require("../models/Subject");
+const Course = require("../models/Course");
+const Branch = require("../models/Branch");
+const User = require("../models/User");
 
 async function getSubjectsForMapping(req, res) {
   try {
     let subjects = await Subject.find(
-      { subjectFullName: { $regex: new RegExp(req.query.subjectFullName, "i") } },
+      {
+        subjectFullName: { $regex: new RegExp(req.query.subjectFullName, "i") },
+      },
       {
         _id: 1,
         subjectFullName: 1,
-      }
+      },
     );
-    let sendSubjects=[]
-    for(let i=0;i<subjects.length;i++){
-        sendSubjects.push({
-            value:subjects[i]._id,
-            label:subjects[i].subjectFullName,
-        })
+    let sendSubjects = [];
+    for (let i = 0; i < subjects.length; i++) {
+      sendSubjects.push({
+        value: subjects[i]._id,
+        label: subjects[i].subjectFullName,
+      });
     }
-    res.status(200).send({success:true,data:sendSubjects})
-} catch (error) {
-      res.status(500).send({success:false,message:'something went wrong'})
+    res.status(200).send({ success: true, data: sendSubjects });
+  } catch (error) {
+    res.status(500).send({ success: false, message: "something went wrong" });
     console.log(error);
-    
   }
 }
 async function getCoursesForMapping(req, res) {
@@ -34,20 +35,19 @@ async function getCoursesForMapping(req, res) {
       {
         _id: 1,
         courseFullName: 1,
-      }
+      },
     );
-    let sendCourses=[]
-    for(let i=0;i<courses.length;i++){
-        sendCourses.push({
-            value:courses[i]._id,
-            label:courses[i].courseFullName,
-        })
+    let sendCourses = [];
+    for (let i = 0; i < courses.length; i++) {
+      sendCourses.push({
+        value: courses[i]._id,
+        label: courses[i].courseFullName,
+      });
     }
-    res.status(200).send({success:true,data:sendCourses})
-} catch (error) {
-      res.status(500).send({success:false,message:'something went wrong'})
+    res.status(200).send({ success: true, data: sendCourses });
+  } catch (error) {
+    res.status(500).send({ success: false, message: "something went wrong" });
     console.log(error);
-    
   }
 }
 
@@ -58,97 +58,149 @@ async function getBranchsForMapping(req, res) {
       {
         _id: 1,
         branchFullName: 1,
-      }
+      },
     );
-    let sendBranchs=[]
-    for(let i=0;i<branchs.length;i++){
-        sendBranchs.push({
-            value:branchs[i]._id,
-            label:branchs[i].branchFullName,
-        })
+    let sendBranchs = [];
+    for (let i = 0; i < branchs.length; i++) {
+      sendBranchs.push({
+        value: branchs[i]._id,
+        label: branchs[i].branchFullName,
+      });
     }
-    res.status(200).send({success:true,data:sendBranchs})
-} catch (error) {
-      res.status(500).send({success:false,message:'something went wrong'})
+    res.status(200).send({ success: true, data: sendBranchs });
+  } catch (error) {
+    res.status(500).send({ success: false, message: "something went wrong" });
     console.log(error);
-    
   }
 }
 
-async function addSubjectMapping(req,res){
-try {
-     let subjectmap=new Mapping(req.body)
-       
-        await subjectmap.save()
-        
-        res.status(200).send({success:true,message:'data saved successfully'})
-        
-    } catch (error) {
-        res.status(500).send({success:false,message:'something went wrong'})
-        console.log(error);        
+async function addSubjectMapping(req, res) {
+  try {
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(401).send({
+        success: false,
+        message: "User not found",
+      });
     }
 
+    if (user.userRole !== "admin") {
+      return res.status(403).send({
+        success: false,
+        message: "Only admin can perform this operation",
+      });
+    }
+    let subjectmap = new Mapping(req.body);
+
+    await subjectmap.save();
+
+    res.status(200).send({ success: true, message: "data saved successfully" });
+  } catch (error) {
+    res.status(500).send({ success: false, message: "something went wrong" });
+    console.log(error);
+  }
 }
 async function getSubjectsMapped(req, res) {
-    try {
-        let subjectsmap = await Mapping.find({
-            course: { $regex: new RegExp(req.query.course, "i") }
-        });
-        res.status(200).send({ success: true, data: subjectsmap })
-    } catch (error) {
-        console.log(error)
-        res.status(500).send({ success: false, message: 'Something went wrong..!' });
-    }
+  try {
+    let subjectsmap = await Mapping.find({
+      course: { $regex: new RegExp(req.query.course, "i") },
+    });
+    res.status(200).send({ success: true, data: subjectsmap });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .send({ success: false, message: "Something went wrong..!" });
+  }
 }
 
 const getSubjectMappingById = async (req, res) => {
-  try{
+  try {
     let id = req.params.id;
-    let subjectMapping = await Mapping.findOne({_id: id})
+    let subjectMapping = await Mapping.findOne({ _id: id });
     res.status(200).send({ success: true, data: subjectMapping });
-  } catch(err){
-    res.status(400).send({message: "Something went Wrong..!"})
+  } catch (err) {
+    res.status(400).send({ message: "Something went Wrong..!" });
   }
-}
+};
 
 const editSubjectMapping = async (req, res) => {
   try {
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(401).send({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    if (user.userRole !== "admin") {
+      return res.status(403).send({
+        success: false,
+        message: "Only admin can perform this operation",
+      });
+    }
     let subjectId = req.params.id;
     let subjectmap = await Mapping.findOne({ _id: subjectId });
     Object.assign(subjectmap, req.body);
     await subjectmap.save();
-    //console.log(subjectmap);
     res
       .status(200)
       .send({ success: true, message: "SubjectMapping has been updated" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Something went wrong in updating SubjectMapping",
+    });
+  }
+};
+
+const deleteSubjectMapping = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(401).send({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    if (user.userRole !== "admin") {
+      return res.status(403).send({
+        success: false,
+        message: "Only admin can perform this operation",
+      });
+    }
+
+    let subjectId = req.params.id;
+    const result = await Mapping.deleteOne({ _id: subjectId });
+
+    if (result) {
+      res
+        .status(200)
+        .send({
+          success: true,
+          message: "Subject Mapping Deleted Successfull",
+        });
+    } else {
+      res
+        .status(500)
+        .send({ success: false, message: "Can not Delete Subject Mapping" });
+    }
   } catch (error) {
     console.log(error);
     res
       .status(500)
       .send({
         success: false,
-        message: "Something went wrong in updating SubjectMapping",
+        message: "Can not Delete, Something went wrong..!",
       });
   }
 };
-
-const deleteSubjectMapping = async (req, res) => {
-  try {
-        let subjectId = req.params.id;
-        const result = await Mapping.deleteOne({ _id: subjectId });
-
-        if (result) {
-            res.status(200).send({ success: true, message: 'Subject Mapping Deleted Successfull' });
-        } else {
-            res.status(500).send({ success: false, message: 'Can not Delete Subject Mapping' });
-        }
-      } 
-      catch (error) {
-        console.log(error)
-        res.status(500).send({ success: false, message: 'Can not Delete, Something went wrong..!' });
-      }
-    } 
-
 
 module.exports = {
   getSubjectsForMapping,
