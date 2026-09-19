@@ -4,157 +4,167 @@ import axios from 'axios'
 import { Modal, Button, Form, InputGroup, Container } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { FaEdit, FaTrash } from 'react-icons/fa'
 
+function SubjectList () {
+  let navigate = useNavigate()
+  let [subjects, setSubjects] = useState([])
+  const [show, setShow] = useState(false)
+  let [isDelete, setIsDelete] = useState(false)
+  let [searchBySubjectName, setSearchBySubjectName] = useState('')
 
-function SubjectList() {
+  useEffect(() => {
+    axios({
+      url: 'http://localhost:3000/subjects',
+      method: 'get',
+      params: {
+        subjectFullName: searchBySubjectName
+      }
+    })
+      .then(result => {
+        if (result.data.success) {
+          console.log(result.data.data)
+          setSubjects(result.data.data)
+        }
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }, [isDelete, searchBySubjectName])
 
+  function searchSubject (subjectFullName) {
+    setSearchBySubjectName(subjectFullName)
+    axios({
+      // url: 'http://localhost:3000',
+      url: 'http://localhost:3000/subject/search/' + subjectFullName,
+      method: 'get',
+      params: {
+        courseFullName: searchBySubjectName
+      }
+    })
+      .then(result => {
+        if (result.data.success) {
+          setSubjects(result.data.data)
+          // setCourses(result.data.data || []);
+        }
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
 
-    let navigate = useNavigate();
-    let [subjects, setSubjects] = useState([])
-    const [show, setShow] = useState(false)
-    let [isDelete, setIsDelete] = useState(false)
-    let [searchBySubjectName, setSearchBySubjectName] = useState('')
+  const handleClose = () => {
+    setShow(false)
+    setIsDelete(true)
+  }
 
+  function goToEdit (id) {
+    console.log('Navigating to edit subject with ID:', id)
+    navigate('/edit/subject/' + id)
+  }
 
+  function goToAddSubjectPage () {
+    navigate('/add/subject')
+  }
 
-    useEffect(() => {
+  function goToDelete (id) {
+    axios({
+      url: 'http://localhost:3000/delete/subject/' + id,
+      method: 'delete'
+    })
+      .then(result => {
+        if (result.data.success) {
+          setShow(true)
+        }
+      })
+      .catch(err => {
+        console.log(err.message)
+      })
+  }
 
-        axios({
-            url: 'http://localhost:3000/subjects',
-            method: 'get',
-            params: {
-                subjectFullName: searchBySubjectName
-            }
-        }).then((result) => {
-            if (result.data.success) {
-                console.log(result.data.data);
-                setSubjects(result.data.data);
+  return (
+    <>
+      <h3 className='text-center mb-4 py-2 text-primary fw-bold'>
+        LIST OF SUBJECTS
+      </h3>
 
-            }
-        }).catch((error) => {
-            console.log(error);
+      <InputGroup className='mb-3' style={{ width: '300px' }}>
+        {' '}
+        <InputGroup.Text>
+          <i className='bi bi-search'></i>
+        </InputGroup.Text>
+        <Form.Control
+          type='text'
+          placeholder=' Type Subject Name to search'
+          onChange={e => searchSubject(e.target.value)}
+        />
+      </InputGroup>
 
-        })
-    }, [isDelete, searchBySubjectName])
+      <button
+        className='btn btn-success ms-3 mt-2 float-end'
+        onClick={goToAddSubjectPage}
+      >
+        Add Subject +
+      </button>
 
+      <table className='table text-center table-hover mt-5'>
+        <thead>
+          <tr>
+            <th>Subject Code</th>
+            <th>Subject Full Name</th>
+            <th>Subject Short Name</th>
+            <th>Subject Category</th>
+            <th>Subject Type</th>
+            <th>Credit Score</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {subjects.map(subject => (
+            <tr>
+              <td>{subject.subjectCode}</td>
+              <td>{subject.subjectFullName}</td>
+              <td>{subject.subjectNickName}</td>
+              <td>{subject.subjectCategory}</td>
+              <td>{subject.subjectType}</td>
+              <td>{subject.creditScore}</td>
+              <td>
+                <Button
+                  variant='outline-primary'
+                  title='Edit Subject'
+                  onClick={() => goToEdit(subject._id)}
+                >
+                  <FaEdit />
+                </Button>
 
+                <Button
+                  variant='outline-danger'
+                  title='Delete Subject'
+                  className='ms-2'
+                  onClick={() => goToDelete(subject._id)}
+                >
+                  <FaTrash />
+                </Button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
-    function searchSubject(subjectFullName) {
-        setSearchBySubjectName(subjectFullName)
-        axios({
-            // url: 'http://localhost:3000',
-            url: 'http://localhost:3000/subject/search/' + subjectFullName,
-            method: 'get',
-            params: {
-                courseFullName: searchBySubjectName
-            }
-
-        }).then((result) => {
-
-            if (result.data.success) {
-                setSubjects(result.data.data);
-                // setCourses(result.data.data || []); 
-            }
-
-        }).catch((error) => {
-            console.log(error);
-        })
-    }
-
-
-    const handleClose = () => {
-        setShow(false)
-        setIsDelete(true)
-    }
-
-    function goToEdit(id) {
-        console.log("Navigating to edit subject with ID:", id);
-        navigate('/edit/subject/' + id)
-    }
-
-    function goToAddSubjectPage() {
-        navigate('/add/subject')
-    }
-
-    function goToDelete(id) {
-        axios({
-            url: 'http://localhost:3000/delete/subject/' + id,
-            method: 'delete'
-
-        }).then((result) => {
-            if (result.data.success) {
-                setShow(true)
-            }
-        }).catch((err) => {
-            console.log(err.message);
-        })
-    }
-
-
-
-
-    return (
-        <>
-            <h3 className="text-center mb-4 py-2 text-primary fw-bold">LIST OF SUBJECTS</h3>
-
-            <InputGroup  className="mb-3" style={{ width: "300px" }}>                <InputGroup.Text>
-                    <i className="bi bi-search"></i>
-                </InputGroup.Text>
-                <Form.Control type="text" placeholder=" Type Subject Name to search" onChange={(e) => searchSubject(e.target.value)} />
-            </InputGroup>
-
-            <button className="btn btn-success ms-3 mt-2 float-end" onClick={goToAddSubjectPage}>Add Subject +</button>
-
-
-            <table className="table text-center table-hover mt-5">
-                <thead>
-                    <tr>
-                        <th>Subject Code</th>
-                        <th>Subject Full Name</th>
-                        <th>Subject Short Name</th>
-                        <th>Subject Category</th>
-                        <th>Subject Type</th>
-                        <th>Credit Score</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        subjects.map((subject) =>
-                            <tr>
-                                <td>{subject.subjectCode}</td>
-                                <td>{subject.subjectFullName}</td>
-                                <td>{subject.subjectNickName}</td>
-                                <td>{subject.subjectCategory}</td>
-                                <td>{subject.subjectType}</td>
-                                <td>{subject.creditScore}</td>
-                                <td>
-                                    <i className="bi bi-pencil me-3 text-primary" onClick={() => goToEdit(subject._id)} ></i>
-                                    <i className="bi bi-trash text-danger" onClick={() => goToDelete(subject._id)}></i>
-                                </td>
-                            </tr>
-                        )
-                    }
-                </tbody>
-            </table>
-
-
-            {/* ---------Modal code ------------- */}
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Success</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>Course has been Deleted successfully👍</Modal.Body>
-                <Modal.Footer>
-                    <Button variant="danger" onClick={handleClose}>
-                        Close
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-        </>
-    )
-
-
+      {/* ---------Modal code ------------- */}
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Success</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Course has been Deleted successfully👍</Modal.Body>
+        <Modal.Footer>
+          <Button variant='danger' onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  )
 }
 
 export default SubjectList

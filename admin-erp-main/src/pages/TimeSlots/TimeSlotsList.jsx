@@ -6,6 +6,8 @@ import axios from "axios";
 import { Modal, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { FaEdit, FaTrash } from 'react-icons/fa'
+
 
 function TimeSlotList() {
 
@@ -119,8 +121,22 @@ function TimeSlotList() {
                                 </td>
 
                                 <td>
-                                    <i className="bi bi-pencil me-3 text-primary" style={{ cursor: "pointer" }} onClick={() =>goToEdit(timeslot._id)} > </i>
-                                    <i className="bi bi-trash text-danger" style={{ cursor: "pointer" }} onClick={() => goToDelete(timeslot._id)} ></i>
+                                    <Button
+                  variant='outline-primary'
+                  title = 'Edit TimeSlot'
+                  onClick={() => goToEdit(timeslot._id)}
+                >
+                  <FaEdit />
+                </Button>
+
+                <Button
+                  variant='outline-danger'
+                  title = 'Delete TimeSlot'
+                  className='ms-2'
+                  onClick={() => goToDelete(timeslot._id)}
+                >
+                  <FaTrash />
+                </Button>
                                  </td>
 
                             </tr>

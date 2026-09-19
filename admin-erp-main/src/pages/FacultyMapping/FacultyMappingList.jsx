@@ -2,395 +2,294 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 
 import {
-    Button,
-    Form,
-    InputGroup,
-    Container,
-    Pagination,
-    Modal
+  Button,
+  Form,
+  InputGroup,
+  Container,
+  Pagination,
+  Modal
 } from 'react-bootstrap'
 
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { FaEdit, FaTrash } from 'react-icons/fa'
 
 const apiUrl = import.meta.env.VITE_API_URL
 
-function FacultyMappingList() {
+function FacultyMappingList () {
+  const navigate = useNavigate()
+  const [show, setShow] = useState(false)
 
-    const navigate = useNavigate();
-    const [show, setShow] = useState(false)
+  const handleAdd = () => {
+    navigate('/add/facultymapping')
+  }
+  const [facultyMapping, setFacultyMapping] = useState([])
 
-    const handleAdd = () => {
-        navigate('/add/facultymapping')
-    }
-    const [facultyMapping, setFacultyMapping] = useState([]);
+  // Separate search states
+  const [sessionSearch, setSessionSearch] = useState('')
+  const [facultyNameSearch, setFacultyNameSearch] = useState('')
 
-    // Separate search states
-    const [sessionSearch, setSessionSearch] = useState('');
-    const [facultyNameSearch, setFacultyNameSearch] = useState('');
+  // Pagination state
+  const [page, setPage] = useState(1)
+  const [limit] = useState(10)
+  const [totalPages, setTotalPages] = useState(1)
 
-    // Pagination state
-    const [page, setPage] = useState(1);
-    const [limit] = useState(10);
-    const [totalPages, setTotalPages] = useState(1);
+  // Loading state
+  const [loading, setLoading] = useState(false)
 
-    // Loading state
-    const [loading, setLoading] = useState(false);
+  // Get faculty mapping data
+  const getFacultyMapping = async () => {
+    try {
+      setLoading(true)
 
-
-    // Get faculty mapping data
-    const getFacultyMapping = async () => {
-
-        try {
-
-            setLoading(true);
-
-            const res = await axios({
-                url: apiUrl + '/get/facultymapping',
-                method: 'get',
-                params: {
-                    page: page,
-                    limit: limit,
-                    session: sessionSearch,
-                    facultyName: facultyNameSearch,
-                }
-            });
-
-            setFacultyMapping(res.data.data);
-
-            setTotalPages(res.data.totalPages);
-
-        } catch (err) {
-
-            console.log(err);
-
-            alert(
-                err.response?.data?.message ||
-                'Something went wrong'
-            );
-
-        } finally {
-
-            setLoading(false);
-
+      const res = await axios({
+        url: apiUrl + '/get/facultymapping',
+        method: 'get',
+        params: {
+          page: page,
+          limit: limit,
+          session: sessionSearch,
+          facultyName: facultyNameSearch
         }
+      })
+
+      setFacultyMapping(res.data.data)
+
+      setTotalPages(res.data.totalPages)
+    } catch (err) {
+      console.log(err)
+
+      alert(err.response?.data?.message || 'Something went wrong')
+    } finally {
+      setLoading(false)
     }
+  }
 
+  // Get data whenever page or search changes
+  useEffect(() => {
+    getFacultyMapping()
+  }, [page, sessionSearch, facultyNameSearch])
 
-    // Get data whenever page or search changes
-    useEffect(() => {
+  // Session search
+  const handleSessionSearch = e => {
+    setSessionSearch(e.target.value)
 
-        getFacultyMapping();
+    // Reset pagination
+    setPage(1)
+  }
 
-    }, [ page, sessionSearch, facultyNameSearch]);
+  const handleClose = () => {
+    setShow(false)
+  }
 
+  // Faculty name search
+  const handleFacultyNameSearch = e => {
+    setFacultyNameSearch(e.target.value)
 
-    // Session search
-    const handleSessionSearch = (e) => {
+    // Reset pagination
+    setPage(1)
+  }
+  //handle edit
+  const handleEdit = id => {
+    navigate('/edit/facultymapping/' + id)
+  }
+  //handle delete
+  const handleDelete = async id => {
+    try {
+      const res = await axios({
+        url: apiUrl + '/delete/facultyMapping/' + id,
+        method: 'delete'
+      })
 
-        setSessionSearch(e.target.value);
+      if (res.data.success) {
+        setShow(true)
+        await getFacultyMapping()
+      }
+    } catch (err) {
+      console.log(err)
 
-        // Reset pagination
-        setPage(1);
-
+      alert(err.response?.data?.message || 'Something went wrong')
     }
+  }
+  return (
+    <Container>
+      <h3 className='text-center mb-4 py-2 text-primary fw-bold'>
+        FACULTY TEACHING DETAIL
+      </h3>
 
-    const handleClose = () => {
-        setShow(false)
-    }
+      {/* Search Section */}
+      <div className='row mb-3'>
+        {/* Session Search */}
+        <div className='col-md-4'>
+          <InputGroup>
+            <InputGroup.Text>
+              <i className='bi bi-calendar'></i>
+            </InputGroup.Text>
 
+            <Form.Control
+              type='text'
+              value={sessionSearch}
+              onChange={handleSessionSearch}
+              placeholder='Search by Session'
+            />
+          </InputGroup>
+        </div>
 
-    // Faculty name search
-    const handleFacultyNameSearch = (e) => {
+        {/* Faculty Name Search */}
+        <div className='col-md-4'>
+          <InputGroup>
+            <InputGroup.Text>
+              <i className='bi bi-person'></i>
+            </InputGroup.Text>
 
-        setFacultyNameSearch(e.target.value);
+            <Form.Control
+              type='text'
+              value={facultyNameSearch}
+              onChange={handleFacultyNameSearch}
+              placeholder='Search by Faculty Name'
+            />
+          </InputGroup>
+        </div>
 
-        // Reset pagination
-        setPage(1);
+        {/* Add Button */}
+        <div className='col-md-4'>
+          <Button className='btn btn-success float-end' onClick={handleAdd}>
+            Add Faculty +
+          </Button>
+        </div>
+      </div>
 
-    }
-    //handle edit
-    const handleEdit = (id) => {
-        navigate('/edit/facultymapping/' + id)
-    }
-    //handle delete
-    const handleDelete = async (id) => {
-        try {
-            const res = await axios({
-                url: apiUrl + '/delete/facultyMapping/' + id,
-                method: 'delete'
-            });
+      {/* Table */}
+      <div className='table-responsive'>
+        <table className='table text-center table-hover mt-5'>
+          <thead>
+            <tr>
+              <th>Session</th>
+              <th>Faculty Name</th>
+              <th>Course</th>
+              <th>Branch</th>
+              <th>Year</th>
+              <th>Semester</th>
+              <th>Section</th>
+              <th>Subject</th>
+              <th>LoadPerWeek</th>
+              <th>Action</th>
+            </tr>
+          </thead>
 
-            if (res.data.success) {
-                setShow(true);
-                await getFacultyMapping();
-            }
+          <tbody>
+            {loading ? (
+              <tr>
+                <td colSpan='10'>Loading...</td>
+              </tr>
+            ) : facultyMapping.length > 0 ? (
+              facultyMapping.map(mapping => (
+                <tr key={mapping._id}>
+                  <td>{mapping.session}</td>
 
-        } catch (err) {
-            console.log(err);
+                  <td>
+                    {mapping.facultyId?.firstName} {mapping.facultyId?.lastName}
+                  </td>
 
-            alert(
-                err.response?.data?.message ||
-                'Something went wrong'
-            );
-        }
-    };
-    return (
+                  <td>{mapping.course?.courseShortName}</td>
 
-        <Container>
+                  <td>{mapping.branch?.branchShortName}</td>
 
-            <h3 className="text-center mb-4 py-2 text-primary fw-bold">
-                FACULTY TEACHING DETAIL
-            </h3>
+                  <td>{mapping.year}</td>
 
+                  <td>{mapping.semester}</td>
 
-            {/* Search Section */}
-            <div className="row mb-3">
+                  <td>{mapping.section}</td>
 
-                {/* Session Search */}
-                <div className="col-md-4">
+                  <td>{mapping.subjectId?.subjectNickName}</td>
 
-                    <InputGroup>
+                  <td>{mapping.loadPerWeek}</td>
 
-                        <InputGroup.Text>
-                          <i className="bi bi-calendar"></i>
-                        </InputGroup.Text>
-
-                            <Form.Control
-                                type="text"
-                                value={sessionSearch}
-                                onChange={handleSessionSearch}
-                                placeholder="Search by Session"
-                           />
-
-                    </InputGroup>
-
-                </div>
-
-
-                {/* Faculty Name Search */}
-                <div className="col-md-4">
-
-                    <InputGroup>
-
-                        <InputGroup.Text>
-                            <i className="bi bi-person"></i>
-                        </InputGroup.Text>
-
-                        <Form.Control
-                            type="text"
-                            value={facultyNameSearch}
-                            onChange={handleFacultyNameSearch}
-                            placeholder="Search by Faculty Name"
-                        />
-
-                    </InputGroup>
-
-                </div>
-
-
-                {/* Add Button */}
-                <div className="col-md-4">
+                  <td>
+                    <Button
+                      variant='outline-primary'
+                      title='Edit Faculty Mapping'
+                      onClick={() => handleEdit(mapping._id)}
+                    >
+                      <FaEdit />
+                    </Button>
 
                     <Button
-                        className="btn btn-success float-end"
-                        onClick={handleAdd}
+                      variant='outline-danger'
+                      title='Delete Faculty Mapping'
+                      className='ms-2'
+                      onClick={() => handleDelete(mapping._id)}
                     >
-                        Add Faculty +
+                      <FaTrash />
                     </Button>
-
-                </div>
-
-            </div>
-
-
-            {/* Table */}
-            <div className="table-responsive">
-
-                <table className="table text-center table-hover mt-5">
-
-                    <thead>
-
-                        <tr>
-                            <th>Session</th>
-                            <th>Faculty Name</th>
-                            <th>Course</th>
-                            <th>Branch</th>
-                            <th>Year</th>
-                            <th>Semester</th>
-                            <th>Section</th>
-                            <th>Subject</th>
-                            <th>LoadPerWeek</th>
-                            <th>Action</th>
-                        </tr>
-
-                    </thead>
-
-
-                    <tbody>
-
-                        {loading ? (
-
-                            <tr>
-
-                                <td colSpan="10">
-                                    Loading...
-                                </td>
-
-                            </tr>
-
-                        ) : facultyMapping.length > 0 ? (
-
-                            facultyMapping.map((mapping) => (
-
-                                <tr key={mapping._id}>
-
-                                    <td>
-                                        {mapping.session}
-                                    </td>
-
-                                    <td>
-                                        {mapping.facultyId?.firstName}{' '}
-                                        {mapping.facultyId?.lastName}
-                                    </td>
-
-                                    <td>
-                                        {mapping.course?.courseShortName}
-                                    </td>
-
-                                    <td>
-                                        {mapping.branch?.branchShortName}
-                                    </td>
-
-                                    <td>
-                                        {mapping.year}
-                                    </td>
-
-                                    <td>
-                                        {mapping.semester}
-                                    </td>
-
-                                    <td>
-                                        {mapping.section}
-                                    </td>
-
-                                    <td>
-                                        {mapping.subjectId?.subjectNickName}
-                                    </td>
-
-                                    <td>
-                                        {mapping.loadPerWeek}
-                                    </td>
-
-                                    <td>
-
-                                        <button onClick={() => handleEdit(mapping._id)}> <i
-                                            className="bi bi-pencil me-3"
-                                            style={{
-                                                cursor: "pointer"
-                                            }}
-
-                                        ></i></button>
-
-                                        <button onClick={() => handleDelete(mapping._id)}><i
-                                            className="bi bi-trash"
-                                            style={{
-                                                cursor: "pointer"
-                                            }}
-                                        ></i></button>
-
-                                    </td>
-
-                                </tr>
-
-                            ))
-
-                        ) : (
-
-                            <tr>
-
-                                <td colSpan="10">
-                                    No records found
-                                </td>
-
-                            </tr>
-
-                        )}
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-
-            {/* Pagination */}
-            {totalPages > 1 && (
-
-                <div className="d-flex justify-content-center mt-4">
-
-                    <Pagination>
-
-                        <Pagination.First
-                            disabled={page === 1}
-                            onClick={() => setPage(1)}
-                        />
-
-                        <Pagination.Prev
-                            disabled={page === 1}
-                            onClick={() => setPage(page - 1)}
-                        />
-
-                        {[...Array(totalPages)].map((_, index) => {
-
-                            const pageNumber = index + 1;
-
-                            return (
-
-                                <Pagination.Item
-                                    key={pageNumber}
-                                    active={pageNumber === page}
-                                    onClick={() => setPage(pageNumber)}
-                                >
-                                    {pageNumber}
-                                </Pagination.Item>
-
-                            )
-
-                        })}
-
-                        <Pagination.Next
-                            disabled={page === totalPages}
-                            onClick={() => setPage(page + 1)}
-                        />
-
-                        <Pagination.Last
-                            disabled={page === totalPages}
-                            onClick={() => setPage(totalPages)}
-                        />
-
-                    </Pagination>
-
-                </div>
-
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan='10'>No records found</td>
+              </tr>
             )}
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Success</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>Faculty Teaching Detail has been Deleted successfully👍</Modal.Body>
-                <Modal.Footer>
-                    <Button variant="danger" onClick={handleClose}>
-                        Close
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+          </tbody>
+        </table>
+      </div>
 
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className='d-flex justify-content-center mt-4'>
+          <Pagination>
+            <Pagination.First
+              disabled={page === 1}
+              onClick={() => setPage(1)}
+            />
 
+            <Pagination.Prev
+              disabled={page === 1}
+              onClick={() => setPage(page - 1)}
+            />
 
-        </Container>
-    )
+            {[...Array(totalPages)].map((_, index) => {
+              const pageNumber = index + 1
+
+              return (
+                <Pagination.Item
+                  key={pageNumber}
+                  active={pageNumber === page}
+                  onClick={() => setPage(pageNumber)}
+                >
+                  {pageNumber}
+                </Pagination.Item>
+              )
+            })}
+
+            <Pagination.Next
+              disabled={page === totalPages}
+              onClick={() => setPage(page + 1)}
+            />
+
+            <Pagination.Last
+              disabled={page === totalPages}
+              onClick={() => setPage(totalPages)}
+            />
+          </Pagination>
+        </div>
+      )}
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Success</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Faculty Teaching Detail has been Deleted successfully👍
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant='danger' onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </Container>
+  )
 }
 
-export default FacultyMappingList;
+export default FacultyMappingList

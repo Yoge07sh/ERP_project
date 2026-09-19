@@ -244,7 +244,7 @@ function EditTimeSlot() {
                     </Row>
                 )}
 
-                <div className="d-flex justify-content-center gap-2 mt-4">
+                <div className="d-flex justify-content-center gap-3 mt-4">
                     <Button
                         onClick={() => navigate("/timeslots")}
                         variant="danger"
@@ -260,7 +260,7 @@ function EditTimeSlot() {
                     >
                         {buttonDisabled
                             ? "Updating..."
-                            : "Update Time Slot"}
+                            : "Edit TimeSlot"}
                     </Button>
                 </div>
             </Form>

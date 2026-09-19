@@ -263,7 +263,7 @@ function FacultyEdit() {
         </Row>
         <Row className="mb-3"></Row>
 
-        <div className="d-flex justify-content-center gap-2 mt-4">
+        <div className="d-flex justify-content-center gap-3 mt-4">
           <Button
             onClick={() => navigate("/faculties")}
             variant="danger"
@@ -272,7 +272,7 @@ function FacultyEdit() {
             Cancel
           </Button>
           <Button onClick={() => doEditFaculty(faculty._id)} variant="success">
-            Update
+            Edit Faculty
           </Button>
         </div>
       </Form>
