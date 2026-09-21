@@ -36,6 +36,8 @@ router.post('/students/upload', upload.single('bulkFile'), (req, res) => {
 router.get('/students', (req, res) => StudentController.getStudents(req, res));
 router.delete('/delete/student/:id', (req, res) => StudentController.deleteStudent(req, res));
 router.get('/student/:id', (req, res) => StudentController.getStudent(req, res));
-router.put('/edit/student/:id', upload.any('file'), (req, res) => StudentController.editStudent(req, res));
+router.put('/edit/student/:id', upload.single('studentImage'), (req, res) => {
+    StudentController.editStudent(req, res);
+});
 
 module.exports = router;

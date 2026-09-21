@@ -101,7 +101,7 @@ function Sidebar() {
       >
         {/* ================= LOGO ================= */}
 
-        <div className="p-1 d-flex align-items-center ">
+        <div className="p-1 d-flex align-items-center mb-0">
           <Image src={logo} width={40} height={40} className="me-2" />
 
           <span
@@ -112,18 +112,14 @@ function Sidebar() {
           </span>
           </div>
 
-<div className="sidebar-clock-wrapper mt-1">
-  <div className="sidebar-clock-box">
-    <div className="sidebar-clock-icon">
-      <i className="bi bi-watch"></i>
-    </div>
-
+ <div className="sidebar-clock-wrapper mt-1"> 
+    
     <div className="sidebar-clock-info">
       <div className="sidebar-clock-time">
-        {currentTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+        {currentTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false  })}
       </div>
 
-      <div className="sidebar-clock-date">
+      <div className="sidebar-clock-date ">
         {currentTime.toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" })}
       </div>
 
@@ -131,12 +127,11 @@ function Sidebar() {
         <i className="bi bi-circle-fill"></i> Live
       </div>
     </div>
-  </div>
 </div>
 
         {/* ================= SIDEBAR MENU ================= */}
 
-        <div className="flex-grow-1 border-top mt-3 overflow-auto">
+        <div className="flex-grow-1 border-top mt-3 d-flex justify-content-between overflow-auto">
           <ListGroup
             variant="flush"
             className="pt-4 px-3 flex-grow-1 overflow-auto"
@@ -261,6 +256,27 @@ className="sidebar-menu-item d-flex align-items-center gap-2"
 
                   <span className="d-none d-md-inline">TimeSlots</span>
                 </ListGroup.Item>
+{/*                 
+<<<<<<< HEAD
+=======
+
+                <ListGroup.Item
+                  as={NavLink}
+                  to="/getstudents"
+                  className="d-flex align-items-center gap-2"
+                >
+
+                  <i className="bi bi-person"></i>
+
+                  <span className="d-none d-md-inline">
+                    Attendance
+                  </span>
+
+                </ListGroup.Item>
+
+
+
+>>>>>>> 1a6fd35629a5a4b2ac1063abf0c029ab76f9a4fb */}
               </>
             )}
 

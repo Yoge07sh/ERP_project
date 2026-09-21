@@ -12,6 +12,7 @@ const student = require('./routes/student')
 const user = require('./routes/user')
 const timeSlot = require('./routes/timeSlots')
 const facultyMapping = require('./routes/facultyMapping');
+const attendance = require('./routes/attendance')
 const cors = require('cors');
 
 app.use(express.urlencoded({ extended: true }));
@@ -27,7 +28,7 @@ app.use(student)
 app.use(timeSlot)
 app.use(facultyMapping)
 app.use(user)
-
+app.use(attendance)
 connect();
 createAdmin()
 

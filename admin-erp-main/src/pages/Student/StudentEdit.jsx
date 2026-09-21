@@ -732,7 +732,7 @@ function StudentEdit() {
                   </Form.Text>
                 )}
 
-                {!file && student.studentImage && (
+                {!file && student.image && (
                   <Form.Text className="text-muted">
                     Existing image will be kept unless a new image is selected.
                   </Form.Text>
