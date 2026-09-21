@@ -11,6 +11,7 @@ import logo from "../assets/logo.png";
 import { useState, useEffect } from "react";
 
 import axios from "axios";
+import { FaUserGraduate } from 'react-icons/fa'
 
 function Sidebar() {
   let navigate = useNavigate();
@@ -114,23 +115,15 @@ function Sidebar() {
 
         <div className="sidebar-clock-wrapper mt-1">
           <div className="sidebar-clock-box">
-            <div className="sidebar-clock-icon">
-              <i className="bi bi-watch"></i>
-            </div>
-
-            <div className="sidebar-clock-info">
               <div className="sidebar-clock-time">
                 {currentTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
               </div>
-
               <div className="sidebar-clock-date">
                 {currentTime.toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" })}
               </div>
-
               <div className="sidebar-clock-live">
                 <i className="bi bi-circle-fill"></i> Live
               </div>
-            </div>
           </div>
         </div>
 
@@ -211,7 +204,7 @@ function Sidebar() {
                   to="/students"
                   className="sidebar-menu-item d-flex align-items-center gap-2"
                 >
-                  <i className="bi bi-person"></i>
+                <FaUserGraduate />
 
                   <span className="d-none d-md-inline">Students</span>
                 </ListGroup.Item>
@@ -295,7 +288,7 @@ function Sidebar() {
                   to="/students"
                   className="sidebar-menu-item d-flex align-items-center gap-2"
                 >
-                  <i className="bi bi-person"></i>
+                  <i className="bi bi-person-circle"></i>
 
                   <span className="d-none d-md-inline">My Profile</span>
                 </ListGroup.Item>

@@ -744,10 +744,10 @@ function StudentEdit() {
           {/* =========================
               BUTTONS
           ========================== */}
-          <div className="d-flex justify-content-center gap-2 mt-4 mb-4">
+          <div className="d-flex justify-content-center gap-3 mt-4 mb-4">
             <Button
               onClick={() => navigate("/students")}
-              variant="secondary"
+              variant="danger"
               type="button"
               disabled={showSpinner}
             >
@@ -755,7 +755,7 @@ function StudentEdit() {
             </Button>
 
             <Button
-              variant="primary"
+              variant="success"
               type="submit"
               disabled={showSpinner}
             >
@@ -770,7 +770,7 @@ function StudentEdit() {
                   Updating...
                 </>
               ) : (
-                "Update"
+                "Edit Student"
               )}
             </Button>
           </div>

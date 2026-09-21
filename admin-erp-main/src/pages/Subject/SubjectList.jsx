@@ -1,116 +1,113 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap-icons/font/bootstrap-icons.css";
-import axios from "axios";
-import { Modal, Button, Form, InputGroup, Container } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap-icons/font/bootstrap-icons.css'
+import axios from 'axios'
+import { Modal, Button, Form, InputGroup, Container } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { FaEdit, FaTrash } from 'react-icons/fa'
 
-function SubjectList() {
-  let navigate = useNavigate();
-  let [subjects, setSubjects] = useState([]);
-  const [show, setShow] = useState(false);
-  let [isDelete, setIsDelete] = useState(false);
-  let [searchBySubjectName, setSearchBySubjectName] = useState("");
-
-  const token = localStorage.getItem("token");
+function SubjectList () {
+  let navigate = useNavigate()
+  let [subjects, setSubjects] = useState([])
+  const [show, setShow] = useState(false)
+  let [isDelete, setIsDelete] = useState(false)
+  let [searchBySubjectName, setSearchBySubjectName] = useState('')
 
   useEffect(() => {
     axios({
-      url: "http://localhost:3000/subjects",
-      method: "get",
+      url: 'http://localhost:3000/subjects',
+      method: 'get',
       params: {
-        subjectFullName: searchBySubjectName,
-      },
+        subjectFullName: searchBySubjectName
+      }
     })
-      .then((result) => {
+      .then(result => {
         if (result.data.success) {
-          console.log(result.data.data);
-          setSubjects(result.data.data);
+          console.log(result.data.data)
+          setSubjects(result.data.data)
         }
       })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [isDelete, searchBySubjectName]);
+      .catch(error => {
+        console.log(error)
+      })
+  }, [isDelete, searchBySubjectName])
 
-  function searchSubject(subjectFullName) {
-    setSearchBySubjectName(subjectFullName);
+  function searchSubject (subjectFullName) {
+    setSearchBySubjectName(subjectFullName)
     axios({
       // url: 'http://localhost:3000',
-      url: "http://localhost:3000/subject/search/" + subjectFullName,
-      method: "get",
+      url: 'http://localhost:3000/subject/search/' + subjectFullName,
+      method: 'get',
       params: {
-        courseFullName: searchBySubjectName,
-      },
+        courseFullName: searchBySubjectName
+      }
     })
-      .then((result) => {
+      .then(result => {
         if (result.data.success) {
-          setSubjects(result.data.data);
+          setSubjects(result.data.data)
           // setCourses(result.data.data || []);
         }
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch(error => {
+        console.log(error)
+      })
   }
 
   const handleClose = () => {
-    setShow(false);
-    setIsDelete(true);
-  };
-
-  function goToEdit(id) {
-    console.log("Navigating to edit subject with ID:", id);
-    navigate("/edit/subject/" + id);
+    setShow(false)
+    setIsDelete(true)
   }
 
-  function goToAddSubjectPage() {
-    navigate("/add/subject");
+  function goToEdit (id) {
+    console.log('Navigating to edit subject with ID:', id)
+    navigate('/edit/subject/' + id)
   }
 
-  function goToDelete(id) {
+  function goToAddSubjectPage () {
+    navigate('/add/subject')
+  }
+
+  function goToDelete (id) {
     axios({
-      url: "http://localhost:3000/delete/subject/" + id,
-      method: "delete",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      url: 'http://localhost:3000/delete/subject/' + id,
+      method: 'delete'
     })
-      .then((result) => {
+      .then(result => {
         if (result.data.success) {
-          setShow(true);
+          setShow(true)
         }
       })
-      .catch((err) => {
-        console.log(err.message);
-      });
+      .catch(err => {
+        console.log(err.message)
+      })
   }
 
   return (
     <>
-      <h3 className="text-center mb-4 py-2 text-primary fw-bold">
+      <h3 className='text-center mb-4 py-2 text-primary fw-bold'>
         LIST OF SUBJECTS
       </h3>
 
-      <InputGroup className="mb-3">
+      <InputGroup className='mb-3' style={{ width: '300px' }}>
+        {' '}
         <InputGroup.Text>
-          <i className="bi bi-search"></i>
+          <i className='bi bi-search'></i>
         </InputGroup.Text>
         <Form.Control
-          type="text"
-          placeholder=" Type Subject Name to search"
-          onChange={(e) => searchSubject(e.target.value)}
+          type='text'
+          placeholder=' Type Subject Name to search'
+          onChange={e => searchSubject(e.target.value)}
         />
       </InputGroup>
 
       <button
-        className="btn btn-success ms-3 mt-2 float-end"
+        className='btn btn-success ms-3 mt-2 float-end'
         onClick={goToAddSubjectPage}
       >
         Add Subject +
       </button>
 
-      <table className="table text-center table-hover mt-5">
+      <table className='table text-center table-hover mt-5'>
         <thead>
           <tr>
             <th>Subject Code</th>
@@ -123,7 +120,7 @@ function SubjectList() {
           </tr>
         </thead>
         <tbody>
-          {subjects.map((subject) => (
+          {subjects.map(subject => (
             <tr>
               <td>{subject.subjectCode}</td>
               <td>{subject.subjectFullName}</td>
@@ -132,14 +129,22 @@ function SubjectList() {
               <td>{subject.subjectType}</td>
               <td>{subject.creditScore}</td>
               <td>
-                <i
-                  className="bi bi-pencil me-3 text-primary"
+                <Button
+                  variant='outline-primary'
+                  title='Edit Subject'
                   onClick={() => goToEdit(subject._id)}
-                ></i>
-                <i
-                  className="bi bi-trash text-danger"
+                >
+                  <FaEdit />
+                </Button>
+
+                <Button
+                  variant='outline-danger'
+                  title='Delete Subject'
+                  className='ms-2'
                   onClick={() => goToDelete(subject._id)}
-                ></i>
+                >
+                  <FaTrash />
+                </Button>
               </td>
             </tr>
           ))}
@@ -151,15 +156,15 @@ function SubjectList() {
         <Modal.Header closeButton>
           <Modal.Title>Success</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Subject has been Deleted successfully👍</Modal.Body>
+        <Modal.Body>Course has been Deleted successfully👍</Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" onClick={handleClose}>
+          <Button variant='danger' onClick={handleClose}>
             Close
           </Button>
         </Modal.Footer>
       </Modal>
     </>
-  );
+  )
 }
 
 export default SubjectList;

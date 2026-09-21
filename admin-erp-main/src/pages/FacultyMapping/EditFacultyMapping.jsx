@@ -678,7 +678,7 @@ function EditFacultyMapping() {
                     </Col>
 
                 </Row>
-                <div className="d-flex justify-content-center gap-2 mt-4">
+                <div className="d-flex justify-content-center gap-3 mt-4">
                 <Button
                 onClick={() => navigate("/facultymapping")}
                 variant="danger"
@@ -689,12 +689,13 @@ function EditFacultyMapping() {
 
                 <Button
                     type="submit"
+                    variant = 'success'
                     disabled={loading}
                 >
 
                     {loading
                         ? "Updating..."
-                        : "Update Mapping"
+                        : "Edit Mapping"
                     }
 
                 </Button>

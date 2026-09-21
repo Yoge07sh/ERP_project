@@ -140,12 +140,12 @@ const token = localStorage.getItem("token")
                 </Row>
 
 
-                <div className="d-flex justify-content-center gap-2 mt-4">
+                <div className="d-flex justify-content-center gap-3 mt-4">
                     <Button onClick={() => navigate('/courses')} variant="danger" type="button">
                         Cancel
                     </Button>
                     <Button onClick={() => doEditCourse(course._id)}  variant="success">
-                        Update
+                        Edit Course
                     </Button>
                 </div>
             </Form>

@@ -6,129 +6,185 @@ import axios from "axios";
 import { Modal, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { FaEdit, FaTrash } from 'react-icons/fa'
+
 
 function TimeSlotList() {
-  const navigate = useNavigate();
 
-  const [timeSlots, setTimeSlots] = useState([]);
-  const [isDelete, setIsDelete] = useState(false);
-  const [show, setShow] = useState(false);
-  const token = localStorage.getItem("token");
-  useEffect(() => {
-    axios({
-      url: "http://localhost:3000/timeslots",
-      method: "get",
-    })
-      .then((res) => {
-        if (res.data.success) {
-          console.log(res.data.data);
-          setTimeSlots(res.data.data);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [isDelete]);
+    const navigate = useNavigate();
 
-  const handleClose = () => {
-    setShow(false);
-    setIsDelete((prev) => !prev);
-  };
+    const [timeSlots, setTimeSlots] = useState([]);
+    const [isDelete, setIsDelete] = useState(false);
+    const [show, setShow] = useState(false);
 
-  function goToAddTimeSlotPage() {
-    navigate("/add/timeslots");
-  }
+    useEffect(() => {
 
-  function goToDelete(id) {
-    axios({
-      url: "http://localhost:3000/delete/timeslot/" + id,
-      method: "delete",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((result) => {
-        if (result.data.success) {
-          setShow(true);
-        }
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
-  }
+        axios({
+            url: "http://localhost:3000/timeslots",
+            method: "get"
+        })
+            .then((res) => {
 
-  function goToEdit(id) {
-    navigate("/edit/timeslot/" + id);
-  }
+                if (res.data.success) {
+                    console.log(res.data.data);
+                    setTimeSlots(res.data.data);
+                }
 
-  return (
-    <>
-      <h3 className="text-center mb-4 py-2 text-primary fw-bold">
-        TIME SLOTS LIST
-      </h3>
+            })
+            .catch((error) => {
+                console.log(error);
+            });
 
-      <button
-        className="btn btn-success ms-3 mt-2 float-end"
-        onClick={goToAddTimeSlotPage}
-      >
-        Add TimeSlot +
-      </button>
+    }, [isDelete]);
 
-      <table className="table text-center table-hover mt-5">
-        <thead>
-          <tr>
-            <th>Session</th>
-            <th>Lecture Number</th>
-            <th>Lecture Time</th>
-            <th>Action</th>
-          </tr>
-        </thead>
 
-        <tbody>
-          {timeSlots.map((timeslot) => (
-            <tr key={timeslot._id}>
-              <td>{timeslot.session}</td>
+    const handleClose = () => {
+        setShow(false);
+        setIsDelete((prev) => !prev);
+    };
 
-              <td>{timeslot.lectureNo}</td>
 
-              <td>{timeslot.timeSlot}</td>
+    function goToAddTimeSlotPage() {
+        navigate("/add/timeslots");
+    }
 
-              <td>
-                <i
-                  className="bi bi-pencil me-3 text-primary"
-                  style={{ cursor: "pointer" }}
+
+    function goToDelete(id) {
+
+        axios({
+            url: "http://localhost:3000/delete/timeslot/" + id,
+            method: "delete"
+        })
+            .then((result) => {
+
+                if (result.data.success) {
+                    setShow(true);
+                }
+
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
+    }
+
+
+    function goToEdit(id) {
+        navigate("/edit/timeslot/" + id);
+    }
+
+
+    return (
+        <>
+
+            <h3 className="text-center mb-4 py-2 text-primary fw-bold">
+                TIME SLOTS LIST
+            </h3>
+
+
+            <button
+                className="btn btn-success ms-3 mt-2 float-end"
+                onClick={goToAddTimeSlotPage}
+            >
+                Add TimeSlot +
+            </button>
+
+
+            <table className="table text-center table-hover mt-5">
+
+                <thead>
+                    <tr>
+                        <th>Session</th>
+                        <th>Lecture Number</th>
+                        <th>Lecture Time</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+
+                <tbody>
+
+                    {
+                        timeSlots.map((timeslot) => (
+
+                            <tr key={timeslot._id}>
+
+                                <td>
+                                    {timeslot.session}
+                                </td>
+
+                                <td>
+                                    {timeslot.lectureNo}
+                                </td>
+
+                                <td>
+                                    {timeslot.timeSlot}
+                                </td>
+
+                                <td>
+                                    <Button
+                  variant='outline-primary'
+                  title = 'Edit TimeSlot'
                   onClick={() => goToEdit(timeslot._id)}
                 >
-                  {" "}
-                </i>
-                <i
-                  className="bi bi-trash text-danger"
-                  style={{ cursor: "pointer" }}
+                  <FaEdit />
+                </Button>
+
+                <Button
+                  variant='outline-danger'
+                  title = 'Delete TimeSlot'
+                  className='ms-2'
                   onClick={() => goToDelete(timeslot._id)}
-                ></i>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                >
+                  <FaTrash />
+                </Button>
+                                 </td>
 
-      {/* Success Modal */}
+                            </tr>
 
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Success</Modal.Title>
-        </Modal.Header>
+                        ))
+                    }
 
-        <Modal.Body>TimeSlot has been Deleted successfully 👍</Modal.Body>
+                </tbody>
 
-        <Modal.Footer>
-          <Button variant="danger" onClick={handleClose}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
-  );
+            </table>
+
+
+            {/* Success Modal */}
+
+            <Modal
+                show={show}
+                onHide={handleClose}
+            >
+
+                <Modal.Header closeButton>
+
+                    <Modal.Title>
+                        Success
+                    </Modal.Title>
+
+                </Modal.Header>
+
+
+                <Modal.Body>
+                    TimeSlot has been Deleted successfully 👍
+                </Modal.Body>
+
+
+                <Modal.Footer>
+
+                    <Button
+                        variant="danger"
+                        onClick={handleClose}
+                    >
+                        Close
+                    </Button>
+
+                </Modal.Footer>
+
+            </Modal>
+
+        </>
+    );
 }
 
 export default TimeSlotList;

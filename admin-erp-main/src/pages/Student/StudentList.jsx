@@ -1,112 +1,110 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap-icons/font/bootstrap-icons.css";
-import axios from "axios";
-import { Modal, Button, Form, InputGroup, Container } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap-icons/font/bootstrap-icons.css'
+import axios from 'axios'
+import { Modal, Button, Form, InputGroup, Container } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { FaEdit, FaTrash, FaEye } from 'react-icons/fa'
 
-function StudentList() {
-  let navigate = useNavigate();
-  let [students, setStudents] = useState([]);
-  const [show, setShow] = useState(false);
-  let [isDelete, setIsDelete] = useState(false);
-  let [searchByFirstName, setSearchByFirstName] = useState("");
-  let [searchByLastName] = useState("");
-  let [searchByEnrollment] = useState("");
-  let [searchByRollno] = useState("");
-  let [searchByFileno] = useState("");
-  const token = localStorage.getItem("token");
+function StudentList () {
+  let navigate = useNavigate()
+  let [students, setStudents] = useState([])
+  const [show, setShow] = useState(false)
+  let [isDelete, setIsDelete] = useState(false)
+  let [searchByFirstName, setSearchByFirstName] = useState('')
+  let [searchByLastName] = useState('')
+  let [searchByEnrollment] = useState('')
+  let [searchByRollno] = useState('')
+  let [searchByFileno] = useState('')
 
   useEffect(() => {
     axios({
-      url: "http://localhost:3000/students",
-      method: "get",
+      url: 'http://localhost:3000/students',
+      method: 'get',
       params: {
         firstName: searchByFirstName,
         lastName: searchByLastName,
         enrollmentNumber: searchByEnrollment,
         rollNumber: searchByRollno,
-        fileNumber: searchByFileno,
-      },
+        fileNumber: searchByFileno
+      }
     })
-      .then((result) => {
+      .then(result => {
         if (result.data.success) {
           // console.log(result.data.data);
-          setStudents(result.data.data);
+          setStudents(result.data.data)
         }
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch(error => {
+        console.log(error)
+      })
   }, [
     isDelete,
     searchByFirstName,
     searchByLastName,
     searchByEnrollment,
     searchByRollno,
-    searchByFileno,
-  ]);
+    searchByFileno
+  ])
 
   const handleClose = () => {
-    setShow(false);
-    setIsDelete((prev) => !prev);
-  };
-
-  function goToAddStudentPage() {
-    navigate("/add/student");
+    setShow(false)
+    setIsDelete(prev => !prev)
   }
 
-  function goToEdit(id) {
-    navigate("/edit/student/" + id);
+  function goToAddStudentPage () {
+    navigate('/add/student')
   }
 
-  function goToView(id) {
-    navigate("/student/profile/" + id);
+  function goToEdit (id) {
+    navigate('/edit/student/' + id)
   }
 
-  function goToDelete(id) {
+  function goToView (id) {
+    navigate('/student/profile/' + id)
+  }
+
+  function goToDelete (id) {
     axios({
-      url: "http://localhost:3000/delete/student/" + id,
-      method: "delete",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      url: 'http://localhost:3000/delete/student/' + id,
+      method: 'delete'
     })
-      .then((result) => {
+      .then(result => {
         if (result.data.success) {
-          setShow(true);
+          setShow(true)
         }
       })
-      .catch((err) => {
-        console.log(err.message);
-      });
+      .catch(err => {
+        console.log(err.message)
+      })
   }
 
   return (
     <>
-      <h3 className="text-center mb-4 py-2 text-primary fw-bold">
+      <h3 className='text-center mb-4 py-2 text-primary fw-bold'>
         LIST OF STUDENTS
       </h3>
 
-      <InputGroup className="mb-3">
+      <InputGroup className='mb-3' style={{ width: '300px' }}>
+        {' '}
         <InputGroup.Text>
-          <i className="bi bi-search"></i>
+          <i className='bi bi-search'></i>
         </InputGroup.Text>
         <Form.Control
-          type="text"
-          placeholder=" Type Student Name to search"
-          onChange={(e) => setSearchByFirstName(e.target.value)}
+          type='text'
+          placeholder=' Type Student Name to search'
+          onChange={e => setSearchByFirstName(e.target.value)}
         />
       </InputGroup>
 
       <button
-        className="btn btn-success ms-3 mt-2 float-end"
+        className='btn btn-success ms-3 mt-2 float-end'
         onClick={goToAddStudentPage}
       >
         Add Student +
       </button>
 
-      <table className="table text-center table-hover mt-5">
+      <table className='table text-center table-hover mt-5'>
         <thead>
           <tr>
             <th>Image</th>
@@ -119,10 +117,10 @@ function StudentList() {
           </tr>
         </thead>
         <tbody>
-          {students.map((student) => (
+          {students.map(student => (
             <tr>
               <td>
-                <img src={student.image} width="60px" height="80px" alt="pic" />
+                <img src={student.image} width='60px' height='80px' alt='pic' />
               </td>
               <td>{student.enrollmentNumber}</td>
               <td>
@@ -132,31 +130,42 @@ function StudentList() {
               <td>{student.year}</td>
               <td>
                 {student.permanentAddressLine1
-                  ? `${student.permanentAddressLine1 || ""}, ${
-                      student.permanentCity || ""
-                    }, ${student.permanentState || ""} - ${
-                      student.permanentPincode || ""
+                  ? `${student.permanentAddressLine1 || ''}, ${
+                      student.permanentCity || ''
+                    }, ${student.permanentState || ''} - ${
+                      student.permanentPincode || ''
                     }`
-                  : `${student.localAddressLine1 || ""}, ${
-                      student.localCity || ""
-                    }, ${student.localState || ""} - ${
-                      student.localPincode || ""
+                  : `${student.localAddressLine1 || ''}, ${
+                      student.localCity || ''
+                    }, ${student.localState || ''} - ${
+                      student.localPincode || ''
                     }`}
               </td>
 
               <td>
-                <i
-                  className="bi bi-eye me-3 text-warning"
+                <Button
+                  variant='outline-warning'
+                  title='View Student'
                   onClick={() => goToView(student._id)}
-                ></i>
-                <i
-                  className="bi bi-pencil me-3 text-primary"
+                >
+                  <FaEye />
+                </Button>
+                <Button
+                  variant='outline-primary'
+                  title='Edit Student'
+                  className='ms-2'
                   onClick={() => goToEdit(student._id)}
-                ></i>
-                <i
-                  className="bi bi-trash text-danger"
+                >
+                  <FaEdit />
+                </Button>
+                <Button
+                  variant='outline-danger'
+                  title='Delete Student'
+                  className='ms-2'
                   onClick={() => goToDelete(student._id)}
-                ></i>
+                >
+                  <FaTrash />
+                </Button>
               </td>
             </tr>
           ))}
@@ -170,13 +179,13 @@ function StudentList() {
         </Modal.Header>
         <Modal.Body>Student has been Deleted successfully👍</Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" onClick={handleClose}>
+          <Button variant='danger' onClick={handleClose}>
             Close
           </Button>
         </Modal.Footer>
       </Modal>
     </>
-  );
+  )
 }
 
-export default StudentList;
+export default StudentList
