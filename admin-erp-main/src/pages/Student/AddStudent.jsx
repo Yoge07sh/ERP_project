@@ -792,10 +792,10 @@ function AddStudent() {
                                     <Form.Label>Select Section :-</Form.Label>
                                     <Form.Select value={section} onChange={(e) => setSection(e.target.value)}>
                                         <option value="">Select</option>
-                                        <option value="P1">P-1</option>
-                                        <option value="P2">P-2</option>
-                                        <option value="C1">C-1</option>
-                                        <option value="C2">C-2</option>
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                        <option value="D">D</option>
                                     </Form.Select>
                                 </Form.Group>
                             </Col>

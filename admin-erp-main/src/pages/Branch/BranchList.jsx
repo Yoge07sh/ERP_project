@@ -1,132 +1,136 @@
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap-icons/font/bootstrap-icons.css'
-import axios from 'axios'
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import axios from "axios";
 import {
   Modal,
   Button,
   Form,
   Pagination,
   InputGroup,
-  Container
-} from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-import { FaEdit, FaTrash } from 'react-icons/fa'
+  Container,
+} from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
-function BranchList () {
-  let navigate = useNavigate()
-  let [branches, setBranches] = useState([])
-  const [show, setShow] = useState(false)
-  let [isDelete, setIsDelete] = useState(false)
-  let [searchByBranchName, setSearchByBranchName] = useState('')
-  let [nop, setNop] = useState(1)
-  let [pageNo, setPageNo] = useState(1)
-  let [totalBranches, setTotalBranches] = useState(0)
-  let branchPerPage = 5
-  let items = []
+function BranchList() {
+  let navigate = useNavigate();
+  let [branches, setBranches] = useState([]);
+  const [show, setShow] = useState(false);
+  let [isDelete, setIsDelete] = useState(false);
+  let [searchByBranchName, setSearchByBranchName] = useState("");
+  let [nop, setNop] = useState(1);
+  let [pageNo, setPageNo] = useState(1);
+  let [totalBranches, setTotalBranches] = useState(0);
+  let branchPerPage = 5;
+  let items = [];
   for (let i = 1; i <= nop; i++) {
     items.push(
       <Pagination.Item key={i} onClick={() => setPageNo(i)}>
         {i}
-      </Pagination.Item>
-    )
+      </Pagination.Item>,
+    );
   }
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     axios({
-      url: 'http://localhost:3000/branches',
-      method: 'get',
+      url: "http://localhost:3000/branches",
+      method: "get",
       params: {
         branchFullName: searchByBranchName,
         pageNo: pageNo,
-        limit: branchPerPage
-      }
+        limit: branchPerPage,
+      },
     })
-      .then(result => {
+      .then((result) => {
         if (result.data.success) {
-          console.log(result.data.data)
-          setBranches(result.data.data)
-          setTotalBranches(result.data.totalCount)
-          setNop(Math.ceil(result.data.totalCount / branchPerPage))
+          console.log(result.data.data);
+          setBranches(result.data.data);
+          setTotalBranches(result.data.totalCount);
+          setNop(Math.ceil(result.data.totalCount / branchPerPage));
         }
       })
-      .catch(error => {
-        console.log(error)
-      })
-  }, [isDelete, searchByBranchName, pageNo])
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [isDelete, searchByBranchName, pageNo]);
 
-  function searchBranch (branchname) {
-    setSearchByBranchName(branchname)
+  function searchBranch(branchname) {
+    setSearchByBranchName(branchname);
     axios({
-      url: 'http://localhost:3000/branch/search/' + branchname,
-      method: 'get',
+      url: "http://localhost:3000/branch/search/" + branchname,
+      method: "get",
       params: {
-        branchFullName: setSearchByBranchName
-      }
+        branchFullName: setSearchByBranchName,
+      },
     })
-      .then(result => {
+      .then((result) => {
         if (result.data.success) {
-          setBranches(result.data.data)
+          setBranches(result.data.data);
         }
       })
-      .catch(error => {
-        console.log(error)
-      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   const handleClose = () => {
-    setShow(false)
-    setIsDelete(true)
+    setShow(false);
+    setIsDelete(true);
+  };
+
+  function goToAddBranchPage() {
+    navigate("/add/branch");
   }
 
-  function goToAddBranchPage () {
-    navigate('/add/branch')
-  }
-
-  function goToDelete (id) {
+  function goToDelete(id) {
     axios({
-      url: 'http://localhost:3000/delete/branch/' + id,
-      method: 'delete'
+      url: "http://localhost:3000/delete/branch/" + id,
+      method: "delete",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
-      .then(result => {
+      .then((result) => {
         if (result.data.success) {
-          setShow(true)
+          setShow(true);
         }
       })
-      .catch(err => {
-        console.log(err.message)
-      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   }
 
-  function goToEdit (id) {
-    navigate('/edit/branch/' + id)
+  function goToEdit(id) {
+    navigate("/edit/branch/" + id);
   }
 
   return (
     <>
-      <h3 className='text-center mb-4 py-2 text-primary fw-bold'>
+      <h3 className="text-center mb-4 py-2 text-primary fw-bold">
         LIST OF BRANCHES
       </h3>
 
-      <InputGroup className='mb-3' style={{ width: '300px' }}>
+      <InputGroup className="mb-3" style={{ width: "300px" }}>
         <InputGroup.Text>
-          <i className='bi bi-search'></i>
+          <i className="bi bi-search"></i>
         </InputGroup.Text>
         <Form.Control
-          type='text'
-          placeholder=' Type Branch Name to search'
-          onChange={e => searchBranch(e.target.value)}
+          type="text"
+          placeholder=" Type Branch Name to search"
+          onChange={(e) => searchBranch(e.target.value)}
         />
       </InputGroup>
 
       <button
-        className='btn btn-success ms-3 mt-2 float-end'
+        className="btn btn-success ms-3 mt-2 float-end"
         onClick={goToAddBranchPage}
       >
         Add Branch +
       </button>
 
-      <table className='table text-center table-hover mt-5'>
+      <table className="table text-center table-hover mt-5">
         <thead>
           <tr>
             <th>Branch Code</th>
@@ -137,7 +141,7 @@ function BranchList () {
           </tr>
         </thead>
         <tbody>
-          {branches.map(branch => (
+          {branches.map((branch) => (
             <tr>
               <td>{branch.branchCode}</td>
               <td>{branch.branchFullName}</td>
@@ -145,17 +149,17 @@ function BranchList () {
               <td>{branch.branchIntake}</td>
               <td>
                 <Button
-                  variant='outline-primary'
-                  title='Edit Branch'
+                  variant="outline-primary"
+                  title="Edit Branch"
                   onClick={() => goToEdit(branch._id)}
                 >
                   <FaEdit />
                 </Button>
 
                 <Button
-                  variant='outline-danger'
-                  title='Delete Branch'
-                  className='ms-2'
+                  variant="outline-danger"
+                  title="Delete Branch"
+                  className="ms-2"
                   onClick={() => goToDelete(branch._id)}
                 >
                   <FaTrash />
@@ -166,9 +170,9 @@ function BranchList () {
         </tbody>
       </table>
 
-      <div className='d-flex justify-content-center'>
+      <div className="d-flex justify-content-center">
         {totalBranches > branchPerPage && (
-          <Pagination style={{ gap: '8px' }}>{items}</Pagination>
+          <Pagination style={{ gap: "8px" }}>{items}</Pagination>
         )}
       </div>
 
@@ -179,13 +183,13 @@ function BranchList () {
         </Modal.Header>
         <Modal.Body>Branch has been Deleted successfully👍</Modal.Body>
         <Modal.Footer>
-          <Button variant='danger' onClick={handleClose}>
+          <Button variant="danger" onClick={handleClose}>
             Close
           </Button>
         </Modal.Footer>
       </Modal>
     </>
-  )
+  );
 }
 
-export default BranchList
+export default BranchList;

@@ -1,22 +1,22 @@
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap-icons/font/bootstrap-icons.css'
-import axios from 'axios'
-import { Modal, Button, Form, InputGroup, Container } from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-import { FaEdit, FaTrash, FaEye } from 'react-icons/fa'
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import axios from "axios";
+import { Modal, Button, Form, InputGroup, Container } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 
-function StudentList () {
-  let navigate = useNavigate()
-  let [students, setStudents] = useState([])
-  const [show, setShow] = useState(false)
-  let [isDelete, setIsDelete] = useState(false)
-  let [searchByFirstName, setSearchByFirstName] = useState('')
-  let [searchByLastName] = useState('')
-  let [searchByEnrollment] = useState('')
-  let [searchByRollno] = useState('')
-  let [searchByFileno] = useState('')
-
+function StudentList() {
+  let navigate = useNavigate();
+  let [students, setStudents] = useState([]);
+  const [show, setShow] = useState(false);
+  let [isDelete, setIsDelete] = useState(false);
+  let [searchByFirstName, setSearchByFirstName] = useState("");
+  let [searchByLastName] = useState("");
+  let [searchByEnrollment] = useState("");
+  let [searchByRollno] = useState("");
+  let [searchByFileno] = useState("");
+  const token = localStorage.getItem("token");
   useEffect(() => {
     axios({
       url: 'http://localhost:3000/students',
@@ -85,8 +85,8 @@ function StudentList () {
         LIST OF STUDENTS
       </h3>
 
-      <InputGroup className='mb-3' style={{ width: '300px' }}>
-        {' '}
+      <InputGroup className="mb-3" style={{ width: "300px" }}>
+        {" "}
         <InputGroup.Text>
           <i className='bi bi-search'></i>
         </InputGroup.Text>
@@ -144,24 +144,24 @@ function StudentList () {
 
               <td>
                 <Button
-                  variant='outline-warning'
-                  title='View Student'
+                  variant="outline-warning"
+                  title="View Student"
                   onClick={() => goToView(student._id)}
                 >
                   <FaEye />
                 </Button>
                 <Button
-                  variant='outline-primary'
-                  title='Edit Student'
-                  className='ms-2'
+                  variant="outline-primary"
+                  title="Edit Student"
+                  className="ms-2"
                   onClick={() => goToEdit(student._id)}
                 >
                   <FaEdit />
                 </Button>
                 <Button
-                  variant='outline-danger'
-                  title='Delete Student'
-                  className='ms-2'
+                  variant="outline-danger"
+                  title="Delete Student"
+                  className="ms-2"
                   onClick={() => goToDelete(student._id)}
                 >
                   <FaTrash />

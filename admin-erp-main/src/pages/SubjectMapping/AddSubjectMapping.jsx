@@ -1,4 +1,4 @@
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Container,
   Row,
@@ -27,10 +27,10 @@ function SubjectMapping() {
   let [branch, setBranch] = useState("");
   let [year, setYear] = useState("1");
   let [semester, setSemester] = useState("1");
-const token = localStorage.getItem("token")
+  const token = localStorage.getItem("token");
   useEffect(() => {
     axios
-      .get(apiUrl+"/courses/for/mapping")
+      .get(apiUrl + "/courses/for/mapping")
       .then((res) => {
         if (res.data.success) {
           setCourses(res.data.data);
@@ -44,7 +44,7 @@ const token = localStorage.getItem("token")
   }, []);
   useEffect(() => {
     axios
-      .get(apiUrl+"/subjects/for/mapping")
+      .get(apiUrl + "/subjects/for/mapping")
       .then((res) => {
         if (res.data.success) {
           setSubjects(res.data.data);
@@ -58,7 +58,7 @@ const token = localStorage.getItem("token")
   }, []);
   useEffect(() => {
     axios
-      .get( apiUrl+"/branchs/for/mapping")
+      .get(apiUrl + "/branchs/for/mapping")
       .then((res) => {
         if (res.data.success) {
           setBranchs(res.data.data);
@@ -106,8 +106,9 @@ const token = localStorage.getItem("token")
     <>
       {showForm && (
         <Container className="mt-5">
-
-          <h3 className="text-center mb-4 py-2 text-primary fw-bold ">ADD SUBJECT MAPPING</h3>
+          <h3 className="text-center mb-4 py-2 text-primary fw-bold ">
+            ADD SUBJECT MAPPING
+          </h3>
           <hr />
 
           <Form>
@@ -181,8 +182,6 @@ const token = localStorage.getItem("token")
                   </Form.Select>
                 </Form.Group>
               </Col>
-
-              
             </Row>
 
             <Row>
@@ -238,7 +237,6 @@ const token = localStorage.getItem("token")
               </Button>
             </div>
           </Form>
-
         </Container>
       )}
       {showSpinner && (

@@ -261,10 +261,7 @@ function EditSubjectMapping() {
             </Row>
 
             <div className="d-flex gap-3 mt-4 justify-content-center">
-              <Button
-                onClick={() => navigate("/subjectsmap")}
-                variant="danger"
-              >
+              <Button onClick={() => navigate("/subjectsmap")} variant="danger">
                 Cancel
               </Button>
               <Button

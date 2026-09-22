@@ -5,11 +5,137 @@ import { Container, Form, Button, Row, Col, Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function EditTimeSlot() {
-    const navigate = useNavigate();
-    const params = useParams();
-    const id = params.id;
-    const [show, setShow] = useState(false);
-    const [buttonDisabled, setButtonDisabled] = useState(false);
+  const navigate = useNavigate();
+  const params = useParams();
+  const id = params.id;
+  const [show, setShow] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const token = localStorage.getItem("token");
+  const [TimeSlot, setTimeSlot] = useState({
+    session: "",
+    lectureNo: "",
+    startTime: "",
+    endTime: "",
+  });
+
+  const handleChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    setTimeSlot((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleClose = () => {
+    setShow(false);
+  };
+
+  const sessions = ["2026-27", "2027-28", "2028-29"];
+
+  const lectureNumbers = [1, 2, 3, 4, 5, 6, 7, 8];
+
+  const formatTime = (time) => {
+    if (!time) return "";
+
+    let [hours, minutes] = time.split(":");
+
+    hours = Number(hours);
+
+    let period = "AM";
+
+    if (hours >= 12) {
+      period = "PM";
+    }
+
+    if (hours > 12) {
+      hours = hours - 12;
+    }
+
+    if (hours === 0) {
+      hours = 12;
+    }
+
+    return `${hours}:${minutes} ${period} `;
+  };
+
+  const formatTimeSlot = (timeSlot) => {
+    if (!timeSlot) return "";
+
+    const [start, end] = timeSlot.split("-");
+
+    return `${formatTime(start.trim())} - ${formatTime(end.trim())} `;
+  };
+
+  const timeSlot = `${TimeSlot.startTime}-${TimeSlot.endTime} `;
+
+  const doEditTimeSlot = async (e) => {
+    e.preventDefault();
+
+    if (!TimeSlot.startTime || !TimeSlot.endTime) {
+      alert("Please select both start time and end time.");
+      return;
+    }
+
+    setButtonDisabled(true);
+
+    try {
+      const res = await axios.put(
+        `http://localhost:3000/edit/timeslot/${id}`,
+        {
+          session: TimeSlot.session,
+          lectureNo: Number(TimeSlot.lectureNo),
+          timeSlot: timeSlot,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      setShow(true);
+    } catch (err) {
+      console.log(err.response?.data || err);
+      alert("Failed to update time slot.");
+    } finally {
+      setButtonDisabled(false);
+    }
+  };
+
+  useEffect(() => {
+    axios({
+      url: `http://localhost:3000/timeslot/${id}`,
+      method: "get",
+    })
+      .then((res) => {
+        console.log(res.data);
+
+        const data = res.data.data || res.data;
+
+        const [startTime, endTime] = data.timeSlot.split("-");
+
+        setTimeSlot({
+          session: data.session,
+          lectureNo: data.lectureNo,
+          startTime: startTime.trim(),
+          endTime: endTime.trim(),
+        });
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }, [id]);
+
+  return (
+    <Container>
+      <Form onSubmit={doEditTimeSlot}>
+        <h3 className="text-center mb-4 py-2 text-white fw-bold bg-black">
+          UPDATE TIME SLOT
+        </h3>
+
+        <hr />
 
     const [TimeSlot, setTimeSlot] = useState({
         session: "",
@@ -330,7 +456,7 @@ function EditTimeSlot() {
           </Row>
         )}
 
-        <div className="d-flex justify-content-center gap-2 mt-4">
+        <div className="d-flex justify-content-center gap-3 mt-4">
           <Button
             onClick={() => navigate("/timeslots")}
             variant="danger"
@@ -340,7 +466,7 @@ function EditTimeSlot() {
           </Button>
 
           <Button disabled={buttonDisabled} variant="success" type="submit">
-            {buttonDisabled ? "Updating..." : "Update Time Slot"}
+            {buttonDisabled ? "Updating..." : "Edit TimeSlot"}
           </Button>
         </div>
       </Form>

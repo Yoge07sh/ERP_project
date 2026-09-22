@@ -19,7 +19,7 @@ SubjectMappingController.getSubjectsForMapping(req,res)
 router.get('/branchs/for/mapping',(req,res)=>{
 SubjectMappingController.getBranchsForMapping(req,res) 
 })
-router.post('/add/subjectMapping',(req,res)=>{
+router.post('/add/subjectMapping',authMiddleware,(req,res)=>{
     SubjectMappingController.addSubjectMapping(req,res)
 })
 router.get('/subjectsMapped', (req, res) => {

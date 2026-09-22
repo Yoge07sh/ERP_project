@@ -1,18 +1,18 @@
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap-icons/font/bootstrap-icons.css'
-import axios from 'axios'
-import { Modal, Button, Form, InputGroup, Container } from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-import { FaEdit, FaTrash } from 'react-icons/fa'
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import axios from "axios";
+import { Modal, Button, Form, InputGroup, Container } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
-function SubjectList () {
-  let navigate = useNavigate()
-  let [subjects, setSubjects] = useState([])
-  const [show, setShow] = useState(false)
-  let [isDelete, setIsDelete] = useState(false)
-  let [searchBySubjectName, setSearchBySubjectName] = useState('')
-
+function SubjectList() {
+  let navigate = useNavigate();
+  let [subjects, setSubjects] = useState([]);
+  const [show, setShow] = useState(false);
+  let [isDelete, setIsDelete] = useState(false);
+  let [searchBySubjectName, setSearchBySubjectName] = useState("");
+  const token = localStorage.getItem("token");
   useEffect(() => {
     axios({
       url: 'http://localhost:3000/subjects',
@@ -23,8 +23,7 @@ function SubjectList () {
     })
       .then(result => {
         if (result.data.success) {
-          console.log(result.data.data)
-          setSubjects(result.data.data)
+          setSubjects(result.data.data);
         }
       })
       .catch(error => {
@@ -88,8 +87,8 @@ function SubjectList () {
         LIST OF SUBJECTS
       </h3>
 
-      <InputGroup className='mb-3' style={{ width: '300px' }}>
-        {' '}
+      <InputGroup className="mb-3" style={{ width: "300px" }}>
+        {" "}
         <InputGroup.Text>
           <i className='bi bi-search'></i>
         </InputGroup.Text>
@@ -130,17 +129,17 @@ function SubjectList () {
               <td>{subject.creditScore}</td>
               <td>
                 <Button
-                  variant='outline-primary'
-                  title='Edit Subject'
+                  variant="outline-primary"
+                  title="Edit Subject"
                   onClick={() => goToEdit(subject._id)}
                 >
                   <FaEdit />
                 </Button>
 
                 <Button
-                  variant='outline-danger'
-                  title='Delete Subject'
-                  className='ms-2'
+                  variant="outline-danger"
+                  title="Delete Subject"
+                  className="ms-2"
                   onClick={() => goToDelete(subject._id)}
                 >
                   <FaTrash />

@@ -7,13 +7,13 @@ import { useEffect, useState } from 'react'
 const apiUrl = import.meta.env.VITE_API_URL
 import { FaEdit, FaTrash } from 'react-icons/fa'
 
-function SubjectMappingList () {
-  let navigate = useNavigate()
-  let [subjectsmap, setSubjectsmap] = useState([])
-  const [show, setShow] = useState(false)
-  let [isDelete, setIsDelete] = useState(false)
-  let [searchByCourse, setSearchByCourse] = useState('')
-
+function SubjectMappingList() {
+  let navigate = useNavigate();
+  let [subjectsmap, setSubjectsmap] = useState([]);
+  const [show, setShow] = useState(false);
+  let [isDelete, setIsDelete] = useState(false);
+  let [searchByCourse, setSearchByCourse] = useState("");
+  const token = localStorage.getItem("token");
   useEffect(() => {
     axios({
       url: apiUrl + '/subjectsMapped',
@@ -63,8 +63,8 @@ function SubjectMappingList () {
         LIST OF SUBJECT MAPPING
       </h3>
 
-      <InputGroup className='mb-3' style={{ width: '300px' }}>
-        {' '}
+      <InputGroup className="mb-3" style={{ width: "300px" }}>
+        {" "}
         <InputGroup.Text>
           <i className='bi bi-search'></i>
         </InputGroup.Text>
@@ -105,17 +105,17 @@ function SubjectMappingList () {
               <td>{subject.semester}</td>
               <td>
                 <Button
-                  variant='outline-primary'
-                  title = 'Edit Subject Mapping'
+                  variant="outline-primary"
+                  title="Edit Subject Mapping"
                   onClick={() => goToEdit(subject._id)}
                 >
                   <FaEdit />
                 </Button>
 
                 <Button
-                  variant='outline-danger'
-                  title = 'Delete Subject Mapping'
-                  className='ms-2'
+                  variant="outline-danger"
+                  title="Delete Subject Mapping"
+                  className="ms-2"
                   onClick={() => goToDelete(subject._id)}
                 >
                   <FaTrash />

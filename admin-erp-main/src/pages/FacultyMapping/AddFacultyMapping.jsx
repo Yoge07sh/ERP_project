@@ -25,6 +25,7 @@ function AddFacultyMapping () {
   const [branches, setBranches] = useState([])
   const [faculties, setFaculties] = useState([])
   const navigate = useNavigate()
+  const token = localStorage.getItem('token')
   // ================= SUCCESS MODAL =================
   const [show, setShow] = useState(false)
 
@@ -120,7 +121,12 @@ function AddFacultyMapping () {
     try {
       const res = await axios.post(
         apiUrl + '/add/facultymapping',
-        facultyMapping
+        facultyMapping,
+        {
+         headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        }
       )
 
       if (res.data.success) {

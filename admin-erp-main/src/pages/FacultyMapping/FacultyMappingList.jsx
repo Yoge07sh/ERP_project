@@ -16,7 +16,7 @@ import axios from 'axios'
 import { FaEdit, FaTrash } from 'react-icons/fa'
 
 const apiUrl = import.meta.env.VITE_API_URL;
-
+const token = localStorage.getItem('token')
 function FacultyMappingList () {
   const navigate = useNavigate()
   const [show, setShow] = useState(false)
@@ -155,7 +155,7 @@ function FacultyMappingList () {
         {/* Add Button */}
         <div className='col-md-4'>
           <Button className='btn btn-success float-end' onClick={handleAdd}>
-            Add Faculty +
+            Add Faculty Mapping +
           </Button>
         </div>
       </div>

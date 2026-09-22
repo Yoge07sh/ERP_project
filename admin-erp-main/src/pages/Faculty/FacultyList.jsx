@@ -1,88 +1,88 @@
-import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap-icons/font/bootstrap-icons.css'
-import axios from 'axios'
-import { Form, InputGroup, Button, Modal, Pagination } from 'react-bootstrap'
-import { FaEdit, FaTrash, FaEye } from 'react-icons/fa'
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import axios from "axios";
+import { Form, InputGroup, Button, Modal, Pagination } from "react-bootstrap";
+import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 
-function FacultyList () {
-  const [show, setShow] = useState(false)
-  const [showModal, setShowModal] = useState(false)
-  let [showSpinner, setShowSpinner] = useState(false)
-  let [buttonDisabled, setButtonDisabled] = useState(false)
+function FacultyList() {
+  const [show, setShow] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  let [showSpinner, setShowSpinner] = useState(false);
+  let [buttonDisabled, setButtonDisabled] = useState(false);
 
-  let [file, setFile] = useState('')
-  let [nop, setNop] = useState(1)
-  let [pageNo, setPageNo] = useState(1)
-  let [totalFaculties, setTotalFaculties] = useState(0)
-  let facultyPerPage = 5
-  let items = []
+  let [file, setFile] = useState("");
+  let [nop, setNop] = useState(1);
+  let [pageNo, setPageNo] = useState(1);
+  let [totalFaculties, setTotalFaculties] = useState(0);
+  let facultyPerPage = 5;
+  let items = [];
   for (let i = 1; i <= nop; i++) {
     items.push(
       <Pagination.Item key={i} onClick={() => setPageNo(i)}>
         {i}
-      </Pagination.Item>
-    )
+      </Pagination.Item>,
+    );
   }
 
-  let navigate = useNavigate()
+  let navigate = useNavigate();
 
-  let [faculties, setFaculties] = useState([])
-  let [searchByFacultyName, setSearchByFacultyName] = useState('')
+  let [faculties, setFaculties] = useState([]);
+  let [searchByFacultyName, setSearchByFacultyName] = useState("");
 
   useEffect(() => {
     axios({
-      url: 'http://localhost:3000/faculties',
-      method: 'get',
+      url: "http://localhost:3000/faculties",
+      method: "get",
       params: {
         firstName: searchByFacultyName,
         pageNo: pageNo,
-        limit: facultyPerPage
-      }
+        limit: facultyPerPage,
+      },
     })
-      .then(result => {
+      .then((result) => {
         if (result.data.success) {
-          console.log(result.data.data)
-          setTotalFaculties(result.data.totalCount)
-          setNop(Math.ceil(result.data.totalCount / facultyPerPage))
-          setFaculties(result.data.data)
+          console.log(result.data.data);
+          setTotalFaculties(result.data.totalCount);
+          setNop(Math.ceil(result.data.totalCount / facultyPerPage));
+          setFaculties(result.data.data);
         }
       })
-      .catch(error => {
-        console.log(error)
-      })
-  }, [searchByFacultyName, facultyPerPage, pageNo])
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [searchByFacultyName, facultyPerPage, pageNo]);
 
-  function searchFacutly (firstName) {
-    setSearchByFacultyName(firstName)
+  function searchFacutly(firstName) {
+    setSearchByFacultyName(firstName);
     axios({
       // url: 'http://localhost:3000',
-      url: 'http://localhost:3000/faculty/search/' + firstName,
-      method: 'get',
+      url: "http://localhost:3000/faculty/search/" + firstName,
+      method: "get",
       params: {
-        firstName: searchByFacultyName
-      }
+        firstName: searchByFacultyName,
+      },
     })
-      .then(result => {
+      .then((result) => {
         if (result.data.success) {
-          setFaculties(result.data.data)
+          setFaculties(result.data.data);
           // setCourses(result.data.data || []);
         }
       })
-      .catch(error => {
-        console.log(error)
-      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
-  function doUploadCsv () {
-    setShowModal(true)
+  function doUploadCsv() {
+    setShowModal(true);
   }
-  function doAddFaculties () {
-    setButtonDisabled(true)
-    let formData = new FormData()
-    formData.append('facultyData', file)
-    formData.append('fileName', file.name)
+  function doAddFaculties() {
+    setButtonDisabled(true);
+    let formData = new FormData();
+    formData.append("facultyData", file);
+    formData.append("fileName", file.name);
     axios({
       url: 'http://localhost:3000/add/faculties',
       method: 'post',
@@ -104,73 +104,80 @@ function FacultyList () {
   }
 
   const handleClose = () => {
-    setShow(false)
-    setShowModal(false)
-    navigate('/faculties')
+    setShow(false);
+    setShowModal(false);
+    navigate("/faculties");
+  };
+
+  function goToAddFacultyPage() {
+    navigate("/add/faculty");
   }
 
-  function goToAddFacultyPage () {
-    navigate('/add/faculty')
+  function goToEdit(id) {
+    navigate("/edit/faculty/" + id);
   }
 
-  function goToEdit (id) {
-    navigate('/edit/faculty/' + id)
-  }
-
-  function goToDelete (id) {
+  function goToDelete(id) {
     const confirmDelete = window.confirm(
-      'Are you sure you want to delete this faculty?'
-    )
+      "Are you sure you want to delete this faculty?",
+    );
 
     if (!confirmDelete) {
-      return
+      return;
     }
 
-    axios({
-      url: 'http://localhost:3000/delete/faculty/' + id,
-      method: 'delete'
-    })
-      .then(result => {
+    axios(
+      {
+        url: "http://localhost:3000/delete/faculty/" + id,
+        method: "delete",
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+      .then((result) => {
         if (result.data.success) {
           alert('Faculty deleted successfully')
           setFaculties(faculties.filter(faculty => faculty._id !== id))
         }
       })
-      .catch(err => {
-        console.log(err.message)
-        alert('Something went wrong while deleting faculty')
-      })
+      .catch((err) => {
+        console.log(err.message);
+        alert("Something went wrong while deleting faculty");
+      });
   }
 
-  function goToView (id) {
-    navigate('/faculty/profile/' + id)
+  function goToView(id) {
+    navigate("/faculty/profile/" + id);
   }
 
   return (
     <>
-      <h3 className='text-center mb-4 py-2 text-primary fw-bold'>
+      <h3 className="text-center mb-4 py-2 text-primary fw-bold">
         LIST OF FACULTIES
       </h3>
 
-      <InputGroup className='mb-3' style={{ width: '300px' }}>
-        {' '}
+      <InputGroup className="mb-3" style={{ width: "300px" }}>
+        {" "}
         <InputGroup.Text>
-          <i className='bi bi-search'></i>
+          <i className="bi bi-search"></i>
         </InputGroup.Text>
         <Form.Control
-          type='text'
-          placeholder=' Type Faculty Name to search'
-          onChange={e => searchFacutly(e.target.value)}
+          type="text"
+          placeholder=" Type Faculty Name to search"
+          onChange={(e) => searchFacutly(e.target.value)}
         />
       </InputGroup>
-      <div className=' d-flex align-content-center gap-2 ms-3 mt-2 float-end'>
-        <button className='btn btn-sm btn-success' onClick={goToAddFacultyPage}>
+      <div className=" d-flex align-content-center gap-2 ms-3 mt-2 float-end">
+        <button className="btn btn-sm btn-success" onClick={goToAddFacultyPage}>
           Add Faculty +
         </button>
         <p>Or upload via csv</p>
         <button
-          className='btn btn-success btn-sm '
-          variant='success'
+          className="btn btn-success btn-sm "
+          variant="success"
           disabled={buttonDisabled}
           onClick={doUploadCsv}
         >
@@ -178,7 +185,7 @@ function FacultyList () {
         </button>
       </div>
 
-      <table className='table text-center table-hover mt-5'>
+      <table className="table text-center table-hover mt-5">
         <thead>
           <tr>
             <th>Faculty Image</th>
@@ -189,14 +196,14 @@ function FacultyList () {
           </tr>
         </thead>
         <tbody>
-          {faculties.map(faculty => (
+          {faculties.map((faculty) => (
             <tr>
               <td>
                 <img
                   src={faculty.facultyImage}
-                  height='50px'
-                  width='50px'
-                  alt=''
+                  height="50px"
+                  width="50px"
+                  alt=""
                 />
               </td>
               <td>
@@ -206,24 +213,24 @@ function FacultyList () {
               <td>{faculty.highestQualification}</td>
               <td>
                 <Button
-                  variant='outline-warning'
-                  title='View Faculty'
+                  variant="outline-warning"
+                  title="View Faculty"
                   onClick={() => goToView(faculty._id)}
                 >
                   <FaEye />
                 </Button>
                 <Button
-                  variant='outline-primary'
-                  title='Edit Faculty'
-                  className = 'ms-2'
+                  variant="outline-primary"
+                  title="Edit Faculty"
+                  className="ms-2"
                   onClick={() => goToEdit(faculty._id)}
                 >
                   <FaEdit />
                 </Button>
                 <Button
-                  variant='outline-danger'
-                  title='Delete Faculty'
-                  className='ms-2'
+                  variant="outline-danger"
+                  title="Delete Faculty"
+                  className="ms-2"
                   onClick={() => goToDelete(faculty._id)}
                 >
                   <FaTrash />
@@ -234,14 +241,14 @@ function FacultyList () {
         </tbody>
       </table>
 
-      <div className='d-flex justify-content-center'>
+      <div className="d-flex justify-content-center">
         {totalFaculties > facultyPerPage && <Pagination>{items}</Pagination>}
       </div>
 
       {showSpinner && (
-        <div className='d-flex justify-content-center align-items-center vh-100'>
-          <Spinner animation='border' role='status'>
-            <span className='visually-hidden'>Loading...</span>
+        <div className="d-flex justify-content-center align-items-center vh-100">
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
           </Spinner>
         </div>
       )}
@@ -251,7 +258,7 @@ function FacultyList () {
         </Modal.Header>
         <Modal.Body>Faculty added successfully</Modal.Body>
         <Modal.Footer>
-          <Button variant='secondary' onClick={handleClose}>
+          <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
         </Modal.Footer>
@@ -263,40 +270,40 @@ function FacultyList () {
         </Modal.Header>
         <Modal.Body>
           <input
-            type='file'
-            name='facultyData'
-            accept='.csv'
-            onChange={e => {
+            type="file"
+            name="facultyData"
+            accept=".csv"
+            onChange={(e) => {
               if (e.target.files.length > 0) {
-                setFile(e.target.files[0])
+                setFile(e.target.files[0]);
               }
             }}
           />
 
           <Button
-            variant='success btn-md mt-2'
+            variant="success btn-md mt-2"
             disabled={buttonDisabled}
             onClick={doAddFaculties}
           >
             Upload CSV
           </Button>
-          <div className='mt-3'>
+          <div className="mt-3">
             <p>
               Click below to download a <b>sample CSV file</b> for reference:
             </p>
-            <a href='/demo.csv' download>
-              <Button variant='success'>⬇ Download Demo CSV</Button>
+            <a href="/demo.csv" download>
+              <Button variant="success">⬇ Download Demo CSV</Button>
             </a>
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant='danger' onClick={handleClose}>
+          <Button variant="danger" onClick={handleClose}>
             Close
           </Button>
         </Modal.Footer>
       </Modal>
     </>
-  )
+  );
 }
 
-export default FacultyList
+export default FacultyList;

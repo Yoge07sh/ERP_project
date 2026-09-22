@@ -49,6 +49,8 @@ import GetStudentForm from "./pages/Attendance/GetStudentForm";
 import StudentsAttendance from "./pages/Attendance/StudentsAttendance";
 import ViewAttendance from "./pages/Attendance/ViewAttendance";
 import EditAttendance from "./pages/Attendance/EditAttendance";
+import AttendanceRegister from "./pages/Attendance/AttendanceRegister";
+import Eregister from "./pages/Attendance/ERegister";
 
 function App() {
   return (
@@ -141,6 +143,8 @@ function App() {
               path="/edit/attendance/:facultyMapId/:SingletimeSlot/:selectedDate"
               element={<EditAttendance />}
             />
+            <Route path="/register" element={<AttendanceRegister></AttendanceRegister>}></Route>
+            <Route path="/eregister" element={<Eregister></Eregister>}></Route>
           </Routes>
         </main>
       </div>

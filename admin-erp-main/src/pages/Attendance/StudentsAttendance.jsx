@@ -6,6 +6,7 @@ import {
   Row,
   Col,
   Badge,
+  Modal
 } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useState } from "react";
@@ -27,7 +28,10 @@ function StudentsAttendance() {
 
   const [attendance, setAttendance] = useState({});
   const [submitting, setSubmitting] = useState(false);
-
+  const [show, setShow] = useState(false);
+  const handleClose = () => {
+    setShow(false);
+  };
   const handleSubmit = async () => {
     if (!facultyMapId) {
       alert("Mapping information is missing.");
@@ -69,8 +73,7 @@ function StudentsAttendance() {
       );
 
       if (response.data.success) {
-        alert("Attendance submitted successfully!");
-        navigate("/getstudents");
+        setShow(true);
       }
     } catch (err) {
       console.error("Attendance submission error:", err);
@@ -297,6 +300,23 @@ function StudentsAttendance() {
               </div>
             </Card.Body>
           </Card>
+          <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Success</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Attendance Submitted successfully👍</Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="success"
+                onClick={() => {
+                  handleClose();
+                  navigate("/getstudents");
+                }}
+              >
+                OK
+              </Button>
+            </Modal.Footer>
+          </Modal>
         </Col>
       </Row>
     </Container>
