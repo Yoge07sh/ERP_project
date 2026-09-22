@@ -94,6 +94,7 @@ function EditTimeSlot() {
           },
         },
       );
+
       setShow(true);
     } catch (err) {
       console.log(err.response?.data || err);
@@ -226,7 +227,7 @@ function EditTimeSlot() {
           </Row>
         )}
 
-        <div className="d-flex justify-content-center gap-2 mt-4">
+        <div className="d-flex justify-content-center gap-3 mt-4">
           <Button
             onClick={() => navigate("/timeslots")}
             variant="danger"
@@ -236,7 +237,7 @@ function EditTimeSlot() {
           </Button>
 
           <Button disabled={buttonDisabled} variant="success" type="submit">
-            {buttonDisabled ? "Updating..." : "Update Time Slot"}
+            {buttonDisabled ? "Updating..." : "Edit TimeSlot"}
           </Button>
         </div>
       </Form>

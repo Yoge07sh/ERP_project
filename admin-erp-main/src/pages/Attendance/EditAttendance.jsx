@@ -6,6 +6,7 @@ import {
   Row,
   Col,
   Badge,
+  Modal,
 } from "react-bootstrap";
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -28,6 +29,10 @@ function EditAttendance() {
   const [attendance, setAttendance] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [show, setShow] = useState(false);
+  const handleClose = () => {
+    setShow(false);
+  };
 
   // Get existing attendance
   const getAttendance = async () => {
@@ -133,17 +138,7 @@ function EditAttendance() {
       );
 
       if (response.data.success) {
-        alert("Attendance updated successfully!");
-
-        navigate(
-          '/viewattendance',
-          {
-            state: {
-              formData: formData,
-              facultyMapId,SingletimeSlot,selectedDate
-            },
-          },
-        );
+        setShow(true);
       }
     } catch (err) {
       console.error("Attendance update error:", err);
@@ -394,6 +389,31 @@ function EditAttendance() {
               </div>
             </Card.Body>
           </Card>
+          <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Success</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Attendance updated successfully👍</Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="success"
+                onClick={() => {
+                  handleClose();
+
+                  navigate("/viewattendance", {
+                    state: {
+                      formData,
+                      facultyMapId,
+                      SingletimeSlot,
+                      selectedDate,
+                    },
+                  });
+                }}
+              >
+                OK
+              </Button>
+            </Modal.Footer>
+          </Modal>
         </Col>
       </Row>
     </Container>

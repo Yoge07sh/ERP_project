@@ -11,6 +11,7 @@ import logo from "../assets/logo.png";
 import { useState, useEffect } from "react";
 
 import axios from "axios";
+import { FaUserGraduate } from "react-icons/fa";
 
 function Sidebar() {
   let navigate = useNavigate();
@@ -114,22 +115,40 @@ function Sidebar() {
 
         <div className="sidebar-clock-wrapper mt-1">
           <div className="sidebar-clock-box">
-            <div className="sidebar-clock-icon">
-              <i className="bi bi-watch"></i>
+            <div
+              className="sidebar-clock-time"
+              style={{
+                width: "100px",
+                margin: "0 auto",
+                fontVariantNumeric: "tabular-nums",
+                fontFeatureSettings: '"tnum"',
+                textAlign: "center",
+              }}
+            >
+              {currentTime.toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: false,
+              })}
             </div>
-
-            <div className="sidebar-clock-info">
-              <div className="sidebar-clock-time">
-                {currentTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
-              </div>
-
-              <div className="sidebar-clock-date">
-                {currentTime.toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" })}
-              </div>
-
-              <div className="sidebar-clock-live">
-                <i className="bi bi-circle-fill"></i> Live
-              </div>
+            <div className="sidebar-clock-date">
+              {currentTime.toLocaleDateString(undefined, {
+                weekday: "short",
+                day: "numeric",
+                month: "short",
+              })}
+            </div>
+            <div
+              className="sidebar-clock-live"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "4px",
+              }}
+            >
+              <i className="bi bi-circle-fill"></i> Live
             </div>
           </div>
         </div>
@@ -141,7 +160,6 @@ function Sidebar() {
             variant="flush"
             className="pt-4 px-3 flex-grow-1 overflow-auto"
           >
-
             {/* ================= ADMIN ================= */}
 
             {isAdmin && (
@@ -211,7 +229,7 @@ function Sidebar() {
                   to="/students"
                   className="sidebar-menu-item d-flex align-items-center gap-2"
                 >
-                  <i className="bi bi-person"></i>
+                  <FaUserGraduate />
 
                   <span className="d-none d-md-inline">Students</span>
                 </ListGroup.Item>
@@ -231,12 +249,11 @@ function Sidebar() {
                   to="/getstudents"
                   className="sidebar-menu-item sidebar-menu-item d-flex align-items-center gap-2"
                 >
-                  <i className="bi bi-clock"></i>
+                  <i className="bi bi-clipboard-check"></i>
 
                   <span className="d-none d-md-inline">Attendance</span>
                 </ListGroup.Item>
               </>
-
             )}
 
             {/* ================= FACULTY ================= */}
@@ -245,44 +262,13 @@ function Sidebar() {
               <>
                 <ListGroup.Item
                   as={NavLink}
-                  to="/facultymapping"
-                  className="sidebar-menu-item d-flex align-items-center gap-2"
-                >
-                  <i className="bi bi-diagram-3"></i>
-
-                  <span className="d-none d-md-inline">My Faculty Mapping</span>
-                </ListGroup.Item>
-
-                <ListGroup.Item
-                  as={NavLink}
-                  to="/subjects"
-                  className="sidebar-menu-item d-flex align-items-center gap-2"
-                >
-                  <i className="bi bi-journal-bookmark"></i>
-
-                  <span className="d-none d-md-inline">Subjects</span>
-                </ListGroup.Item>
-
-                <ListGroup.Item
-                  as={NavLink}
-                  to="/timeslots"
-                  className="sidebar-menu-item d-flex align-items-center gap-2"
-                >
-                  <i className="bi bi-clock"></i>
-
-                  <span className="d-none d-md-inline">TimeSlots</span>
-                </ListGroup.Item>
-
-                <ListGroup.Item
-                  as={NavLink}
                   to="/getstudents"
                   className="sidebar-menu-item sidebar-menu-item d-flex align-items-center gap-2"
                 >
-                  <i className="bi bi-clock"></i>
+                  <i className="bi bi-clipboard-check"></i>
 
                   <span className="d-none d-md-inline">Attendance</span>
                 </ListGroup.Item>
-
               </>
             )}
 
@@ -295,33 +281,12 @@ function Sidebar() {
                   to="/students"
                   className="sidebar-menu-item d-flex align-items-center gap-2"
                 >
-                  <i className="bi bi-person"></i>
+                  <i className="bi bi-person-circle"></i>
 
                   <span className="d-none d-md-inline">My Profile</span>
                 </ListGroup.Item>
-
-                <ListGroup.Item
-                  as={NavLink}
-                  to="/subjects"
-                  className="sidebar-menu-item d-flex align-items-center gap-2"
-                >
-                  <i className="bi bi-journal-bookmark"></i>
-
-                  <span className="d-none d-md-inline">Subjects</span>
-                </ListGroup.Item>
-
-                <ListGroup.Item
-                  as={NavLink}
-                  to="/timeslots"
-                  className="sidebar-menu-item d-flex align-items-center gap-2"
-                >
-                  <i className="bi bi-clock"></i>
-
-                  <span className="d-none d-md-inline">TimeSlots</span>
-                </ListGroup.Item>
               </>
             )}
-
           </ListGroup>
         </div>
 

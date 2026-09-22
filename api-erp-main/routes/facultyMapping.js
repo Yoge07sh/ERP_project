@@ -26,7 +26,7 @@ router.get('/branchs/for/mapping', (req, res) => {
     FacultyMappingController.getBranchsForMapping(req, res);
 });
 
-router.post('/add/facultymapping', (req, res) => {
+router.post('/add/facultymapping',authMiddleware, (req, res) => {
     FacultyMappingController.addFacultyMapping(req, res);
 });
 router.get('/get/facultymapping', (req, res) => {

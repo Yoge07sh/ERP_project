@@ -14,7 +14,6 @@ function SubjectMappingList() {
   let [isDelete, setIsDelete] = useState(false);
   let [searchByCourse, setSearchByCourse] = useState("");
   const token = localStorage.getItem("token");
-
   useEffect(() => {
     axios({
       url: apiUrl + "/subjectsMapped",
@@ -67,7 +66,8 @@ function SubjectMappingList() {
         LIST OF SUBJECT MAPPING
       </h3>
 
-      <InputGroup className="mb-3">
+      <InputGroup className="mb-3" style={{ width: "300px" }}>
+        {" "}
         <InputGroup.Text>
           <i className="bi bi-search"></i>
         </InputGroup.Text>
@@ -107,14 +107,21 @@ function SubjectMappingList() {
               <td>{subject.year}</td>
               <td>{subject.semester}</td>
               <td>
-                <Button variant="primary" onClick={() => goToEdit(subject._id)}>
-                  <FaEdit></FaEdit>
-                </Button>
                 <Button
-                  variant="danger ms-2"
+                  variant="outline-primary"
+                  title="Edit Subject Mapping"
+                  onClick={() => goToEdit(subject._id)}
+                >
+                  <FaEdit />
+                </Button>
+
+                <Button
+                  variant="outline-danger"
+                  title="Delete Subject Mapping"
+                  className="ms-2"
                   onClick={() => goToDelete(subject._id)}
                 >
-                  <FaTrash></FaTrash>
+                  <FaTrash />
                 </Button>
               </td>
             </tr>

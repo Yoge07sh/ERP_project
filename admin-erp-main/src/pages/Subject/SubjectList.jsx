@@ -4,6 +4,7 @@ import axios from "axios";
 import { Modal, Button, Form, InputGroup, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 function SubjectList() {
   let navigate = useNavigate();
@@ -11,9 +12,7 @@ function SubjectList() {
   const [show, setShow] = useState(false);
   let [isDelete, setIsDelete] = useState(false);
   let [searchBySubjectName, setSearchBySubjectName] = useState("");
-
   const token = localStorage.getItem("token");
-
   useEffect(() => {
     axios({
       url: "http://localhost:3000/subjects",
@@ -24,7 +23,6 @@ function SubjectList() {
     })
       .then((result) => {
         if (result.data.success) {
-          console.log(result.data.data);
           setSubjects(result.data.data);
         }
       })
@@ -92,7 +90,8 @@ function SubjectList() {
         LIST OF SUBJECTS
       </h3>
 
-      <InputGroup className="mb-3">
+      <InputGroup className="mb-3" style={{ width: "300px" }}>
+        {" "}
         <InputGroup.Text>
           <i className="bi bi-search"></i>
         </InputGroup.Text>
@@ -132,14 +131,22 @@ function SubjectList() {
               <td>{subject.subjectType}</td>
               <td>{subject.creditScore}</td>
               <td>
-                <i
-                  className="bi bi-pencil me-3 text-primary"
+                <Button
+                  variant="outline-primary"
+                  title="Edit Subject"
                   onClick={() => goToEdit(subject._id)}
-                ></i>
-                <i
-                  className="bi bi-trash text-danger"
+                >
+                  <FaEdit />
+                </Button>
+
+                <Button
+                  variant="outline-danger"
+                  title="Delete Subject"
+                  className="ms-2"
                   onClick={() => goToDelete(subject._id)}
-                ></i>
+                >
+                  <FaTrash />
+                </Button>
               </td>
             </tr>
           ))}
@@ -151,7 +158,7 @@ function SubjectList() {
         <Modal.Header closeButton>
           <Modal.Title>Success</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Subject has been Deleted successfully👍</Modal.Body>
+        <Modal.Body>Course has been Deleted successfully👍</Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={handleClose}>
             Close

@@ -14,12 +14,12 @@ const studentSchema = new mongoose.Schema({
   rollNumber: { type: String, uppercase: true, trim: true },
 
   firstName: { type: String, required: true, trim: true, set: toTitleCase },
-  lastName: { type: String, required: true, trim: true, set: toTitleCase },
+  lastName: { type: String, required: false, trim: true, set: toTitleCase },
   dob: { type: Date },
   gender: { type: String, default: 'Male', enum: ['Male', 'Female', 'Other'], required: true },
 
-  fatherName: { type: String, required: true, trim: true, set: toTitleCase },
-  motherName: { type: String, required: true, trim: true, set: toTitleCase },
+  fatherName: { type: String, required: false, trim: true, set: toTitleCase },
+  motherName: { type: String, required: false, trim: true, set: toTitleCase },
 
   personalEmailId: { type: String, lowercase: true, trim: true },
   collegeEmailId: { type: String, lowercase: true, trim: true },

@@ -72,7 +72,6 @@ function AddBranch() {
         },
       );
 
-      console.log(res.data);
       setShow(true);
 
       // reset form

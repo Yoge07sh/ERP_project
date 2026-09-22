@@ -8,7 +8,6 @@ import {
   FaChalkboardTeacher,
   FaClock,
   FaCalendarAlt,
-  FaUserGraduate,
   FaEye,
   FaArrowRight,
   FaClipboardCheck,
@@ -16,14 +15,17 @@ import {
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
-function GetStudentForm() {
+function AttendanceRegister() {
   const navigate = useNavigate();
 
   const [mappings, setMappings] = useState([]);
   const [selectedMapping, setSelectedMapping] = useState("");
+
   const [timeslots, setTimeSlots] = useState([]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
-  const [selectedDate, setSelectedDate] = useState("");
+
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
 
   const [formData, setFormData] = useState({
     session: "",
@@ -34,7 +36,9 @@ function GetStudentForm() {
     year: "",
     semester: "",
     section: "",
+    subjectName: "",
   });
+
   const token = localStorage.getItem("token");
 
   // Get faculty mappings
@@ -81,14 +85,15 @@ function GetStudentForm() {
 
     if (mapping) {
       setFormData({
-        session: mapping.session,
+        session: mapping.session || "",
         course: mapping.course?._id || "",
         courseName: mapping.course?.courseShortName || "",
         branch: mapping.branch?._id || "",
         branchName: mapping.branch?.branchShortName || "",
-        year: mapping.year,
-        semester: mapping.semester,
-        section: mapping.section,
+        year: mapping.year || "",
+        semester: mapping.semester || "",
+        section: mapping.section || "",
+        subjectName: mapping.subjectId?.subjectFullName || "",
       });
     } else {
       setFormData({
@@ -100,11 +105,13 @@ function GetStudentForm() {
         year: "",
         semester: "",
         section: "",
+        subjectName: "",
       });
     }
   };
 
-  const handleSubmit = async (e) => {
+  // Submit form
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!selectedMapping) {
@@ -117,31 +124,30 @@ function GetStudentForm() {
       return;
     }
 
-    try {
-      const token = localStorage.getItem("token");
-
-      const response = await axios.get(`${apiUrl}/getstudentsdata`, {
-        params: {
-          mappingId: selectedMapping,
-        },
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      navigate("/studentsattendance", {
-        state: {
-          students: response.data.data,
-          formData: formData,
-          facultyMapId: selectedMapping,
-          timeSlotId: selectedTimeSlot,
-        },
-      });
-    } catch (err) {
-      console.error(err);
-
-      alert(err.response?.data?.message || "Failed to fetch students");
+    if (!fromDate) {
+      alert("Please select From Date.");
+      return;
     }
+
+    if (!toDate) {
+      alert("Please select To Date.");
+      return;
+    }
+
+    if (fromDate > toDate) {
+      alert("From Date cannot be greater than To Date.");
+      return;
+    }
+    
+    navigate("/eregister", {
+      state: {
+        formData,
+        facultyMapId: selectedMapping,
+        timeSlotId: selectedTimeSlot,
+        fromDate,
+        toDate,
+      },
+    });
   };
 
   return (
@@ -174,7 +180,7 @@ function GetStudentForm() {
           </div>
 
           <div>
-            <h3 className="mb-1 fw-bold">Attendance Management</h3>
+            <h3 className="mb-1 fw-bold">E-Attendance Register</h3>
 
             <p
               className="mb-0"
@@ -183,24 +189,16 @@ function GetStudentForm() {
                 fontSize: "14px",
               }}
             >
-              Select your class, lecture time and date to manage attendance
+              Select class, lecture time and date range to view attendance
             </p>
-          </div>
-          <div className="ms-auto">
-            <Button
-              onClick={() => {
-                navigate("/register");
-              }}
-            >
-              E-AttendanceRegister
-            </Button>
           </div>
         </div>
       </div>
+
       {/* Form Card */}
       <div className="bg-white rounded-4 shadow-sm p-4">
         <Form onSubmit={handleSubmit}>
-          {/* Class */}
+          {/* Faculty Mapping */}
           <Row>
             <Col md={12}>
               <Form.Group className="mb-4">
@@ -212,7 +210,7 @@ function GetStudentForm() {
                     className="me-2"
                     style={{ color: "#2563eb" }}
                   />
-                  Select Class / Lecture
+                  Select Class / Subject
                 </Form.Label>
 
                 <Form.Select
@@ -225,14 +223,14 @@ function GetStudentForm() {
                     boxShadow: "none",
                   }}
                 >
-                  <option value="">Select Class</option>
+                  <option value="">Select Class / Subject</option>
 
                   {mappings.map((mapping) => (
                     <option key={mapping._id} value={mapping._id}>
                       {mapping.session} | {mapping.course?.courseShortName} |{" "}
-                      {mapping.branch?.branchShortName} | Year {mapping.year} |
-                      Semester {mapping.semester} | Section {mapping.section} |{" "}
-                      {mapping.subjectId?.subjectFullName}
+                      {mapping.branch?.branchShortName || "No Branch"} | Year{" "}
+                      {mapping.year} | Semester {mapping.semester} | Section{" "}
+                      {mapping.section} | {mapping.subjectId?.subjectFullName}
                     </option>
                   ))}
                 </Form.Select>
@@ -240,9 +238,9 @@ function GetStudentForm() {
             </Col>
           </Row>
 
-          {/* Time Slot + Date */}
+          {/* Time Slot */}
           <Row>
-            <Col md={6}>
+            <Col md={12}>
               <Form.Group className="mb-4">
                 <Form.Label
                   className="fw-semibold"
@@ -272,7 +270,10 @@ function GetStudentForm() {
                 </Form.Select>
               </Form.Group>
             </Col>
+          </Row>
 
+          {/* From Date + To Date */}
+          <Row>
             <Col md={6}>
               <Form.Group className="mb-4">
                 <Form.Label
@@ -283,13 +284,40 @@ function GetStudentForm() {
                     className="me-2"
                     style={{ color: "#8b5cf6" }}
                   />
-                  Select Date
+                  From Date
                 </Form.Label>
 
                 <Form.Control
                   type="date"
-                  value={selectedDate}
-                  onChange={(e) => setSelectedDate(e.target.value)}
+                  value={fromDate}
+                  onChange={(e) => setFromDate(e.target.value)}
+                  className="py-2"
+                  style={{
+                    borderRadius: "10px",
+                    border: "1px solid #cbd5e1",
+                    boxShadow: "none",
+                  }}
+                />
+              </Form.Group>
+            </Col>
+
+            <Col md={6}>
+              <Form.Group className="mb-4">
+                <Form.Label
+                  className="fw-semibold"
+                  style={{ color: "#1e293b" }}
+                >
+                  <FaCalendarAlt
+                    className="me-2"
+                    style={{ color: "#ef4444" }}
+                  />
+                  To Date
+                </Form.Label>
+
+                <Form.Control
+                  type="date"
+                  value={toDate}
+                  onChange={(e) => setToDate(e.target.value)}
                   className="py-2"
                   style={{
                     borderRadius: "10px",
@@ -301,47 +329,24 @@ function GetStudentForm() {
             </Col>
           </Row>
 
-          {/* Buttons */}
-          <div className="d-flex gap-3 mt-2 flex-wrap">
+          {/* Submit Button */}
+          <div className="d-flex gap-3 mt-2">
             <Button
               type="submit"
-              disabled={!selectedMapping || !selectedTimeSlot}
+              disabled={
+                !selectedMapping || !selectedTimeSlot || !fromDate || !toDate
+              }
               className="d-flex align-items-center justify-content-center gap-2 px-4 py-2 border-0"
               style={{
                 backgroundColor: "#2563eb",
                 borderRadius: "9px",
                 fontWeight: "600",
-                minWidth: "160px",
-              }}
-            >
-              <FaUserGraduate />
-              Get Students
-              <FaArrowRight size={12} />
-            </Button>
-
-            <Button
-              type="button"
-              disabled={!selectedMapping || !selectedTimeSlot || !selectedDate}
-              onClick={() =>
-                navigate("/viewattendance", {
-                  state: {
-                    formData: formData,
-                    facultyMapId: selectedMapping,
-                    SingletimeSlot: selectedTimeSlot,
-                    selectedDate: selectedDate,
-                  },
-                })
-              }
-              className="d-flex align-items-center justify-content-center gap-2 px-4 py-2 border-0"
-              style={{
-                backgroundColor: "#0f7631",
-                borderRadius: "9px",
-                fontWeight: "600",
-                minWidth: "180px",
+                minWidth: "220px",
               }}
             >
               <FaEye />
-              View Attendance
+              View E-Attendance Register
+              <FaArrowRight size={12} />
             </Button>
           </div>
         </Form>
@@ -350,4 +355,4 @@ function GetStudentForm() {
   );
 }
 
-export default GetStudentForm;
+export default AttendanceRegister;

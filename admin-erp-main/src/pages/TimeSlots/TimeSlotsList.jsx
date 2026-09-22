@@ -6,14 +6,15 @@ import axios from "axios";
 import { Modal, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 function TimeSlotList() {
   const navigate = useNavigate();
-
+  const token = localStorage.getItem("token");
   const [timeSlots, setTimeSlots] = useState([]);
   const [isDelete, setIsDelete] = useState(false);
   const [show, setShow] = useState(false);
-  const token = localStorage.getItem("token");
+
   useEffect(() => {
     axios({
       url: "http://localhost:3000/timeslots",
@@ -94,18 +95,22 @@ function TimeSlotList() {
               <td>{timeslot.timeSlot}</td>
 
               <td>
-                <i
-                  className="bi bi-pencil me-3 text-primary"
-                  style={{ cursor: "pointer" }}
+                <Button
+                  variant="outline-primary"
+                  title="Edit TimeSlot"
                   onClick={() => goToEdit(timeslot._id)}
                 >
-                  {" "}
-                </i>
-                <i
-                  className="bi bi-trash text-danger"
-                  style={{ cursor: "pointer" }}
+                  <FaEdit />
+                </Button>
+
+                <Button
+                  variant="outline-danger"
+                  title="Delete TimeSlot"
+                  className="ms-2"
                   onClick={() => goToDelete(timeslot._id)}
-                ></i>
+                >
+                  <FaTrash />
+                </Button>
               </td>
             </tr>
           ))}

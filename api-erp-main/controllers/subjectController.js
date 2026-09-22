@@ -90,7 +90,6 @@ async function deleteSubject(req, res) {
     try {
 
         const user = await User.findById(req.user._id);
-        
                 if (!user) {
                     return res.status(401).send({
                         success: false,

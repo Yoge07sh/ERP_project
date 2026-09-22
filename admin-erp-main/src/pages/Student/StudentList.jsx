@@ -4,6 +4,7 @@ import axios from "axios";
 import { Modal, Button, Form, InputGroup, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 
 function StudentList() {
   let navigate = useNavigate();
@@ -16,7 +17,6 @@ function StudentList() {
   let [searchByRollno] = useState("");
   let [searchByFileno] = useState("");
   const token = localStorage.getItem("token");
-
   useEffect(() => {
     axios({
       url: "http://localhost:3000/students",
@@ -88,7 +88,8 @@ function StudentList() {
         LIST OF STUDENTS
       </h3>
 
-      <InputGroup className="mb-3">
+      <InputGroup className="mb-3" style={{ width: "300px" }}>
+        {" "}
         <InputGroup.Text>
           <i className="bi bi-search"></i>
         </InputGroup.Text>
@@ -145,18 +146,29 @@ function StudentList() {
               </td>
 
               <td>
-                <i
-                  className="bi bi-eye me-3 text-warning"
+                <Button
+                  variant="outline-warning"
+                  title="View Student"
                   onClick={() => goToView(student._id)}
-                ></i>
-                <i
-                  className="bi bi-pencil me-3 text-primary"
+                >
+                  <FaEye />
+                </Button>
+                <Button
+                  variant="outline-primary"
+                  title="Edit Student"
+                  className="ms-2"
                   onClick={() => goToEdit(student._id)}
-                ></i>
-                <i
-                  className="bi bi-trash text-danger"
+                >
+                  <FaEdit />
+                </Button>
+                <Button
+                  variant="outline-danger"
+                  title="Delete Student"
+                  className="ms-2"
                   onClick={() => goToDelete(student._id)}
-                ></i>
+                >
+                  <FaTrash />
+                </Button>
               </td>
             </tr>
           ))}
