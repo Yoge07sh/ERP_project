@@ -98,12 +98,9 @@ function FacultyMappingList () {
   const handleDelete = async id => {
     try {
       const res = await axios({
-        url: apiUrl + "/delete/facultyMapping/" + id,
-        method: "delete",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+        url: apiUrl + '/delete/facultyMapping/' + id,
+        method: 'delete'
+      })
 
       if (res.data.success) {
         setShow(true)

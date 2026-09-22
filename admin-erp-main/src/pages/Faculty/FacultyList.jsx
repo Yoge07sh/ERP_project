@@ -84,23 +84,23 @@ function FacultyList() {
     formData.append("facultyData", file);
     formData.append("fileName", file.name);
     axios({
-      url: "http://localhost:3000/add/faculties",
-      method: "post",
+      url: 'http://localhost:3000/add/faculties',
+      method: 'post',
       data: formData,
       headers: {
-        "content-type": "multipart/form-data",
-      },
+        'content-type': 'multipart/form-data'
+      }
     })
-      .then((result) => {
-        if (result.data.success) setButtonDisabled(false);
-        setShow(true);
-        setShowSpinner(false);
+      .then(result => {
+        if (result.data.success) setButtonDisabled(false)
+        setShow(true)
+        setShowSpinner(false)
       })
-      .catch((err) => {
-        setShowSpinner(false);
-        setButtonDisabled(false);
-        alert(err);
-      });
+      .catch(err => {
+        setShowSpinner(false)
+        setButtonDisabled(false)
+        alert(err)
+      })
   }
 
   const handleClose = () => {
@@ -139,8 +139,8 @@ function FacultyList() {
     )
       .then((result) => {
         if (result.data.success) {
-          alert("Faculty deleted successfully");
-          setFaculties(faculties.filter((faculty) => faculty._id !== id));
+          alert('Faculty deleted successfully')
+          setFaculties(faculties.filter(faculty => faculty._id !== id))
         }
       })
       .catch((err) => {

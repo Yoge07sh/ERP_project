@@ -156,12 +156,12 @@ function BranchEdit() {
                 </Row>
 
 
-                <div className="d-flex justify-content-center gap-2 mt-4">
+                <div className="d-flex justify-content-center gap-3 mt-4">
                     <Button onClick={() => navigate('/branches')} variant="danger" type="button">
                         Cancel
                     </Button>
                     <Button onClick={()=>doEditBranch(branch._id)} variant="success" type='button' >
-                        Update
+                        Edit Branch
                     </Button>
                 </div>
             </Form>
