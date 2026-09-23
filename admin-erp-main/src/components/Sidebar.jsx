@@ -1,12 +1,10 @@
 import { NavLink, useNavigate } from "react-router-dom";
 
-import { ListGroup, Dropdown, Image } from "react-bootstrap";
+import { ListGroup } from "react-bootstrap";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import "bootstrap-icons/font/bootstrap-icons.css";
-
-import logo from "../assets/logo.png";
 
 import { useState, useEffect } from "react";
 
@@ -16,7 +14,6 @@ import { FaUserGraduate } from "react-icons/fa";
 function Sidebar() {
   let navigate = useNavigate();
 
-  let [username, setUserName] = useState("");
   let [userRole, setUserRole] = useState("");
 
   // Added for live clock
@@ -43,8 +40,6 @@ function Sidebar() {
         });
 
         if (res.data.success) {
-          setUserName(res.data.data.name);
-
           setUserRole(res.data.data.userRole);
         }
       } catch (error) {
@@ -71,17 +66,6 @@ function Sidebar() {
     return () => clearInterval(timer);
   }, []);
 
-  // ================= LOGOUT =================
-
-  function doLogout() {
-    localStorage.removeItem("token");
-
-    setUserName("");
-    setUserRole("");
-
-    navigate("/");
-  }
-
   // ================= ROLE CHECK =================
 
   const isAdmin = userRole === "admin";
@@ -100,61 +84,65 @@ function Sidebar() {
           boxShadow: "2px 0 8px rgba(0, 0, 0, 0.1)",
         }}
       >
-        {/* ================= LOGO ================= */}
-
-        <div className="p-1 d-flex align-items-center ">
-          <Image src={logo} width={40} height={40} className="me-2" />
-
-          <span
-            style={{ color: "#ffffff" }}
-            className="fw-bold d-none d-md-inline fs-2"
+        <div
+          style={{
+            textAlign: "center",
+            padding: "8px 2px",
+            color: "#ffffff",
+          }}
+        >
+          <div
+            style={{
+              fontSize: "14px",
+              fontWeight: "600",
+              lineHeight: "1.2",
+              fontVariantNumeric: "tabular-nums",
+            }}
           >
-            RDEC
-          </span>
-        </div>
+            {currentTime.toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+              hour12: false,
+            })}
+          </div>
 
-        <div className="sidebar-clock-wrapper mt-1">
-          <div className="sidebar-clock-box">
-            <div
-              className="sidebar-clock-time"
+          <div
+            style={{
+              marginTop: "2px",
+              fontSize: "11px",
+              color: "#b9c8d8",
+              lineHeight: "1.2",
+            }}
+          >
+            {currentTime.toLocaleDateString(undefined, {
+              weekday: "short",
+              day: "numeric",
+              month: "short",
+            })}
+          </div>
+
+          <div
+            style={{
+              marginTop: "2px",
+              fontSize: "10px",
+              color: "#22c55e",
+              fontWeight: "600",
+              lineHeight: "1.2",
+            }}
+          >
+            <i
+              className="bi bi-circle-fill"
               style={{
-                width: "100px",
-                margin: "0 auto",
-                fontVariantNumeric: "tabular-nums",
-                fontFeatureSettings: '"tnum"',
-                textAlign: "center",
+                fontSize: "5px",
+                marginRight: "4px",
               }}
-            >
-              {currentTime.toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit",
-                hour12: false,
-              })}
-            </div>
-            <div className="sidebar-clock-date">
-              {currentTime.toLocaleDateString(undefined, {
-                weekday: "short",
-                day: "numeric",
-                month: "short",
-              })}
-            </div>
-            <div
-              className="sidebar-clock-live"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "4px",
-              }}
-            >
-              <i className="bi bi-circle-fill"></i> Live
-            </div>
+            ></i>
+            Live
           </div>
         </div>
 
         {/* ================= SIDEBAR MENU ================= */}
-
         <div className="flex-grow-1 border-top mt-3 overflow-auto">
           <ListGroup
             variant="flush"
@@ -288,50 +276,6 @@ function Sidebar() {
               </>
             )}
           </ListGroup>
-        </div>
-
-        {/* ================= PROFILE DROPDOWN ================= */}
-
-        <div className="border-top p-3">
-          <Dropdown drop="up">
-            <Dropdown.Toggle
-              variant="light"
-              className="w-100 d-flex align-items-center justify-content-between"
-            >
-              <div className="d-none d-md-flex align-items-center">
-                <div>
-                  <h6 className="mb-0">
-                    {username || "User"}
-
-                    {" :- "}
-
-                    <small className="text-muted text-capitalize">
-                      {userRole || "User"}
-                    </small>
-                  </h6>
-                </div>
-              </div>
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu className="w-100">
-              <Dropdown.Item as={NavLink} to="/profile">
-                <i className="bi bi-person me-2"></i>
-                Profile
-              </Dropdown.Item>
-
-              <Dropdown.Item as={NavLink} to="/settings">
-                <i className="bi bi-gear me-2"></i>
-                Settings
-              </Dropdown.Item>
-
-              <Dropdown.Divider />
-
-              <Dropdown.Item onClick={doLogout}>
-                <i className="bi bi-box-arrow-right me-2"></i>
-                Logout
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
         </div>
       </div>
     </>

@@ -6,7 +6,7 @@ import {
   Row,
   Col,
   Badge,
-  Modal
+  Modal,
 } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useState } from "react";
@@ -29,6 +29,8 @@ function StudentsAttendance() {
   const [attendance, setAttendance] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [show, setShow] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const handleClose = () => {
     setShow(false);
   };
@@ -77,8 +79,10 @@ function StudentsAttendance() {
       }
     } catch (err) {
       console.error("Attendance submission error:", err);
-
-      alert(err.response?.data?.message || "Failed to submit attendance");
+      setErrorMessage(
+        err.response?.data?.message || "Failed to submit attendance",
+      );
+      setShowError(true);
     } finally {
       setSubmitting(false);
     }
@@ -313,6 +317,23 @@ function StudentsAttendance() {
                   navigate("/getstudents");
                 }}
               >
+                OK
+              </Button>
+            </Modal.Footer>
+          </Modal>
+          <Modal show={showError} onHide={() => setShowError(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title className="text-danger">
+                Submission Failed
+              </Modal.Title>
+            </Modal.Header>
+
+            <Modal.Body>
+              <div className="text-danger fw-semibold">{errorMessage}</div>
+            </Modal.Body>
+
+            <Modal.Footer>
+              <Button variant="danger" onClick={() => setShowError(false)}>
                 OK
               </Button>
             </Modal.Footer>

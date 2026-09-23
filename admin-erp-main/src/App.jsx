@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import WelcomePage from "./pages/WelcomePage/WelcomePage";
-
+import AdminNavbar from "./components/AdminNavbar";
 // Branch
 import AddBranch from "./pages/Branch/AddBranch";
 import BranchList from "./pages/Branch/BranchList";
@@ -59,94 +59,105 @@ function App() {
       <Routes>
         <Route path="/" element={<AdminLogin />} />
       </Routes>
+      <div>
+        <AdminNavbar></AdminNavbar>
+        <div className="d-flex">
+          <Sidebar />
+          <main style={{ flexGrow: 1, padding: "20px" }}>
+            <Routes>
+              <Route path="/admin/dashboard" element={<WelcomePage />} />
 
-      <div className="d-flex">
-        <Sidebar />
-        <main style={{ flexGrow: 1, padding: "20px" }}>
-          <Routes>
-            <Route path="/admin/dashboard" element={<WelcomePage />} />
+              {/* Welcome Page */}
+              <Route path="/" element={<WelcomePage />} />
 
-            {/* Welcome Page */}
-            <Route path="/" element={<WelcomePage />} />
+              {/* Courses */}
+              <Route path="/courses" element={<CourseList />} />
+              <Route path="/add/course" element={<AddCourse />} />
+              <Route path="/edit/course/:id" element={<CourseEdit />} />
 
-            {/* Courses */}
-            <Route path="/courses" element={<CourseList />} />
-            <Route path="/add/course" element={<AddCourse />} />
-            <Route path="/edit/course/:id" element={<CourseEdit />} />
+              {/* Branches */}
+              <Route path="/branches" element={<BranchList />} />
+              <Route path="/add/branch" element={<AddBranch />} />
+              <Route path="/edit/branch/:id" element={<BranchEdit />} />
 
-            {/* Branches */}
-            <Route path="/branches" element={<BranchList />} />
-            <Route path="/add/branch" element={<AddBranch />} />
-            <Route path="/edit/branch/:id" element={<BranchEdit />} />
+              {/* Subjects */}
+              <Route path="/subjects" element={<SubjectList />} />
+              <Route path="/add/subject" element={<AddSubject />} />
+              <Route path="/edit/subject/:id" element={<SubjectEdit />} />
 
-            {/* Subjects */}
-            <Route path="/subjects" element={<SubjectList />} />
-            <Route path="/add/subject" element={<AddSubject />} />
-            <Route path="/edit/subject/:id" element={<SubjectEdit />} />
+              {/* Subject Mapping */}
+              <Route path="/subjectsmap" element={<SubjectMappingList />} />
+              <Route
+                path="/add/subjectmapping"
+                element={<AddSubjectMapping />}
+              />
+              <Route
+                path="/edit/subjectMapping/:id"
+                element={<EditSubjectMapping />}
+              />
+              <Route path="/add/faculty" element={<AddFaculty />} />
+              <Route path="/faculty/:id" element={<FacultyProfile />} />
 
-            {/* Subject Mapping */}
-            <Route path="/subjectsmap" element={<SubjectMappingList />} />
-            <Route path="/add/subjectmapping" element={<AddSubjectMapping />} />
-            <Route
-              path="/edit/subjectMapping/:id"
-              element={<EditSubjectMapping />}
-            />
-            <Route path="/add/faculty" element={<AddFaculty />} />
-            <Route path="/faculty/:id" element={<FacultyProfile />} />
+              {/* Students */}
 
-            {/* Students */}
+              <Route path="/students" element={<StudentList />} />
+              <Route path="/add/student" element={<AddStudent />} />
+              <Route path="/edit/student/:id" element={<StudentEdit />} />
+              <Route path="/student/profile/:id" element={<StudentProfile />} />
 
-            <Route path="/students" element={<StudentList />} />
-            <Route path="/add/student" element={<AddStudent />} />
-            <Route path="/edit/student/:id" element={<StudentEdit />} />
-            <Route path="/student/profile/:id" element={<StudentProfile />} />
+              {/*TimeSlots*/}
+              <Route path="/timeslots" element={<TimeSlotList />} />
+              <Route path="/add/timeslots" element={<AddTimeSlot />} />
+              <Route path="/edit/timeslot/:id" element={<EditTimeSlot />} />
 
-            {/*TimeSlots*/}
-            <Route path="/timeslots" element={<TimeSlotList />} />
-            <Route path="/add/timeslots" element={<AddTimeSlot />} />
-            <Route path="/edit/timeslot/:id" element={<EditTimeSlot />} />
+              {/*facultyMapping*/}
+              <Route
+                path="/facultymapping"
+                element={<FacultyMappingList></FacultyMappingList>}
+              ></Route>
+              <Route
+                path="/add/facultymapping"
+                element={<AddFacultyMapping></AddFacultyMapping>}
+              ></Route>
+              <Route
+                path="/edit/facultymapping/:id"
+                element={<EditFacultyMapping></EditFacultyMapping>}
+              ></Route>
 
-            {/*facultyMapping*/}
-            <Route
-              path="/facultymapping"
-              element={<FacultyMappingList></FacultyMappingList>}
-            ></Route>
-            <Route
-              path="/add/facultymapping"
-              element={<AddFacultyMapping></AddFacultyMapping>}
-            ></Route>
-            <Route
-              path="/edit/facultymapping/:id"
-              element={<EditFacultyMapping></EditFacultyMapping>}
-            ></Route>
+              {/*faculty*/}
+              <Route path="/faculties" element={<FacultyList />}></Route>
+              <Route path="/add/faculty" element={<AddFaculty />} />
+              <Route path="/edit/faculty/:id" element={<FacultyEdit />} />
+              <Route path="/faculty/profile/:id" element={<FacultyProfile />} />
 
-            {/*faculty*/}
-            <Route path="/faculties" element={<FacultyList />}></Route>
-            <Route path="/add/faculty" element={<AddFaculty />} />
-            <Route path="/edit/faculty/:id" element={<FacultyEdit />} />
-            <Route path="/faculty/profile/:id" element={<FacultyProfile />} />
-
-            {/*Attendance*/}
-            <Route
-              path="/getstudents"
-              element={<GetStudentForm></GetStudentForm>}
-            ></Route>
-            <Route
-              path="/studentsattendance"
-              element={<StudentsAttendance></StudentsAttendance>}
-            ></Route>
-            <Route
-              path="/viewattendance"
-              element={<ViewAttendance></ViewAttendance>}
-            />
-            <Route
-              path="/edit/attendance/:facultyMapId/:SingletimeSlot/:selectedDate"
-              element={<EditAttendance />}
-            />
-            <Route path="/register" element={<AttendanceRegister></AttendanceRegister>}></Route>
-            <Route path="/eregister" element={<Eregister></Eregister>}></Route>
-          </Routes>
-        </main>
+              {/*Attendance*/}
+              <Route
+                path="/getstudents"
+                element={<GetStudentForm></GetStudentForm>}
+              ></Route>
+              <Route
+                path="/studentsattendance"
+                element={<StudentsAttendance></StudentsAttendance>}
+              ></Route>
+              <Route
+                path="/viewattendance"
+                element={<ViewAttendance></ViewAttendance>}
+              />
+              <Route
+                path="/edit/attendance/:facultyMapId/:SingletimeSlot/:selectedDate"
+                element={<EditAttendance />}
+              />
+              <Route
+                path="/register"
+                element={<AttendanceRegister></AttendanceRegister>}
+              ></Route>
+              <Route
+                path="/eregister"
+                element={<Eregister></Eregister>}
+              ></Route>
+            </Routes>
+          </main>
+        </div>
       </div>
     </BrowserRouter>
   );

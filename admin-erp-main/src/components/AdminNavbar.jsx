@@ -1,50 +1,94 @@
-import  { useState } from "react";
-import { Navbar, Container, Dropdown } from "react-bootstrap";
+import { Navbar, Container, Button } from "react-bootstrap";
 import logo from "../assets/logo.png";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 function AdminNavbar() {
-  const [show, setShow] = useState(false);
+  const username = localStorage.getItem("name") || "Admin";
 
-  const handleMouseEnter = () => setShow(true);
-  const handleMouseLeave = () => setShow(false);
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("name");
+    window.location.href = "/";
+  };
 
   return (
-    <Navbar sticky="top" bg="dark" data-bs-theme="dark" className="bg-body-tertiary">
-      <Container>
-        <Navbar.Brand href="#home">
+    <Navbar
+      sticky="top"
+      style={{
+        height: "70px",
+        backgroundColor: "#0b2d52",
+        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
+        zIndex: 1030,
+      }}
+    >
+      <Container fluid className="px-4">
+        {/* LOGO + BRAND */}
+        <Navbar.Brand
+          href="#home"
+          className="d-flex align-items-center"
+          style={{
+            color: "#ffffff",
+            fontWeight: "700",
+            fontSize: "18px",
+            textDecoration: "none",
+          }}
+        >
           <img
-            alt=""
+            alt="RDEC"
             src={logo}
-            width="50"
-            height="50"
-            className="d-inline-block"
-          />{" "}
-          RDEC
+            width="45"
+            height="45"
+            style={{
+              objectFit: "contain",
+              marginRight: "10px",
+            }}
+          />
+
+          <span>RDEC ERP</span>
         </Navbar.Brand>
 
-        <Navbar.Toggle />
-        <Navbar.Collapse className="justify-content-end">
-          <Dropdown
-            show={show}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
+        {/* USER + LOGOUT */}
+        <div className="ms-auto d-flex align-items-center gap-3">
+          {/* USERNAME */}
+          <div
+            className="d-flex align-items-center"
+            style={{
+              color: "#ffffff",
+              fontSize: "14px",
+              fontWeight: "600",
+            }}
           >
-            <Dropdown.Toggle
-              as="a"
-              className="text-light nav-link"
-              style={{ cursor: "pointer" }}
-            >
-              Welcome, Admin
-            </Dropdown.Toggle>
+            <i
+              className="bi bi-person-circle"
+              style={{
+                fontSize: "20px",
+                marginRight: "8px",
+              }}
+            ></i>
+            Welcome, {username}
+          </div>
 
-            <Dropdown.Menu align="end">
-              <Dropdown.Item href="#profile">Profile</Dropdown.Item>
-              <Dropdown.Item href="#settings">Settings</Dropdown.Item>
-              <Dropdown.Divider />
-              <Dropdown.Item href="#logout">Logout</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </Navbar.Collapse>
+          {/* LOGOUT BUTTON */}
+          <Button
+            onClick={handleLogout}
+            variant="outline-light"
+            className="d-flex align-items-center"
+            style={{
+              borderRadius: "6px",
+              padding: "6px 12px",
+              fontSize: "13px",
+              fontWeight: "600",
+            }}
+          >
+            <i
+              className="bi bi-box-arrow-right"
+              style={{
+                marginRight: "6px",
+              }}
+            ></i>
+            Logout
+          </Button>
+        </div>
       </Container>
     </Navbar>
   );
