@@ -112,7 +112,7 @@ async function doLogin(req, res) {
       secret_key,
 
       {
-        expiresIn: "24h",
+        expiresIn: "30d",
       },
     );
 

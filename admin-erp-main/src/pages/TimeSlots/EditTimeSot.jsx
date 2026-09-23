@@ -470,7 +470,6 @@ function EditTimeSlot() {
           </Button>
         </div>
       </Form>
-
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Success</Modal.Title>
