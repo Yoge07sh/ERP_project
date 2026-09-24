@@ -4,12 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 const apiUrl = import.meta.env.VITE_API_URL;
-import {
-  FaClipboardCheck,
-  FaCalendarAlt,
-  FaClock,
-  FaArrowLeft,
-} from "react-icons/fa";
+import { FaClipboardCheck, FaCalendarAlt, FaArrowLeft } from "react-icons/fa";
 
 function Eregister() {
   const location = useLocation();
@@ -18,7 +13,6 @@ function Eregister() {
   const {
     formData = {},
     facultyMapId = "",
-    timeSlotId = "",
     fromDate = "",
     toDate = "",
   } = location.state || {};
@@ -33,7 +27,6 @@ function Eregister() {
       const response = await axios.get(`${apiUrl}/eregister`, {
         params: {
           mappingId: facultyMapId,
-          timeSlotId: timeSlotId,
           fromDate: fromDate,
           toDate: toDate,
         },
@@ -57,10 +50,11 @@ function Eregister() {
     }
   };
   useEffect(() => {
-    if (facultyMapId && timeSlotId && fromDate && toDate) {
+    if (facultyMapId && fromDate && toDate) {
       getERegister();
     }
-  }, [facultyMapId, timeSlotId, fromDate, toDate]);
+  }, [facultyMapId, fromDate, toDate]);
+  // Get all unique students
   // Get all unique students
   // Get all unique students
   const students = [];
@@ -85,29 +79,55 @@ function Eregister() {
       }
     });
   });
-  // Find attendance for a student on a particular date/time slot
-  // Calculate attendance percentage
-  const getStudentStatus = (student, record) => {
-    const attendance = record.students?.find(
-      (item) => item.studentId?._id === student.studentId,
-    );
 
-    return attendance?.status || "-";
+  // Get all unique dates
+  const dates = [
+    ...new Set(
+      attendanceRecords.map((record) => {
+        return new Date(record.date).toISOString().split("T")[0];
+      }),
+    ),
+  ].sort();
+
+  // Get attendance for a student on a particular date
+  const getStudentDateAttendance = (student, date) => {
+    return attendanceRecords.filter((record) => {
+      const recordDate = new Date(record.date).toISOString().split("T")[0];
+
+      return (
+        recordDate === date &&
+        record.students?.some(
+          (item) => item.studentId?._id === student.studentId,
+        )
+      );
+    });
   };
-  const getAttendancePercentage = (student) => {
-    const total = attendanceRecords.length;
 
-    if (total === 0) {
-      return 0;
+  // Get attendance percentage
+  const getAttendancePercentage = (student) => {
+    let totalLectures = 0;
+    let presentLectures = 0;
+
+    attendanceRecords.forEach((record) => {
+      const attendance = record.students?.find(
+        (item) => item.studentId?._id === student.studentId,
+      );
+
+      if (attendance) {
+        totalLectures++;
+
+        if (attendance.status === "Present") {
+          presentLectures++;
+        }
+      }
+    });
+
+    if (totalLectures === 0) {
+      return "0.0";
     }
 
-    const present = attendanceRecords.filter(
-      (record) => getStudentStatus(student, record) === "Present",
-    ).length;
-
-    return ((present / total) * 100).toFixed(1);
+    return ((presentLectures / totalLectures) * 100).toFixed(1);
   };
-
   const formatDate = (date) => {
     if (!date) return "-";
 
@@ -158,7 +178,7 @@ function Eregister() {
                 fontSize: "12px",
               }}
             >
-              Date and time slot wise attendance register
+              Date and Lecture wise attendance register
             </p>
           </div>
         </div>
@@ -210,19 +230,6 @@ function Eregister() {
                 <small className="text-muted d-block">SECTION</small>
                 <div className="fw-bold">{formData.section || "-"}</div>
               </Col>
-
-              {/* Time Slot */}
-              <Col lg={2} md={4} sm={6}>
-                <small className="text-muted d-block">TIME SLOT</small>
-
-                <div className="fw-bold text-primary d-flex align-items-center justify-content-center gap-1">
-                  <FaClock size={13} />
-                  <span>
-                    {attendanceRecords[0]?.timeSlotId?.timeSlot ||
-                      "Selected Time Slot"}
-                  </span>
-                </div>
-              </Col>
             </Row>
           </div>
 
@@ -259,7 +266,7 @@ function Eregister() {
             <h5 className="fw-bold mb-1">Attendance Register</h5>
 
             <small className="text-muted">
-              Attendance for selected time slot and date range
+              Attendance for all Lectures within the selected date range
             </small>
           </div>
 
@@ -269,7 +276,7 @@ function Eregister() {
                 <tr>
                   <th
                     style={{
-                      minWidth: "90px",
+                      minWidth: "50px",
                     }}
                   >
                     S.No
@@ -277,7 +284,7 @@ function Eregister() {
 
                   <th
                     style={{
-                      minWidth: "110px",
+                      minWidth: "100px",
                     }}
                   >
                     Roll No.
@@ -286,41 +293,38 @@ function Eregister() {
                   <th
                     className="text-start"
                     style={{
-                      minWidth: "180px",
+                      minWidth: "100px",
                     }}
                   >
                     Student Name
                   </th>
 
-                  {attendanceRecords.map((record, index) => (
+                  {dates.map((date) => (
                     <th
-                      key={index}
+                      key={date}
                       style={{
-                        minWidth: "140px",
+                        minWidth: "80px",
                       }}
                     >
-                      <div>{formatDate(record.date)}</div>
-
-                      <small>{record.timeSlotId?.timeSlot || "-"}</small>
+                      {formatDate(date)}
                     </th>
                   ))}
 
                   <th
                     style={{
-                      minWidth: "110px",
+                      minWidth: "100px",
                     }}
                   >
                     Attendance %
                   </th>
                 </tr>
               </thead>
-
               <tbody>
                 {students.map((student, index) => {
                   const percentage = getAttendancePercentage(student);
 
                   return (
-                    <tr key={student.rollNumber}>
+                    <tr key={student.studentId}>
                       <td>{index + 1}</td>
 
                       <td className="fw-semibold">{student.rollNumber}</td>
@@ -329,21 +333,65 @@ function Eregister() {
                         {student.firstName} {student.lastName}
                       </td>
 
-                      {attendanceRecords.map((record, recordIndex) => {
-                        const status = getStudentStatus(student, record);
+                      {dates.map((date) => {
+                        const dateRecords = getStudentDateAttendance(
+                          student,
+                          date,
+                        );
 
                         return (
-                          <td key={recordIndex}>
-                            {status === "Present" && (
-                              <span className="badge bg-success">P</span>
-                            )}
-
-                            {status === "Absent" && (
-                              <span className="badge bg-danger">A</span>
-                            )}
-
-                            {status === "-" && (
+                          <td
+                            key={date}
+                            style={{
+                              minWidth: "80px",
+                              padding: "5px",
+                            }}
+                          >
+                            {dateRecords.length === 0 ? (
                               <span className="text-muted">-</span>
+                            ) : (
+                              <div
+                                style={{
+                                  display: "grid",
+                                  gridTemplateColumns: "repeat(2, 1fr)",
+                                  gap: "2px",
+                                }}
+                              >
+                                {dateRecords.map((record) => {
+                                  const attendance = record.students?.find(
+                                    (item) =>
+                                      item.studentId?._id === student.studentId,
+                                  );
+
+                                  const lectureNo =
+                                    record.timeSlotId?.lectureNo;
+                                  const status = attendance?.status;
+
+                                  return (
+                                    <span
+                                      key={record._id}
+                                      className={
+                                        status === "Present"
+                                          ? "text-success fw-bold"
+                                          : status === "Absent"
+                                            ? "text-danger fw-bold"
+                                            : "text-secondary fw-bold"
+                                      }
+                                      style={{
+                                        fontSize: "13px",
+                                        minWidth: "25px",
+                                      }}
+                                    >
+                                      L{lectureNo}:
+                                      {status === "Present"
+                                        ? "P"
+                                        : status === "Absent"
+                                          ? "A"
+                                          : "-"}
+                                    </span>
+                                  );
+                                })}
+                              </div>
                             )}
                           </td>
                         );
@@ -352,7 +400,7 @@ function Eregister() {
                       <td>
                         <span
                           className={
-                            percentage >= 75
+                            Number(percentage) >= 75
                               ? "badge bg-success"
                               : "badge bg-danger"
                           }
