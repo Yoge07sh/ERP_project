@@ -50,7 +50,7 @@ import StudentsAttendance from "./pages/Attendance/StudentsAttendance";
 import ViewAttendance from "./pages/Attendance/ViewAttendance";
 import EditAttendance from "./pages/Attendance/EditAttendance";
 import AttendanceRegister from "./pages/Attendance/AttendanceRegister";
-import Eregister from "./pages/Attendance/ERegister";
+import Eregister from "./pages/Attendance/Eregister";
 
 function App() {
   return (
