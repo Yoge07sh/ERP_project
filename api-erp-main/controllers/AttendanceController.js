@@ -454,20 +454,32 @@ const updateAttendance = async (req, res) => {
 
 const getEregister = async (req, res) => {
   try {
-    const { mappingId, timeSlotId, fromDate, toDate } = req.query;
+    const { mappingId, fromDate, toDate } = req.query;
 
-    if (!mappingId || !timeSlotId || !fromDate || !toDate) {
+    // Validate required fields
+    if (!mappingId || !fromDate || !toDate) {
       return res.status(400).json({
         success: false,
-        message: "Mapping ID, Time Slot, From Date and To Date are required",
+        message: "Mapping ID, From Date and To Date are required",
+      });
+    }
+
+    // Validate date range
+    if (fromDate > toDate) {
+      return res.status(400).json({
+        success: false,
+        message: "From Date cannot be greater than To Date",
       });
     }
 
     // Convert date-only values into India date boundaries
     const startDate = new Date(`${fromDate}T00:00:00+05:30`);
     const endDate = new Date(`${toDate}T23:59:59.999+05:30`);
+
+    // Logged-in user's ID from JWT
     const userId = req.user._id;
 
+    // Find logged-in faculty
     const faculty = await Faculty.findOne({
       userId: userId,
     });
@@ -479,19 +491,53 @@ const getEregister = async (req, res) => {
       });
     }
 
+    // Verify that this mapping belongs to the logged-in faculty
+    const facultyMap = await FacultyMap.findOne({
+      _id: mappingId,
+      facultyId: faculty._id,
+    });
+
+    if (!facultyMap) {
+      return res.status(403).json({
+        success: false,
+        message: "You are not authorized to view this faculty mapping",
+      });
+    }
+
+    // Get ALL attendance records for this mapping
+    // within the selected date range.
+    // attendance of every lecture.
     const attendanceRecords = await Attendance.find({
       facultyMapId: mappingId,
-      timeSlotId: timeSlotId,
       date: {
         $gte: startDate,
         $lte: endDate,
       },
     })
-      .populate("timeSlotId")
+      .populate({
+        path: "timeSlotId",
+        select: "lectureNo timeSlot",
+      })
       .populate({
         path: "students.studentId",
+        select: "rollNumber firstName lastName",
       })
-      .sort({ date: 1 });
+      .sort({
+        date: 1,
+      });
+
+    // Sort by date and then lecture number
+    attendanceRecords.sort((a, b) => {
+      const dateDifference = new Date(a.date) - new Date(b.date);
+
+      if (dateDifference !== 0) {
+        return dateDifference;
+      }
+
+      return (
+        (a.timeSlotId?.lectureNo ?? 999) - (b.timeSlotId?.lectureNo ?? 999)
+      );
+    });
 
     return res.status(200).json({
       success: true,
@@ -507,7 +553,6 @@ const getEregister = async (req, res) => {
     });
   }
 };
-
 module.exports = {
   getStudentsData,
   getFacultyMappings,

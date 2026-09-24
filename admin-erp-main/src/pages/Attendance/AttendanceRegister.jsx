@@ -6,7 +6,6 @@ import axios from "axios";
 
 import {
   FaChalkboardTeacher,
-  FaClock,
   FaCalendarAlt,
   FaEye,
   FaArrowRight,
@@ -20,13 +19,8 @@ function AttendanceRegister() {
 
   const [mappings, setMappings] = useState([]);
   const [selectedMapping, setSelectedMapping] = useState("");
-
-  const [timeslots, setTimeSlots] = useState([]);
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
-
   const [fromDate, setFromDate] = useState("");
-  const [toDate, setToDate] = useState("");
-
+  const [toDate, setToDate] = useState(new Date().toISOString().split("T")[0]);
   const [formData, setFormData] = useState({
     session: "",
     course: "",
@@ -59,19 +53,6 @@ function AttendanceRegister() {
       .catch((err) => {
         console.error("Error fetching faculty mappings:", err);
         alert("Failed to load faculty mappings.");
-      });
-  }, []);
-
-  // Get time slots
-  useEffect(() => {
-    axios
-      .get(`${apiUrl}/timeslots`)
-      .then((res) => {
-        setTimeSlots(res.data.data);
-      })
-      .catch((err) => {
-        console.error("Error fetching time slots:", err);
-        alert("Failed to load time slots.");
       });
   }, []);
 
@@ -119,11 +100,6 @@ function AttendanceRegister() {
       return;
     }
 
-    if (!selectedTimeSlot) {
-      alert("Please select a time slot.");
-      return;
-    }
-
     if (!fromDate) {
       alert("Please select From Date.");
       return;
@@ -138,12 +114,11 @@ function AttendanceRegister() {
       alert("From Date cannot be greater than To Date.");
       return;
     }
-    
+
     navigate("/eregister", {
       state: {
         formData,
         facultyMapId: selectedMapping,
-        timeSlotId: selectedTimeSlot,
         fromDate,
         toDate,
       },
@@ -186,10 +161,10 @@ function AttendanceRegister() {
               className="mb-0"
               style={{
                 color: "#cbd5e1",
-                fontSize: "14px",
+                fontSize: "12px",
               }}
             >
-              Select class, lecture time and date range to view attendance
+              Select class, date range to view attendance
             </p>
           </div>
         </div>
@@ -237,41 +212,6 @@ function AttendanceRegister() {
               </Form.Group>
             </Col>
           </Row>
-
-          {/* Time Slot */}
-          <Row>
-            <Col md={12}>
-              <Form.Group className="mb-4">
-                <Form.Label
-                  className="fw-semibold"
-                  style={{ color: "#1e293b" }}
-                >
-                  <FaClock className="me-2" style={{ color: "#0ea5e9" }} />
-                  Select Time Slot
-                </Form.Label>
-
-                <Form.Select
-                  value={selectedTimeSlot}
-                  onChange={(e) => setSelectedTimeSlot(e.target.value)}
-                  className="py-2"
-                  style={{
-                    borderRadius: "10px",
-                    border: "1px solid #cbd5e1",
-                    boxShadow: "none",
-                  }}
-                >
-                  <option value="">Select Time Slot</option>
-
-                  {timeslots.map((t) => (
-                    <option key={t._id} value={t._id}>
-                      Lecture {t.lectureNo} - {t.timeSlot}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
-            </Col>
-          </Row>
-
           {/* From Date + To Date */}
           <Row>
             <Col md={6}>
@@ -291,6 +231,7 @@ function AttendanceRegister() {
                   type="date"
                   value={fromDate}
                   onChange={(e) => setFromDate(e.target.value)}
+                  max={new Date().toISOString().split("T")[0]}
                   className="py-2"
                   style={{
                     borderRadius: "10px",
@@ -318,6 +259,7 @@ function AttendanceRegister() {
                   type="date"
                   value={toDate}
                   onChange={(e) => setToDate(e.target.value)}
+                  max={new Date().toISOString().split("T")[0]}
                   className="py-2"
                   style={{
                     borderRadius: "10px",
@@ -333,9 +275,7 @@ function AttendanceRegister() {
           <div className="d-flex gap-3 mt-2">
             <Button
               type="submit"
-              disabled={
-                !selectedMapping || !selectedTimeSlot || !fromDate || !toDate
-              }
+              disabled={!selectedMapping || !fromDate || !toDate}
               className="d-flex align-items-center justify-content-center gap-2 px-4 py-2 border-0"
               style={{
                 backgroundColor: "#2563eb",
