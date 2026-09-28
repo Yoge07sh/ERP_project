@@ -5,7 +5,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import axios from "axios";
 import { Form, InputGroup, Button, Modal, Pagination } from "react-bootstrap";
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
-const apiUrl = import.meta.env.VITE_API__URL;
+const apiUrl = import.meta.env.VITE_API_URL;
 
 function FacultyList() {
   const [show, setShow] = useState(false);
@@ -34,7 +34,7 @@ function FacultyList() {
 
   useEffect(() => {
     axios({
-      url: apiUrl+"/faculties",
+      url: apiUrl + "/faculties",
       method: "get",
       params: {
         firstName: searchByFacultyName,
@@ -58,7 +58,7 @@ function FacultyList() {
   function searchFacutly(firstName) {
     setSearchByFacultyName(firstName);
     axios({
-      url: apiUrl+"/faculty/search/" + firstName,
+      url: apiUrl + "/faculty/search/" + firstName,
       method: "get",
       params: {
         firstName: searchByFacultyName,
@@ -84,23 +84,23 @@ function FacultyList() {
     formData.append("facultyData", file);
     formData.append("fileName", file.name);
     axios({
-      url: apiUrl+'/add/faculties',
-      method: 'post',
+      url: apiUrl + "/add/faculties",
+      method: "post",
       data: formData,
       headers: {
-        'content-type': 'multipart/form-data'
-      }
+        "content-type": "multipart/form-data",
+      },
     })
-      .then(result => {
-        if (result.data.success) setButtonDisabled(false)
-        setShow(true)
-        setShowSpinner(false)
+      .then((result) => {
+        if (result.data.success) setButtonDisabled(false);
+        setShow(true);
+        setShowSpinner(false);
       })
-      .catch(err => {
-        setShowSpinner(false)
-        setButtonDisabled(false)
-        alert(err)
-      })
+      .catch((err) => {
+        setShowSpinner(false);
+        setButtonDisabled(false);
+        alert(err);
+      });
   }
 
   const handleClose = () => {
@@ -128,7 +128,7 @@ function FacultyList() {
 
     axios(
       {
-        url: apiUrl+"/delete/faculty/" + id,
+        url: apiUrl + "/delete/faculty/" + id,
         method: "delete",
       },
       {
@@ -139,8 +139,8 @@ function FacultyList() {
     )
       .then((result) => {
         if (result.data.success) {
-          alert('Faculty deleted successfully')
-          setFaculties(faculties.filter(faculty => faculty._id !== id))
+          alert("Faculty deleted successfully");
+          setFaculties(faculties.filter((faculty) => faculty._id !== id));
         }
       })
       .catch((err) => {
@@ -200,7 +200,7 @@ function FacultyList() {
             <tr>
               <td>
                 <img
-                  src={faculty.facultyImage}
+                  src={faculty.facultyImage || undefined}
                   height="50px"
                   width="50px"
                   alt=""

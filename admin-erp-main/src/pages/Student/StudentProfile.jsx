@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Button, Card, Spinner, Image } from 'react-bootstrap';
 import axios from 'axios';
 import "bootstrap/dist/css/bootstrap.min.css";
-
+const apiurl = import.meta.env.VITE_API_URL
 function StudentProfile() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -12,7 +12,7 @@ function StudentProfile() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/student/${id}`)
+      .get(`${apiUrl}/student/${id}`)
       .then((result) => {
         setStudent(result.data.data);
         setLoading(false);

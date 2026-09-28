@@ -5,7 +5,7 @@ import { Modal, Button, Form, InputGroup, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
-const apiUrl = import.meta.env.VITE_API__URL;
+const apiUrl = import.meta.env.VITE_API_URL;
 
 function StudentList() {
   let navigate = useNavigate();
@@ -124,7 +124,7 @@ function StudentList() {
           {students.map((student) => (
             <tr>
               <td>
-                <img src={student.image} width="60px" height="80px" alt="pic" />
+                <img src={student.image || undefined} width="60px" height="80px" alt="pic" />
               </td>
               <td>{student.enrollmentNumber}</td>
               <td>

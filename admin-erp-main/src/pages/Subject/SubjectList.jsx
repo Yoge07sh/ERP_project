@@ -5,7 +5,7 @@ import { Modal, Button, Form, InputGroup, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
-const apiUrl = import.meta.env.VITE_API__URL;
+const apiUrl = import.meta.env.VITE_API_URL;
 
 function SubjectList() {
   let navigate = useNavigate();
@@ -16,97 +16,100 @@ function SubjectList() {
   const token = localStorage.getItem("token");
   useEffect(() => {
     axios({
-      url: 'http://localhost:3000/subjects',
-      method: 'get',
+      url: apiUrl + "/subjects",
+      method: "get",
       params: {
-        subjectFullName: searchBySubjectName
-      }
+        subjectFullName: searchBySubjectName,
+      },
     })
-      .then(result => {
+      .then((result) => {
         if (result.data.success) {
           setSubjects(result.data.data);
         }
       })
-      .catch(error => {
-        console.log(error)
-      })
-  }, [isDelete, searchBySubjectName])
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [isDelete, searchBySubjectName]);
 
-  function searchSubject (subjectFullName) {
-    setSearchBySubjectName(subjectFullName)
+  function searchSubject(subjectFullName) {
+    setSearchBySubjectName(subjectFullName);
     axios({
-      url: apiUrl+'/subject/search/' + subjectFullName,
-      method: 'get',
+      url: apiUrl + "/subject/search/" + subjectFullName,
+      method: "get",
       params: {
-        courseFullName: searchBySubjectName
-      }
+        courseFullName: searchBySubjectName,
+      },
     })
-      .then(result => {
+      .then((result) => {
         if (result.data.success) {
-          setSubjects(result.data.data)
+          setSubjects(result.data.data);
           // setCourses(result.data.data || []);
         }
       })
-      .catch(error => {
-        console.log(error)
-      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   const handleClose = () => {
-    setShow(false)
-    setIsDelete(true)
+    setShow(false);
+    setIsDelete(true);
+  };
+
+  function goToEdit(id) {
+    console.log("Navigating to edit subject with ID:", id);
+    navigate("/edit/subject/" + id);
   }
 
-  function goToEdit (id) {
-    console.log('Navigating to edit subject with ID:', id)
-    navigate('/edit/subject/' + id)
+  function goToAddSubjectPage() {
+    navigate("/add/subject");
   }
 
-  function goToAddSubjectPage () {
-    navigate('/add/subject')
-  }
-
-  function goToDelete (id) {
+  function goToDelete(id) {
     axios({
-      url: apiUrl+'/delete/subject/' + id,
-      method: 'delete'
+      url: apiUrl + "/delete/subject/" + id,
+      method: "delete",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
-      .then(result => {
+      .then((result) => {
         if (result.data.success) {
-          setShow(true)
+          setShow(true);
         }
       })
-      .catch(err => {
-        console.log(err.message)
-      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   }
 
   return (
     <>
-      <h3 className='text-center mb-4 py-2 text-primary fw-bold'>
+      <h3 className="text-center mb-4 py-2 text-primary fw-bold">
         LIST OF SUBJECTS
       </h3>
 
       <InputGroup className="mb-3" style={{ width: "300px" }}>
         {" "}
         <InputGroup.Text>
-          <i className='bi bi-search'></i>
+          <i className="bi bi-search"></i>
         </InputGroup.Text>
         <Form.Control
-          type='text'
-          placeholder=' Type Subject Name to search'
-          onChange={e => searchSubject(e.target.value)}
+          type="text"
+          placeholder=" Type Subject Name to search"
+          onChange={(e) => searchSubject(e.target.value)}
         />
       </InputGroup>
 
       <button
-        className='btn btn-success ms-3 mt-2 float-end'
+        className="btn btn-success ms-3 mt-2 float-end"
         onClick={goToAddSubjectPage}
       >
         Add Subject +
       </button>
 
-      <table className='table text-center table-hover mt-5'>
+      <table className="table text-center table-hover mt-5">
         <thead>
           <tr>
             <th>Subject Code</th>
@@ -119,7 +122,7 @@ function SubjectList() {
           </tr>
         </thead>
         <tbody>
-          {subjects.map(subject => (
+          {subjects.map((subject) => (
             <tr>
               <td>{subject.subjectCode}</td>
               <td>{subject.subjectFullName}</td>
@@ -155,15 +158,15 @@ function SubjectList() {
         <Modal.Header closeButton>
           <Modal.Title>Success</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Course has been Deleted successfully👍</Modal.Body>
+        <Modal.Body>Subject has been Deleted successfully👍</Modal.Body>
         <Modal.Footer>
-          <Button variant='danger' onClick={handleClose}>
+          <Button variant="danger" onClick={handleClose}>
             Close
           </Button>
         </Modal.Footer>
       </Modal>
     </>
-  )
+  );
 }
 
 export default SubjectList;

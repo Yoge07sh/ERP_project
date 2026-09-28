@@ -13,7 +13,7 @@ import {
   Alert,
 } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-const apiUrl = import.meta.env.VITE_API__URL;
+const apiUrl = import.meta.env.VITE_API_URL;
 
 function StudentEdit() {
   const [student, setStudent] = useState({});

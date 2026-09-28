@@ -1,9 +1,9 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { Container, Form, Button, Row, Col, Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-const apiUrl = import.meta.env.VITE_API__URL;
+const apiUrl = import.meta.env.VITE_API_URL;
 
 function SubjectEdit() {
   let navigate = useNavigate();
@@ -31,7 +31,7 @@ function SubjectEdit() {
 
   function doEditSubject(id) {
     axios({
-      url: apiUrl+"/edit/subject/" + id,
+      url: apiUrl + "/edit/subject/" + id,
       method: "put",
       data: subject,
       headers: {
@@ -51,7 +51,7 @@ function SubjectEdit() {
 
   useEffect(() => {
     axios({
-      url: apiUrl+"/subject/" + params.id,
+      url: apiUrl + "/subject/" + params.id,
       method: "get",
     })
       .then((result) => {
@@ -59,22 +59,6 @@ function SubjectEdit() {
       })
       .catch(() => {});
   }, [params]);
-
-  function doDeleteSubject(id) {
-    axios({
-      url: apiUrl+"/delete/subject/" + id,
-      method: "delete",
-    })
-      .then((result) => {
-        if (result.data.success) {
-          setMessage("Subject Deleted successfully");
-          setShow(true);
-        }
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
-  }
 
   return (
     <>
