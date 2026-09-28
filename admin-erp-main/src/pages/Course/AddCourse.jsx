@@ -13,7 +13,7 @@ import {
   Modal,
 } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-
+const apiUrl = import.meta.env.VITE_API_URL
 function AddCourse() {
   let navigate = useNavigate();
   const [show, setShow] = useState(false);
@@ -36,7 +36,7 @@ function AddCourse() {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/add/course",
+        `${apiUrl}/add/course`,
         {
           courseCode,
           courseFullName,

@@ -12,7 +12,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
-
+const apiUrl = import.meta.env.VITE_API_URL
 function BranchList() {
   let navigate = useNavigate();
   let [branches, setBranches] = useState([]);
@@ -35,7 +35,7 @@ function BranchList() {
 
   useEffect(() => {
     axios({
-      url: "http://localhost:3000/branches",
+      url: apiUrl+"/branches",
       method: "get",
       params: {
         branchFullName: searchByBranchName,
@@ -59,7 +59,7 @@ function BranchList() {
   function searchBranch(branchname) {
     setSearchByBranchName(branchname);
     axios({
-      url: "http://localhost:3000/branch/search/" + branchname,
+      url: apiUrl+"/branch/search/" + branchname,
       method: "get",
       params: {
         branchFullName: setSearchByBranchName,
@@ -86,7 +86,7 @@ function BranchList() {
 
   function goToDelete(id) {
     axios({
-      url: "http://localhost:3000/delete/branch/" + id,
+      url: apiUrl+"/delete/branch/" + id,
       method: "delete",
       headers: {
         Authorization: `Bearer ${token}`,

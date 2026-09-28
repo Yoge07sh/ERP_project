@@ -12,6 +12,7 @@ import {
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
+const apiUrl = import.meta.env.VITE_API__URL;
 
 function AddSubject() {
   let navigate = useNavigate();
@@ -34,7 +35,7 @@ function AddSubject() {
     SetShowForm(false);
     setShowSpinner(true);
     axios({
-      url: "http://localhost:3000/add/subject",
+      url: apiUrl+"/add/subject",
       method: "post",
       data: {
         subjectCode,

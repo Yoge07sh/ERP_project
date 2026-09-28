@@ -12,7 +12,7 @@ import {
   Modal,
 } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-
+const apiUrl = import.meta.env.VITE_API_URL;
 function AddBranch() {
   let navigate = useNavigate();
   const [show, setShow] = useState(false);
@@ -33,7 +33,7 @@ function AddBranch() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/courses/for/branch")
+      .get(apiUrl+"/courses/for/branch")
       .then((res) => {
         if (res.data.success) {
           console.log(res.data.data);
@@ -57,7 +57,7 @@ function AddBranch() {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/add/branch",
+        `${apiUrl}/add/branch`,
         {
           course,
           branchCode,

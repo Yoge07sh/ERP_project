@@ -13,6 +13,7 @@ import {
   Alert,
 } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+const apiUrl = import.meta.env.VITE_API__URL;
 
 function StudentEdit() {
   const [student, setStudent] = useState({});
@@ -148,7 +149,7 @@ function StudentEdit() {
       }
 
       const result = await axios({
-        url: "http://localhost:3000/edit/student/" + id,
+        url: apiUrl + "/edit/student/" + id,
         method: "put",
         data: formData,
       });
@@ -156,16 +157,14 @@ function StudentEdit() {
       if (result.data.success) {
         setShow(true);
       } else {
-        setError(
-          result.data.message || "Student could not be updated."
-        );
+        setError(result.data.message || "Student could not be updated.");
       }
     } catch (err) {
       console.error("Error updating student:", err);
 
       setError(
         err.response?.data?.message ||
-          "Something went wrong while updating the student."
+          "Something went wrong while updating the student.",
       );
     } finally {
       setShowSpinner(false);
@@ -184,7 +183,7 @@ function StudentEdit() {
 
       try {
         const result = await axios({
-          url: "http://localhost:3000/student/" + params.id,
+          url: apiUrl + "/student/" + params.id,
           method: "get",
         });
 
@@ -203,8 +202,7 @@ function StudentEdit() {
             (studentData.permanentAddressLine1 || "") &&
           (studentData.localAddressLine2 || "") ===
             (studentData.permanentAddressLine2 || "") &&
-          (studentData.localCity || "") ===
-            (studentData.permanentCity || "") &&
+          (studentData.localCity || "") === (studentData.permanentCity || "") &&
           (studentData.localState || "") ===
             (studentData.permanentState || "") &&
           (studentData.localPincode || "") ===
@@ -226,8 +224,7 @@ function StudentEdit() {
 
         if (isMounted) {
           setError(
-            err.response?.data?.message ||
-              "Unable to load student details."
+            err.response?.data?.message || "Unable to load student details.",
           );
         }
       } finally {
@@ -256,11 +253,7 @@ function StudentEdit() {
         </h4>
 
         {error && (
-          <Alert
-            variant="danger"
-            dismissible
-            onClose={() => setError("")}
-          >
+          <Alert variant="danger" dismissible onClose={() => setError("")}>
             {error}
           </Alert>
         )}
@@ -754,11 +747,7 @@ function StudentEdit() {
               Cancel
             </Button>
 
-            <Button
-              variant="success"
-              type="submit"
-              disabled={showSpinner}
-            >
+            <Button variant="success" type="submit" disabled={showSpinner}>
               {showSpinner ? (
                 <>
                   <Spinner
@@ -784,9 +773,7 @@ function StudentEdit() {
             <Modal.Title>Success </Modal.Title>
           </Modal.Header>
 
-          <Modal.Body>
-            Student has been updated successfully 👍
-          </Modal.Body>
+          <Modal.Body>Student has been updated successfully 👍</Modal.Body>
 
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
