@@ -18,6 +18,7 @@ function SidebarClock() {
     <div
       style={{
         display: "flex",
+        position:"fixed",
         alignItems: "center",
         justifyContent: "center",
         gap: "12px",

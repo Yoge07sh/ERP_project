@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Button, Card, Spinner, Image } from 'react-bootstrap';
 import axios from 'axios';
 import "bootstrap/dist/css/bootstrap.min.css";
-const apiUrl = import.meta.env.VITE_API__URL;
+const apiUrl = import.meta.env.VITE_API_URL;
 
 function FacultyProfile() {
   const navigate = useNavigate();
