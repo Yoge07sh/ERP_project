@@ -5,6 +5,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import axios from "axios";
 import { Form, InputGroup, Button, Modal, Pagination } from "react-bootstrap";
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
+const apiUrl = import.meta.env.VITE_API__URL;
 
 function FacultyList() {
   const [show, setShow] = useState(false);
@@ -33,7 +34,7 @@ function FacultyList() {
 
   useEffect(() => {
     axios({
-      url: "http://localhost:3000/faculties",
+      url: apiUrl+"/faculties",
       method: "get",
       params: {
         firstName: searchByFacultyName,
@@ -57,8 +58,7 @@ function FacultyList() {
   function searchFacutly(firstName) {
     setSearchByFacultyName(firstName);
     axios({
-      // url: 'http://localhost:3000',
-      url: "http://localhost:3000/faculty/search/" + firstName,
+      url: apiUrl+"/faculty/search/" + firstName,
       method: "get",
       params: {
         firstName: searchByFacultyName,
@@ -84,7 +84,7 @@ function FacultyList() {
     formData.append("facultyData", file);
     formData.append("fileName", file.name);
     axios({
-      url: 'http://localhost:3000/add/faculties',
+      url: apiUrl+'/add/faculties',
       method: 'post',
       data: formData,
       headers: {
@@ -128,7 +128,7 @@ function FacultyList() {
 
     axios(
       {
-        url: "http://localhost:3000/delete/faculty/" + id,
+        url: apiUrl+"/delete/faculty/" + id,
         method: "delete",
       },
       {

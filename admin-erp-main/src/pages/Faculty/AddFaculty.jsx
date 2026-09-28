@@ -7,7 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Form } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+const apiUrl = import.meta.env.VITE_API__URL
 function AddFaculty() {
   let navigate = useNavigate();
 
@@ -65,7 +65,7 @@ function AddFaculty() {
     formData.append("file", file);
     formData.append("fileName", file.name);
     axios({
-      url: "http://localhost:3000/add/faculty",
+      url: apiUrl+"/add/faculty",
       method: "post",
       data: formData,
       headers: {

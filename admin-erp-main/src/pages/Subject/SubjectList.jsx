@@ -5,6 +5,7 @@ import { Modal, Button, Form, InputGroup, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
+const apiUrl = import.meta.env.VITE_API__URL;
 
 function SubjectList() {
   let navigate = useNavigate();
@@ -34,8 +35,7 @@ function SubjectList() {
   function searchSubject (subjectFullName) {
     setSearchBySubjectName(subjectFullName)
     axios({
-      // url: 'http://localhost:3000',
-      url: 'http://localhost:3000/subject/search/' + subjectFullName,
+      url: apiUrl+'/subject/search/' + subjectFullName,
       method: 'get',
       params: {
         courseFullName: searchBySubjectName
@@ -68,7 +68,7 @@ function SubjectList() {
 
   function goToDelete (id) {
     axios({
-      url: 'http://localhost:3000/delete/subject/' + id,
+      url: apiUrl+'/delete/subject/' + id,
       method: 'delete'
     })
       .then(result => {

@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { Container, Form, Button, Row, Col, Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+const apiUrl = import.meta.env.VITE_API__URL;
 
 function EditTimeSlot() {
   const navigate = useNavigate();
@@ -72,7 +73,7 @@ function EditTimeSlot() {
 
     try {
       await axios.put(
-        `http://localhost:3000/edit/timeslot/${id}`,
+        `${apiUrl}/edit/timeslot/${id}`,
         {
           session: TimeSlot.session,
           lectureNo: Number(TimeSlot.lectureNo),
@@ -96,7 +97,7 @@ function EditTimeSlot() {
 
   useEffect(() => {
     axios({
-      url: `http://localhost:3000/timeslot/${id}`,
+      url: `${apiUrl}/timeslot/${id}`,
       method: "get",
     })
       .then((res) => {

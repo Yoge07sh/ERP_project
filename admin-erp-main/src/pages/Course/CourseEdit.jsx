@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import  { useEffect, useState } from 'react'
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom'
 import universityData from '../../assets/universities.json'
 
 import { Container, Form, Button, Row, Col, Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-
-
+const apiUrl = import.meta.env.VITE_API_URL
 
 function CourseEdit() {
 
@@ -35,7 +34,7 @@ const token = localStorage.getItem("token")
 
     function doEditCourse(id) {
         axios({
-          url: "http://localhost:3000/edit/course/" + id,
+          url: apiUrl+"/edit/course/" + id,
           method: "put",
           data: course,
           headers: {
@@ -54,7 +53,7 @@ const token = localStorage.getItem("token")
 
     useEffect(() => {
         axios({
-            url: 'http://localhost:3000/course/' + params.id,
+            url: apiUrl+'/course/' + params.id,
             method: 'get'
         }).then((result) => {
             setCourse(result.data.data)

@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Container, Form, Button, Row, Col, Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+const apiUrl = import.meta.env.VITE_API__URL;
 
 function AddTimeSlot() {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ function AddTimeSlot() {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/add/timeslots",
+        `${apiurl}/add/timeslots`,
         {
           session,
           lectureNo: Number(lectureNo),

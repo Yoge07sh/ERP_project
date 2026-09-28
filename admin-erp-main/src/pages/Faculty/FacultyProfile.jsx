@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Button, Card, Spinner, Image } from 'react-bootstrap';
 import axios from 'axios';
 import "bootstrap/dist/css/bootstrap.min.css";
+const apiUrl = import.meta.env.VITE_API__URL;
 
 function FacultyProfile() {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ function FacultyProfile() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/faculty/${id}`)
+      .get(`${apiUrl}/faculty/${id}`)
       .then((result) => {
         setFaculty(result.data.data);
         setLoading(false);

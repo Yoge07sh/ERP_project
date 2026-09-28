@@ -5,7 +5,7 @@ import { Modal, Button, Form, InputGroup, Container } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { FaEdit, FaTrash } from 'react-icons/fa'
-
+const apiUrl = import.meta.env.VITE_API_URL
 function CourseList () {
   let navigate = useNavigate()
   let [courses, setCourses] = useState([])
@@ -15,7 +15,7 @@ function CourseList () {
 const token = localStorage.getItem('token')
   useEffect(() => {
     axios({
-      url: 'http://localhost:3000/courses',
+      url: apiUrl+'/courses',
       method: 'get',
       params: {
         courseFullName: searchByCourseName
@@ -35,8 +35,7 @@ const token = localStorage.getItem('token')
   function searchCourse (coursename) {
     setSearchByCourseName(coursename)
     axios({
-      // url: 'http://localhost:3000',
-      url: 'http://localhost:3000/course/search/' + coursename,
+      url: apiUrl+'/course/search/' + coursename,
       method: 'get',
       params: {
         courseFullName: searchByCourseName
@@ -45,7 +44,6 @@ const token = localStorage.getItem('token')
       .then(result => {
         if (result.data.success) {
           setCourses(result.data.data)
-          // setCourses(result.data.data || []);
         }
       })
       .catch(error => {
@@ -64,7 +62,7 @@ const token = localStorage.getItem('token')
 
   function goToDelete (id) {
     axios({
-      url: "http://localhost:3000/delete/course/" + id,
+      url: apiUrl+"/delete/course/" + id,
       method: "delete",
       headers: {
         Authorization: `Bearer ${token}`,

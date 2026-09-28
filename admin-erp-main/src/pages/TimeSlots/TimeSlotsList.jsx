@@ -7,7 +7,7 @@ import { Modal, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
-
+const apiUrl = import.meta.env.VITE_API_URL
 function TimeSlotList() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -17,7 +17,7 @@ function TimeSlotList() {
 
   useEffect(() => {
     axios({
-      url: "http://localhost:3000/timeslots",
+      url: apiUrl+"/timeslots",
       method: "get",
     })
       .then((res) => {
@@ -42,7 +42,7 @@ function TimeSlotList() {
 
   function goToDelete(id) {
     axios({
-      url: "http://localhost:3000/delete/timeslot/" + id,
+      url: apiUrl+"/delete/timeslot/" + id,
       method: "delete",
       headers: {
         Authorization: `Bearer ${token}`,

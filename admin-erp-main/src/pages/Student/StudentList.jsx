@@ -5,6 +5,7 @@ import { Modal, Button, Form, InputGroup, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
+const apiUrl = import.meta.env.VITE_API__URL;
 
 function StudentList() {
   let navigate = useNavigate();
@@ -19,7 +20,7 @@ function StudentList() {
   const token = localStorage.getItem("token");
   useEffect(() => {
     axios({
-      url: "http://localhost:3000/students",
+      url: apiUrl+"/students",
       method: "get",
       params: {
         firstName: searchByFirstName,
@@ -66,7 +67,7 @@ function StudentList() {
 
   function goToDelete(id) {
     axios({
-      url: "http://localhost:3000/delete/student/" + id,
+      url: apiUrl+"/delete/student/" + id,
       method: "delete",
       headers: {
         Authorization: `Bearer ${token}`,

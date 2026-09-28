@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { Container, Form, Button, Row, Col, Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+const apiUrl = import.meta.env.VITE_API__URL;
 
 function FacultyEdit() {
   let navigate = useNavigate();
@@ -30,7 +31,7 @@ function FacultyEdit() {
 
   function doEditFaculty(id) {
     axios({
-      url: "http://localhost:3000/edit/faculty/" + id,
+      url: apiUrl+"/edit/faculty/" + id,
       method: "put",
       data: faculty,
     })
@@ -46,7 +47,7 @@ function FacultyEdit() {
 
   useEffect(() => {
     axios({
-      url: "http://localhost:3000/faculty/" + params.id,
+      url: apiUrl+"/faculty/" + params.id,
       method: "get",
     })
       .then((result) => {
