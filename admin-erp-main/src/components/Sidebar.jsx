@@ -6,79 +6,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { FaUserGraduate } from "react-icons/fa";
 
-// ================= LIVE CLOCK =================
-function SidebarClock() {
-  const [currentTime, setCurrentTime] = useState(new Date());
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  return (
-    <div
-      style={{
-        textAlign: "center",
-        padding: "8px 2px",
-        color: "#ffffff",
-      }}
-    >
-      <div
-        style={{
-          fontSize: "14px",
-          fontWeight: "600",
-          lineHeight: "1.2",
-          fontVariantNumeric: "tabular-nums",
-        }}
-      >
-        {currentTime.toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-          hour12: false,
-        })}
-      </div>
-
-      <div
-        style={{
-          marginTop: "2px",
-          fontSize: "11px",
-          color: "#b9c8d8",
-          lineHeight: "1.2",
-        }}
-      >
-        {currentTime.toLocaleDateString(undefined, {
-          weekday: "short",
-          day: "numeric",
-          month: "short",
-        })}
-      </div>
-
-      <div
-        style={{
-          marginTop: "2px",
-          fontSize: "10px",
-          color: "#22c55e",
-          fontWeight: "600",
-          lineHeight: "1.2",
-        }}
-      >
-        <i
-          className="bi bi-circle-fill"
-          style={{
-            fontSize: "5px",
-            marginRight: "4px",
-          }}
-        ></i>
-        Live
-      </div>
-    </div>
-  );
-}
-
 // ================= SIDEBAR =================
 function Sidebar() {
   let navigate = useNavigate();
@@ -134,8 +61,6 @@ function Sidebar() {
           boxShadow: "2px 0 8px rgba(0, 0, 0, 0.1)",
         }}
       >
-        {/* ================= CLOCK ================= */}
-        <SidebarClock />
 
         {/* ================= SIDEBAR MENU ================= */}
         <div className="flex-grow-1 border-top mt-3 overflow-auto">
