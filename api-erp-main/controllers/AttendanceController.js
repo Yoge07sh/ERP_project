@@ -344,7 +344,7 @@ const updateAttendance = async (req, res) => {
   try {
     const { facultyMapId, timeSlotId, date, students } = req.body;
 
-    if (!facultyMapId || !timeSlotId || !date || !students) {
+    if (!facultyMapId || !timeSlotId || !date) {
       return res.status(400).json({
         success: false,
         message: "facultyMapId, timeSlotId, date and students are required",
@@ -408,8 +408,8 @@ const updateAttendance = async (req, res) => {
     }
 
     // Selected date range
-    const startDate = new Date(`${date}T00:00:00.000Z`);
-    const endDate = new Date(`${date}T23:59:59.999Z`);
+    const startDate = new Date(`${date}T00:00:00+05:30`);
+    const endDate = new Date(`${date}T23:59:59.999+05:30`);
 
     // Find the existing attendance record
     const attendanceRecord = await Attendance.findOne({

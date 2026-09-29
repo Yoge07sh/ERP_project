@@ -93,7 +93,7 @@ function AddBranch() {
       <Form onSubmit={doAddBranch}>
         <h3
           className="text-center mb-4 py-2 fw-bold"
-          style={{ color: "#1a3c6e" }}
+          style={{ color: "#6e391a" }}
         >
           ADD NEW BRANCH
         </h3>

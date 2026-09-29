@@ -20,7 +20,7 @@ function StudentList() {
   const token = localStorage.getItem("token");
   useEffect(() => {
     axios({
-      url: apiUrl+"/students",
+      url: apiUrl + "/students",
       method: "get",
       params: {
         firstName: searchByFirstName,
@@ -67,7 +67,7 @@ function StudentList() {
 
   function goToDelete(id) {
     axios({
-      url: apiUrl+"/delete/student/" + id,
+      url: apiUrl + "/delete/student/" + id,
       method: "delete",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -85,109 +85,101 @@ function StudentList() {
 
   return (
     <>
-      <h3 className="text-center mb-4 py-2 text-primary fw-bold">
-        LIST OF STUDENTS
-      </h3>
+      <Container>
+        <h3 className="text-center mb-4 py-2 text-primary fw-bold text-danger">
+          LIST OF STUDENTS
+        </h3>
 
-      <InputGroup className="mb-3" style={{ width: "300px" }}>
-        {" "}
-        <InputGroup.Text>
-          <i className="bi bi-search"></i>
-        </InputGroup.Text>
-        <Form.Control
-          type="text"
-          placeholder=" Type Student Name to search"
-          onChange={(e) => setSearchByFirstName(e.target.value)}
-        />
-      </InputGroup>
+        <InputGroup className="mb-3" style={{ width: "100%" }}>
+          {" "}
+          <InputGroup.Text>
+            <i className="bi bi-search"></i>
+          </InputGroup.Text>
+          <Form.Control
+            type="text"
+            placeholder=" Type Student Name to search"
+            onChange={(e) => setSearchByFirstName(e.target.value)}
+          />
+        </InputGroup>
 
-      <button
-        className="btn btn-success ms-3 mt-2 float-end"
-        onClick={goToAddStudentPage}
-      >
-        Add Student +
-      </button>
+        <button
+          className="btn btn-success ms-3 mt-2 float-end"
+          onClick={goToAddStudentPage}
+        >
+          Add Student +
+        </button>
 
-      <table className="table text-center table-hover mt-5">
-        <thead>
-          <tr>
-            <th>Image</th>
-            <th>Enrollment No</th>
-            <th>Name</th>
-            <th>Roll No</th>
-            <th>Year</th>
-            <th>Address</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {students.map((student) => (
+        <table className="table text-center table-hover mt-5">
+          <thead>
             <tr>
-              <td>
-                <img src={student.image || undefined} width="60px" height="80px" alt="pic" />
-              </td>
-              <td>{student.enrollmentNumber}</td>
-              <td>
-                {student.firstName} {student.lastName}
-              </td>
-              <td>{student.rollNumber}</td>
-              <td>{student.year}</td>
-              <td>
-                {student.permanentAddressLine1
-                  ? `${student.permanentAddressLine1 || ""}, ${
-                      student.permanentCity || ""
-                    }, ${student.permanentState || ""} - ${
-                      student.permanentPincode || ""
-                    }`
-                  : `${student.localAddressLine1 || ""}, ${
-                      student.localCity || ""
-                    }, ${student.localState || ""} - ${
-                      student.localPincode || ""
-                    }`}
-              </td>
-
-              <td>
-                <Button
-                  variant="outline-warning"
-                  title="View Student"
-                  onClick={() => goToView(student._id)}
-                >
-                  <FaEye />
-                </Button>
-                <Button
-                  variant="outline-primary"
-                  title="Edit Student"
-                  className="ms-2"
-                  onClick={() => goToEdit(student._id)}
-                >
-                  <FaEdit />
-                </Button>
-                <Button
-                  variant="outline-danger"
-                  title="Delete Student"
-                  className="ms-2"
-                  onClick={() => goToDelete(student._id)}
-                >
-                  <FaTrash />
-                </Button>
-              </td>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Roll No</th>
+              <th>Year</th>
+              <th>Action</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {students.map((student) => (
+              <tr>
+                <td className="text-center align-middle">
+                  <img
+                    src={student.image || "/profile.png"}
+                    width="50"
+                    height="50"
+                    alt="pic"
+                    className="d-block mx-auto"
+                    style={{ objectFit: "cover" }}
+                  />
+                </td>
+                <td>
+                  {student.firstName} {student.lastName}
+                </td>
+                <td>{student.rollNumber}</td>
+                <td>{student.year}</td>
+                <td>
+                  <Button
+                    variant="outline-warning"
+                    title="View Student"
+                    onClick={() => goToView(student._id)}
+                  >
+                    <FaEye />
+                  </Button>
+                  <Button
+                    variant="outline-primary"
+                    title="Edit Student"
+                    className="ms-2"
+                    onClick={() => goToEdit(student._id)}
+                  >
+                    <FaEdit />
+                  </Button>
+                  <Button
+                    variant="outline-danger"
+                    title="Delete Student"
+                    className="ms-2"
+                    onClick={() => goToDelete(student._id)}
+                  >
+                    <FaTrash />
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-      {/* ---------Modal code ------------- */}
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Success</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Student has been Deleted successfully👍</Modal.Body>
-        <Modal.Footer>
-          <Button variant="danger" onClick={handleClose}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+        {/* ---------Modal code ------------- */}
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Success</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Student has been Deleted successfully👍</Modal.Body>
+          <Modal.Footer>
+            <Button variant="danger" onClick={handleClose}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </Container>
     </>
   );
 }

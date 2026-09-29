@@ -1,9 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Container, Row, Col, Button, Card, Spinner, Image } from 'react-bootstrap';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import {
+  Container,
+  Row,
+  Col,
+  Button,
+  Card,
+  Spinner,
+  Image,
+} from "react-bootstrap";
+import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
-const apiurl = import.meta.env.VITE_API_URL
+const apiurl = import.meta.env.VITE_API_URL;
 function StudentProfile() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -12,36 +20,35 @@ function StudentProfile() {
 
   useEffect(() => {
     axios
-      .get(`${apiUrl}/student/${id}`)
+      .get(apiurl + "/student/" + id)
       .then((result) => {
         setStudent(result.data.data);
         setLoading(false);
       })
       .catch(() => {
-        alert('Something went wrong!');
+        alert("Something went wrong!");
         setLoading(false);
       });
   }, [id]);
 
   function goToStudentList() {
-    navigate('/students');
+    navigate("/students");
   }
 
   if (loading) {
     return (
-      <Container className="d-flex justify-content-center align-items-center" style={{ height: "80vh" }}>
+      <Container
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "80vh" }}
+      >
         <Spinner animation="border" variant="primary" />
       </Container>
     );
   }
 
-  
-
   function goToEdit(id) {
-    navigate('/edit/student/' + id);
+    navigate("/edit/student/" + id);
   }
-
-
 
   return (
     <>
@@ -54,7 +61,7 @@ function StudentProfile() {
             <Card className="shadow border-1 rounded-4 overflow-hidden">
               <Image
                 variant="top"
-                src={student.image}
+                src={student.image || "/profile.png"}
                 alt="Student picture"
                 className="p-2 img-fluid"
                 thumbnail
@@ -64,7 +71,9 @@ function StudentProfile() {
           </Col>
 
           <Col md={8}>
-            <h2 className="fw-bold mb-3 border-bottom pb-2">{student.firstName} {student.lastName}</h2>
+            <h2 className="fw-bold mb-3 border-bottom pb-2">
+              {student.firstName} {student.lastName}
+            </h2>
 
             <Row>
               <Col sm={6} className="mb-2">
@@ -98,7 +107,8 @@ function StudentProfile() {
                 <strong>Semester :-</strong> {student.semester}
               </Col>
               <Col sm={12} className="mb-2">
-                <strong>Address :-</strong> {student.localAddressLine1}, {student.localAddressLine2}
+                <strong>Address :-</strong> {student.localAddressLine1},{" "}
+                {student.localAddressLine2}
               </Col>
               <Col sm={3} className="mb-2">
                 <strong>City :-</strong> {student.localCity}
@@ -112,10 +122,19 @@ function StudentProfile() {
             </Row>
 
             <div className="mt-4">
-              <Button variant="primary" onClick={goToStudentList} className="me-2">
+              <Button
+                variant="primary"
+                onClick={goToStudentList}
+                className="me-2"
+              >
                 Back to List
               </Button>
-              <Button variant="outline-secondary" onClick={() => goToEdit(student._id)}>Edit Profile</Button>
+              <Button
+                variant="outline-secondary"
+                onClick={() => goToEdit(student._id)}
+              >
+                Edit Profile
+              </Button>
             </div>
           </Col>
         </Row>

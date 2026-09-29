@@ -61,9 +61,8 @@ function Sidebar() {
           boxShadow: "2px 0 8px rgba(0, 0, 0, 0.1)",
         }}
       >
-
         {/* ================= SIDEBAR MENU ================= */}
-        <div className="flex-grow-1 border-top mt-3 overflow-auto">
+        <div className="flex-grow-1  mt-3 overflow-auto">
           <ListGroup
             variant="flush"
             className="pt-4 px-3 flex-grow-1 overflow-auto"
@@ -104,9 +103,7 @@ function Sidebar() {
                   className="sidebar-menu-item d-flex align-items-center gap-2"
                 >
                   <i className="bi bi-diagram-2"></i>
-                  <span className="d-none d-md-inline">
-                    Subject Mapping
-                  </span>
+                  <span className="d-none d-md-inline">Subject Mapping</span>
                 </ListGroup.Item>
 
                 <ListGroup.Item
@@ -124,9 +121,7 @@ function Sidebar() {
                   className="sidebar-menu-item d-flex align-items-center gap-2"
                 >
                   <i className="bi bi-diagram-3"></i>
-                  <span className="d-none d-md-inline">
-                    Faculty Mapping
-                  </span>
+                  <span className="d-none d-md-inline">Faculty Mapping</span>
                 </ListGroup.Item>
 
                 <ListGroup.Item
@@ -145,15 +140,6 @@ function Sidebar() {
                 >
                   <i className="bi bi-clock"></i>
                   <span className="d-none d-md-inline">TimeSlots</span>
-                </ListGroup.Item>
-
-                <ListGroup.Item
-                  as={NavLink}
-                  to="/getstudents"
-                  className="sidebar-menu-item d-flex align-items-center gap-2"
-                >
-                  <i className="bi bi-clipboard-check"></i>
-                  <span className="d-none d-md-inline">Attendance</span>
                 </ListGroup.Item>
               </>
             )}

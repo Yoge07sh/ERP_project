@@ -64,7 +64,7 @@ function TimeSlotList() {
 
   return (
     <>
-      <h3 className="text-center mb-4 py-2 text-primary fw-bold">
+      <h3 className="text-center mb-4 py-2  fw-bold text-danger">
         TIME SLOTS LIST
       </h3>
 

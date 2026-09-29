@@ -9,6 +9,7 @@ import {
   Spinner,
   Card,
 } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 const apiUrl = import.meta.env.VITE_API_URL;

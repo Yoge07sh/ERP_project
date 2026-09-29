@@ -84,11 +84,11 @@ const token = localStorage.getItem('token')
 
   return (
     <>
-      <h3 className='text-center mb-4 py-2 text-primary fw-bold'>
+      <h3 className='text-center mb-4 py-2 text-primary fw-bold text-danger'>
         LIST OF COURSES
       </h3>
 
-      <InputGroup className='mb-3' style={{ width: '300px' }}>
+      <InputGroup className='mb-3' style={{ width: '100%' }}>
         {' '}
         <InputGroup.Text>
           <i className='bi bi-search'></i>

@@ -1,7 +1,15 @@
-import  { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Container, Row, Col, Button, Card, Spinner, Image } from 'react-bootstrap';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import {
+  Container,
+  Row,
+  Col,
+  Button,
+  Card,
+  Spinner,
+  Image,
+} from "react-bootstrap";
+import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -19,30 +27,29 @@ function FacultyProfile() {
         setLoading(false);
       })
       .catch(() => {
-        alert('Something went wrong!');
+        alert("Something went wrong!");
         setLoading(false);
       });
   }, [id]);
 
   function goToFacultyList() {
-    navigate('/faculties');
+    navigate("/faculties");
   }
 
   if (loading) {
     return (
-      <Container className="d-flex justify-content-center align-items-center" style={{ height: "80vh" }}>
+      <Container
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "80vh" }}
+      >
         <Spinner animation="border" variant="primary" />
       </Container>
     );
   }
 
-  
-
   function goToEdit(id) {
-    navigate('/edit/faculty/' + id);
+    navigate("/edit/faculty/" + id);
   }
-
-
 
   return (
     <>
@@ -55,7 +62,7 @@ function FacultyProfile() {
             <Card className="shadow border-1 rounded-4 overflow-hidden">
               <Image
                 variant="top"
-                src={faculty.facultyImage}
+                src={faculty.facultyImage || "/profile.png"}
                 alt="Faculty picture"
                 className="p-2 img-fluid"
                 thumbnail
@@ -65,7 +72,9 @@ function FacultyProfile() {
           </Col>
 
           <Col md={8}>
-            <h2 className="fw-bold mb-3 border-bottom pb-2">{faculty.firstName} {faculty.lastName}</h2>
+            <h2 className="fw-bold mb-3 border-bottom pb-2">
+              {faculty.firstName} {faculty.lastName}
+            </h2>
 
             <Row>
               <Col sm={6} className="mb-2">
@@ -78,13 +87,20 @@ function FacultyProfile() {
                 <strong>Mobile No:</strong> {faculty.mobileNo}
               </Col>
               <Col sm={6} className="mb-2">
-                <strong>Emergency Mobile No:</strong> {faculty.emergencyMobileNo}
+                <strong>Emergency Mobile No:</strong>{" "}
+                {faculty.emergencyMobileNo}
               </Col>
               <Col sm={6} className="mb-2">
                 <strong>Gender:</strong> {faculty.gender}
               </Col>
               <Col sm={6} className="mb-2">
-                <strong>Date of Birth:</strong> {faculty.dob}
+                <strong>Date of Birth:</strong>{" "}
+                {new Date(faculty.dob).toLocaleDateString("en-IN", {
+                  timeZone: "Asia/Kolkata",
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                })}
               </Col>
               <Col sm={6} className="mb-2">
                 <strong>Designation:</strong> {faculty.designation}
@@ -92,14 +108,22 @@ function FacultyProfile() {
               <Col sm={6} className="mb-2">
                 <strong>College Email:</strong> {faculty.collegeEmail}
               </Col>
-              
             </Row>
 
             <div className="mt-4">
-              <Button variant="primary" onClick={goToFacultyList} className="me-2">
+              <Button
+                variant="primary"
+                onClick={goToFacultyList}
+                className="me-2"
+              >
                 Back to List
               </Button>
-              <Button variant="outline-secondary" onClick={() => goToEdit(faculty._id)}>Edit Profile</Button>
+              <Button
+                variant="outline-secondary"
+                onClick={() => goToEdit(faculty._id)}
+              >
+                Edit Profile
+              </Button>
             </div>
           </Col>
         </Row>

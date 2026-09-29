@@ -10,6 +10,7 @@ import {
   Modal,
 } from "react-bootstrap";
 import axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { FaEye, FaEyeSlash, FaLock, FaEnvelope } from "react-icons/fa";
 const apiUrl = import.meta.env.VITE_API_URL;
 function AdminLogin() {
