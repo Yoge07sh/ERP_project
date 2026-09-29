@@ -1,10 +1,22 @@
 import { Container, Button, Table, Card, Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
-const apiUrl = import.meta.env.VITE_API_URL;
+
 import { FaClipboardCheck, FaCalendarAlt, FaArrowLeft } from "react-icons/fa";
+
+const apiUrl = import.meta.env.VITE_API_URL;
+
+// Convert a Date into YYYY-MM-DD according to IST
+const getDateIST = (date) => {
+  if (!date) return "";
+
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Kolkata",
+  }).format(new Date(date));
+};
 
 function Eregister() {
   const location = useLocation();
@@ -20,6 +32,7 @@ function Eregister() {
   const [attendanceRecords, setAttendanceRecords] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Get E-Attendance Register
   const getERegister = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -49,13 +62,15 @@ function Eregister() {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     if (facultyMapId && fromDate && toDate) {
       getERegister();
+    } else {
+      setLoading(false);
     }
   }, [facultyMapId, fromDate, toDate]);
-  // Get all unique students
-  // Get all unique students
+
   // Get all unique students
   const students = [];
 
@@ -80,19 +95,19 @@ function Eregister() {
     });
   });
 
-  // Get all unique dates
+  // Get all unique dates in IST
   const dates = [
     ...new Set(
-      attendanceRecords.map((record) => {
-        return new Date(record.date).toISOString().split("T")[0];
-      }),
+      attendanceRecords
+        .map((record) => getDateIST(record.date))
+        .filter(Boolean),
     ),
   ].sort();
 
   // Get attendance for a student on a particular date
   const getStudentDateAttendance = (student, date) => {
     return attendanceRecords.filter((record) => {
-      const recordDate = new Date(record.date).toISOString().split("T")[0];
+      const recordDate = getDateIST(record.date);
 
       return (
         recordDate === date &&
@@ -128,10 +143,28 @@ function Eregister() {
 
     return ((presentLectures / totalLectures) * 100).toFixed(1);
   };
+
+  // Display date in Indian format
   const formatDate = (date) => {
     if (!date) return "-";
 
+    // If already YYYY-MM-DD, convert it safely as an IST calendar date
+    if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      const [year, month, day] = date.split("-");
+
+      return new Date(
+        Number(year),
+        Number(month) - 1,
+        Number(day),
+      ).toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      });
+    }
+
     return new Date(date).toLocaleDateString("en-IN", {
+      timeZone: "Asia/Kolkata",
       day: "2-digit",
       month: "short",
       year: "numeric",
@@ -194,6 +227,7 @@ function Eregister() {
               {/* Course */}
               <Col lg={2} md={4} sm={6} className="border-end">
                 <small className="text-muted d-block">COURSE</small>
+
                 <div className="fw-bold text-primary">
                   {formData.courseName || "-"}
                 </div>
@@ -202,6 +236,7 @@ function Eregister() {
               {/* Branch */}
               <Col lg={2} md={4} sm={6} className="border-end">
                 <small className="text-muted d-block">BRANCH</small>
+
                 <div className="fw-bold">
                   {formData.branchName || "No Branch"}
                 </div>
@@ -210,24 +245,28 @@ function Eregister() {
               {/* Session */}
               <Col lg={2} md={4} sm={6} className="border-end">
                 <small className="text-muted d-block">SESSION</small>
+
                 <div className="fw-bold">{formData.session || "-"}</div>
               </Col>
 
               {/* Year */}
               <Col lg={1} md={4} sm={6} className="border-end">
                 <small className="text-muted d-block">YEAR</small>
+
                 <div className="fw-bold">{formData.year || "-"}</div>
               </Col>
 
               {/* Semester */}
               <Col lg={2} md={4} sm={6} className="border-end">
                 <small className="text-muted d-block">SEMESTER</small>
+
                 <div className="fw-bold">{formData.semester || "-"}</div>
               </Col>
 
               {/* Section */}
               <Col lg={1} md={4} sm={6} className="border-end">
                 <small className="text-muted d-block">SECTION</small>
+
                 <div className="fw-bold">{formData.section || "-"}</div>
               </Col>
             </Row>
@@ -259,6 +298,7 @@ function Eregister() {
           </Row>
         </Card.Body>
       </Card>
+
       {/* Attendance Register */}
       <Card className="shadow-sm border-0">
         <Card.Body className="p-0">
@@ -270,156 +310,172 @@ function Eregister() {
             </small>
           </div>
 
-          <div className="table-responsive">
-            <Table bordered hover className="mb-0 align-middle text-center">
-              <thead className="table-primary">
-                <tr>
-                  <th
-                    style={{
-                      minWidth: "50px",
-                    }}
-                  >
-                    S.No
-                  </th>
+          {/* Loading */}
+          {loading ? (
+            <div className="text-center py-5">
+              <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
 
-                  <th
-                    style={{
-                      minWidth: "100px",
-                    }}
-                  >
-                    Roll No.
-                  </th>
+              <div className="mt-2 text-muted">Loading attendance...</div>
+            </div>
+          ) : (
+            <>
+              <div className="table-responsive">
+                <Table bordered hover className="mb-0 align-middle text-center">
+                  <thead className="table-primary">
+                    <tr>
+                      <th
+                        style={{
+                          minWidth: "50px",
+                        }}
+                      >
+                        S.No
+                      </th>
 
-                  <th
-                    className="text-start"
-                    style={{
-                      minWidth: "100px",
-                    }}
-                  >
-                    Student Name
-                  </th>
+                      <th
+                        style={{
+                          minWidth: "100px",
+                        }}
+                      >
+                        Roll No.
+                      </th>
 
-                  {dates.map((date) => (
-                    <th
-                      key={date}
-                      style={{
-                        minWidth: "80px",
-                      }}
-                    >
-                      {formatDate(date)}
-                    </th>
-                  ))}
+                      <th
+                        className="text-start"
+                        style={{
+                          minWidth: "100px",
+                        }}
+                      >
+                        Student Name
+                      </th>
 
-                  <th
-                    style={{
-                      minWidth: "100px",
-                    }}
-                  >
-                    Attendance %
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {students.map((student, index) => {
-                  const percentage = getAttendancePercentage(student);
+                      {dates.map((date) => (
+                        <th
+                          key={date}
+                          style={{
+                            minWidth: "80px",
+                          }}
+                        >
+                          {formatDate(date)}
+                        </th>
+                      ))}
 
-                  return (
-                    <tr key={student.studentId}>
-                      <td>{index + 1}</td>
+                      <th
+                        style={{
+                          minWidth: "100px",
+                        }}
+                      >
+                        Attendance %
+                      </th>
+                    </tr>
+                  </thead>
 
-                      <td className="fw-semibold">{student.rollNumber}</td>
+                  <tbody>
+                    {students.map((student, index) => {
+                      const percentage = getAttendancePercentage(student);
 
-                      <td className="text-start">
-                        {student.firstName} {student.lastName}
-                      </td>
+                      return (
+                        <tr key={student.studentId}>
+                          <td>{index + 1}</td>
 
-                      {dates.map((date) => {
-                        const dateRecords = getStudentDateAttendance(
-                          student,
-                          date,
-                        );
+                          <td className="fw-semibold">{student.rollNumber}</td>
 
-                        return (
-                          <td
-                            key={date}
-                            style={{
-                              minWidth: "80px",
-                              padding: "5px",
-                            }}
-                          >
-                            {dateRecords.length === 0 ? (
-                              <span className="text-muted">-</span>
-                            ) : (
-                              <div
+                          <td className="text-start">
+                            {student.firstName} {student.lastName}
+                          </td>
+
+                          {dates.map((date) => {
+                            const dateRecords = getStudentDateAttendance(
+                              student,
+                              date,
+                            );
+
+                            return (
+                              <td
+                                key={date}
                                 style={{
-                                  display: "grid",
-                                  gridTemplateColumns: "repeat(2, 1fr)",
-                                  gap: "2px",
+                                  minWidth: "80px",
+                                  padding: "5px",
                                 }}
                               >
-                                {dateRecords.map((record) => {
-                                  const attendance = record.students?.find(
-                                    (item) =>
-                                      item.studentId?._id === student.studentId,
-                                  );
+                                {dateRecords.length === 0 ? (
+                                  <span className="text-muted">-</span>
+                                ) : (
+                                  <div
+                                    style={{
+                                      display: "grid",
+                                      gridTemplateColumns: "repeat(2, 1fr)",
+                                      gap: "2px",
+                                    }}
+                                  >
+                                    {dateRecords.map((record) => {
+                                      const attendance = record.students?.find(
+                                        (item) =>
+                                          item.studentId?._id ===
+                                          student.studentId,
+                                      );
 
-                                  const lectureNo =
-                                    record.timeSlotId?.lectureNo;
-                                  const status = attendance?.status;
+                                      const lectureNo =
+                                        record.timeSlotId?.lectureNo;
 
-                                  return (
-                                    <span
-                                      key={record._id}
-                                      className={
-                                        status === "Present"
-                                          ? "text-success fw-bold"
-                                          : status === "Absent"
-                                            ? "text-danger fw-bold"
-                                            : "text-secondary fw-bold"
-                                      }
-                                      style={{
-                                        fontSize: "13px",
-                                        minWidth: "25px",
-                                      }}
-                                    >
-                                      L{lectureNo}:
-                                      {status === "Present"
-                                        ? "P"
-                                        : status === "Absent"
-                                          ? "A"
-                                          : "-"}
-                                    </span>
-                                  );
-                                })}
-                              </div>
-                            )}
+                                      const status = attendance?.status;
+
+                                      return (
+                                        <span
+                                          key={record._id}
+                                          className={
+                                            status === "Present"
+                                              ? "text-success fw-bold"
+                                              : status === "Absent"
+                                                ? "text-danger fw-bold"
+                                                : "text-secondary fw-bold"
+                                          }
+                                          style={{
+                                            fontSize: "13px",
+                                            minWidth: "25px",
+                                          }}
+                                        >
+                                          L{lectureNo}:
+                                          {status === "Present"
+                                            ? "P"
+                                            : status === "Absent"
+                                              ? "A"
+                                              : "-"}
+                                        </span>
+                                      );
+                                    })}
+                                  </div>
+                                )}
+                              </td>
+                            );
+                          })}
+
+                          <td>
+                            <span
+                              className={
+                                Number(percentage) >= 75
+                                  ? "badge bg-success"
+                                  : "badge bg-danger"
+                              }
+                            >
+                              {percentage}%
+                            </span>
                           </td>
-                        );
-                      })}
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </Table>
+              </div>
 
-                      <td>
-                        <span
-                          className={
-                            Number(percentage) >= 75
-                              ? "badge bg-success"
-                              : "badge bg-danger"
-                          }
-                        >
-                          {percentage}%
-                        </span>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </Table>
-          </div>
-
-          {/* No Records */}
-          {attendanceRecords.length === 0 && (
-            <div className="text-center text-muted py-5">
-              No attendance records found.
-            </div>
+              {/* No Records */}
+              {attendanceRecords.length === 0 && (
+                <div className="text-center text-muted py-5">
+                  No attendance records found.
+                </div>
+              )}
+            </>
           )}
         </Card.Body>
       </Card>

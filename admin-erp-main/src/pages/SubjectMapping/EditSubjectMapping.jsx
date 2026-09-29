@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+
 import {
   Container,
   Row,
@@ -8,8 +9,11 @@ import {
   Modal,
   Spinner,
 } from "react-bootstrap";
+
 import axios from "axios";
+
 import "bootstrap/dist/css/bootstrap.min.css";
+
 import { useNavigate, useParams } from "react-router-dom";
 
 const apiUrl = import.meta.env.VITE_API_URL;
@@ -18,12 +22,15 @@ function EditSubjectMapping() {
   let navigate = useNavigate();
   let params = useParams();
   let id = params.id;
+
   const token = localStorage.getItem("token");
+
   let [subjects, setSubjects] = useState([]);
   let [courses, setCourses] = useState([]);
   let [branchs, setBranchs] = useState([]);
 
   const [show, setShow] = useState(false);
+
   let [showForm, setShowForm] = useState(true);
   let [showSpinner, setShowSpinner] = useState(false);
   let [buttonDisabled, setButtonDisabled] = useState(false);
@@ -37,7 +44,9 @@ function EditSubjectMapping() {
     semester: "",
   });
 
-  //Get Courses.
+  // =========================
+  // GET COURSES
+  // =========================
   useEffect(() => {
     axios
       .get(apiUrl + "/courses/for/mapping")
@@ -53,7 +62,9 @@ function EditSubjectMapping() {
       });
   }, []);
 
-  //// Get Subjects.
+  // =========================
+  // GET SUBJECTS
+  // =========================
   useEffect(() => {
     axios
       .get(apiUrl + "/subjects/for/mapping")
@@ -69,7 +80,9 @@ function EditSubjectMapping() {
       });
   }, []);
 
-  // Get Branches.
+  // =========================
+  // GET BRANCHES
+  // =========================
   useEffect(() => {
     axios
       .get(apiUrl + "/branchs/for/mapping")
@@ -85,20 +98,44 @@ function EditSubjectMapping() {
       });
   }, []);
 
-  // Get Existing Subject Mapping.
+  // =========================
+  // GET EXISTING MAPPING
+  // =========================
   useEffect(() => {
     axios({
       url: apiUrl + "/subjectMapping/" + id,
       method: "get",
     })
       .then((res) => {
-        setSubjectMapping(res.data.data);
+        const data = res.data.data;
+
+        console.log("Existing Subject Mapping:", data);
+
+        setSubjectMapping({
+          session: data.session || "",
+
+          // Populated object -> ObjectId
+          subject: data.subject?._id || "",
+
+          // Populated object -> ObjectId
+          course: data.course?._id || "",
+
+          // Populated object -> ObjectId
+          branch: data.branch?._id || "",
+
+          year: data.year || "",
+          semester: data.semester || "",
+        });
       })
       .catch((err) => {
+        console.error("Error loading subject mapping:", err);
         alert("Error loading subject mapping");
       });
   }, [id]);
 
+  // =========================
+  // HANDLE FORM CHANGE
+  // =========================
   function manageUpdate(e) {
     let name = e.target.name;
     let value = e.target.value;
@@ -111,14 +148,27 @@ function EditSubjectMapping() {
     });
   }
 
+  // =========================
+  // UPDATE MAPPING
+  // =========================
   let doEditMapping = () => {
     setButtonDisabled(true);
     setShowForm(false);
     setShowSpinner(true);
+
     axios({
       url: apiUrl + "/Edit/subjectMapping/" + id,
       method: "put",
-      data: subjectMapping,
+
+      data: {
+        session: subjectMapping.session,
+        subject: subjectMapping.subject,
+        course: subjectMapping.course,
+        branch: subjectMapping.branch,
+        year: subjectMapping.year,
+        semester: subjectMapping.semester,
+      },
+
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -127,18 +177,28 @@ function EditSubjectMapping() {
         if (result.data.success) {
           setShow(true);
         }
+
         setButtonDisabled(false);
         setShowSpinner(false);
         setShowForm(true);
       })
       .catch((err) => {
+        console.error("Error updating Subject Mapping:", err);
+
         setShowSpinner(false);
         setButtonDisabled(false);
         setShowForm(true);
-        alert(err);
+
+        alert(
+          err.response?.data?.message ||
+            "Something went wrong while updating Subject Mapping",
+        );
       });
   };
 
+  // =========================
+  // CLOSE MODAL
+  // =========================
   const handleClose = () => {
     setShow(false);
     navigate("/subjectsmap");
@@ -146,18 +206,27 @@ function EditSubjectMapping() {
 
   return (
     <>
+      {/* =========================
+          FORM
+      ========================= */}
       {showForm && (
         <Container className="mt-5">
-          <h3 className="text-center mb-4 py-2 text-primary fw-bold ">
+          <h3 className="text-center mb-4 py-2 text-primary fw-bold">
             EDIT SUBJECT MAPPING
           </h3>
+
           <hr />
 
           <Form>
+            {/* =========================
+                SESSION + SUBJECT
+            ========================= */}
             <Row>
+              {/* SESSION */}
               <Col md={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>Session</Form.Label>
+
                   <Form.Select
                     name="session"
                     value={subjectMapping.session}
@@ -170,16 +239,21 @@ function EditSubjectMapping() {
                   </Form.Select>
                 </Form.Group>
               </Col>
+
+              {/* SUBJECT */}
               <Col md={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>Subjects</Form.Label>
+
                   <Form.Select
                     name="subject"
                     value={subjectMapping.subject}
                     onChange={manageUpdate}
                   >
+                    <option value="">Select Subject</option>
+
                     {subjects.map((c) => (
-                      <option key={c.value} value={c.label}>
+                      <option key={c.value} value={c.value}>
                         {c.label}
                       </option>
                     ))}
@@ -188,33 +262,45 @@ function EditSubjectMapping() {
               </Col>
             </Row>
 
+            {/* =========================
+                COURSE + BRANCH
+            ========================= */}
             <Row>
+              {/* COURSE */}
               <Col md={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>Courses</Form.Label>
+
                   <Form.Select
                     name="course"
                     value={subjectMapping.course}
                     onChange={manageUpdate}
                   >
+                    <option value="">Select Course</option>
+
                     {courses.map((c) => (
-                      <option key={c.value} value={c.label}>
+                      <option key={c.value} value={c.value}>
                         {c.label}
                       </option>
                     ))}
                   </Form.Select>
                 </Form.Group>
               </Col>
+
+              {/* BRANCH */}
               <Col md={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>Branch</Form.Label>
+
                   <Form.Select
                     name="branch"
                     value={subjectMapping.branch}
                     onChange={manageUpdate}
                   >
+                    <option value="">Select Branch</option>
+
                     {branchs.map((b) => (
-                      <option key={b.value} value={b.label}>
+                      <option key={b.value} value={b.value}>
                         {b.label}
                       </option>
                     ))}
@@ -223,10 +309,15 @@ function EditSubjectMapping() {
               </Col>
             </Row>
 
+            {/* =========================
+                YEAR + SEMESTER
+            ========================= */}
             <Row>
+              {/* YEAR */}
               <Col md={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>Year</Form.Label>
+
                   <Form.Select
                     name="year"
                     value={subjectMapping.year}
@@ -239,9 +330,12 @@ function EditSubjectMapping() {
                   </Form.Select>
                 </Form.Group>
               </Col>
+
+              {/* SEMESTER */}
               <Col md={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>Semester</Form.Label>
+
                   <Form.Select
                     name="semester"
                     value={subjectMapping.semester}
@@ -260,10 +354,14 @@ function EditSubjectMapping() {
               </Col>
             </Row>
 
+            {/* =========================
+                BUTTONS
+            ========================= */}
             <div className="d-flex gap-3 mt-4 justify-content-center">
               <Button onClick={() => navigate("/subjectsmap")} variant="danger">
                 Cancel
               </Button>
+
               <Button
                 onClick={doEditMapping}
                 disabled={buttonDisabled}
@@ -276,6 +374,9 @@ function EditSubjectMapping() {
         </Container>
       )}
 
+      {/* =========================
+          SPINNER
+      ========================= */}
       {showSpinner && (
         <div className="d-flex justify-content-center align-items-center vh-100">
           <Spinner animation="border" role="status">
@@ -283,11 +384,17 @@ function EditSubjectMapping() {
           </Spinner>
         </div>
       )}
+
+      {/* =========================
+          SUCCESS MODAL
+      ========================= */}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Success</Modal.Title>
         </Modal.Header>
+
         <Modal.Body>Subject Mapping Updated Successfully</Modal.Body>
+
         <Modal.Footer>
           <Button variant="danger" onClick={handleClose}>
             Close

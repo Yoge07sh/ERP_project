@@ -14,13 +14,21 @@ import {
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
+// Get today's date according to India Standard Time
+const getTodayIST = () => {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Kolkata",
+  }).format(new Date());
+};
+
 function AttendanceRegister() {
   const navigate = useNavigate();
 
   const [mappings, setMappings] = useState([]);
   const [selectedMapping, setSelectedMapping] = useState("");
   const [fromDate, setFromDate] = useState("");
-  const [toDate, setToDate] = useState(new Date().toISOString().split("T")[0]);
+  const [toDate, setToDate] = useState(getTodayIST());
+
   const [formData, setFormData] = useState({
     session: "",
     course: "",
@@ -34,6 +42,9 @@ function AttendanceRegister() {
   });
 
   const token = localStorage.getItem("token");
+
+  // Get today's date in IST
+  const todayIST = getTodayIST();
 
   // Get faculty mappings
   useEffect(() => {
@@ -54,7 +65,7 @@ function AttendanceRegister() {
         console.error("Error fetching faculty mappings:", err);
         alert("Failed to load faculty mappings.");
       });
-  }, []);
+  }, [token]);
 
   // When faculty selects a mapping
   const handleMappingChange = (e) => {
@@ -212,6 +223,7 @@ function AttendanceRegister() {
               </Form.Group>
             </Col>
           </Row>
+
           {/* From Date + To Date */}
           <Row>
             <Col md={6}>
@@ -231,7 +243,7 @@ function AttendanceRegister() {
                   type="date"
                   value={fromDate}
                   onChange={(e) => setFromDate(e.target.value)}
-                  max={new Date().toISOString().split("T")[0]}
+                  max={todayIST}
                   className="py-2"
                   style={{
                     borderRadius: "10px",
@@ -259,7 +271,7 @@ function AttendanceRegister() {
                   type="date"
                   value={toDate}
                   onChange={(e) => setToDate(e.target.value)}
-                  max={new Date().toISOString().split("T")[0]}
+                  max={todayIST}
                   className="py-2"
                   style={{
                     borderRadius: "10px",

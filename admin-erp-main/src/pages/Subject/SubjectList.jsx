@@ -54,7 +54,6 @@ function SubjectList() {
 
   const handleClose = () => {
     setShow(false);
-    setIsDelete(true);
   };
 
   function goToEdit(id) {
@@ -76,6 +75,7 @@ function SubjectList() {
     })
       .then((result) => {
         if (result.data.success) {
+          setIsDelete((prev) => !prev);
           setShow(true);
         }
       })
@@ -86,11 +86,11 @@ function SubjectList() {
 
   return (
     <>
-      <h3 className="text-center mb-4 py-2 text-primary fw-bold">
+      <h3 className="text-center mb-4 py-2 text-primary fw-bold text-danger">
         LIST OF SUBJECTS
       </h3>
 
-      <InputGroup className="mb-3" style={{ width: "300px" }}>
+      <InputGroup className="mb-3" style={{ width: "100%" }}>
         {" "}
         <InputGroup.Text>
           <i className="bi bi-search"></i>
@@ -113,7 +113,6 @@ function SubjectList() {
         <thead>
           <tr>
             <th>Subject Code</th>
-            <th>Subject Full Name</th>
             <th>Subject Short Name</th>
             <th>Subject Category</th>
             <th>Subject Type</th>
@@ -125,7 +124,6 @@ function SubjectList() {
           {subjects.map((subject) => (
             <tr>
               <td>{subject.subjectCode}</td>
-              <td>{subject.subjectFullName}</td>
               <td>{subject.subjectNickName}</td>
               <td>{subject.subjectCategory}</td>
               <td>{subject.subjectType}</td>

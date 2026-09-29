@@ -12,6 +12,7 @@ router.post('/add/subject', authMiddleware,(req,res)=>{
     SubjectController.addSubject(req,res)
 })
 router.get('/subjects', (req, res) => {
+    console.log('d')
     SubjectController.getSubjects(req, res);
 })
 

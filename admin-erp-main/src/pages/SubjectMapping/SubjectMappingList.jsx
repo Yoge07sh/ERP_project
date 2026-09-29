@@ -1,88 +1,131 @@
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap-icons/font/bootstrap-icons.css'
-import axios from 'axios'
-import { Modal, Button, Form, InputGroup } from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-const apiUrl = import.meta.env.VITE_API_URL
-import { FaEdit, FaTrash } from 'react-icons/fa'
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
+
+import axios from "axios";
+
+import { Modal, Button, Form, InputGroup } from "react-bootstrap";
+
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+
+import { FaEdit, FaTrash } from "react-icons/fa";
+
+const apiUrl = import.meta.env.VITE_API_URL;
 
 function SubjectMappingList() {
   let navigate = useNavigate();
+
   let [subjectsmap, setSubjectsmap] = useState([]);
+
   const [show, setShow] = useState(false);
+
   let [isDelete, setIsDelete] = useState(false);
+
   let [searchByCourse, setSearchByCourse] = useState("");
+
   const token = localStorage.getItem("token");
+
+  // =========================
+  // GET SUBJECT MAPPINGS
+  // =========================
   useEffect(() => {
     axios({
-      url: apiUrl + '/subjectsMapped',
-      method: 'get',
+      url: apiUrl + "/subjectsMapped",
+      method: "get",
       params: {
-        course: searchByCourse
-      }
+        course: searchByCourse,
+      },
     })
-      .then(result => {
+      .then((result) => {
         if (result.data.success) {
-          console.log(result.data.data)
-          setSubjectsmap(result.data.data)
+          console.log(result.data.data);
+
+          setSubjectsmap(result.data.data);
+
+          setIsDelete(false);
         }
       })
-      .catch(error => {
-        console.log(error)
-      })
-  }, [isDelete, searchByCourse])
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [isDelete, searchByCourse]);
 
+  // =========================
+  // CLOSE DELETE MODAL
+  // =========================
   const handleClose = () => {
-    setShow(false)
-    setIsDelete(true)
+    setShow(false);
+    setIsDelete(true);
+  };
+
+  // =========================
+  // EDIT
+  // =========================
+  function goToEdit(id) {
+    navigate("/edit/subjectMapping/" + id);
   }
 
-  function goToEdit (id) {
-    navigate('/edit/subjectMapping/' + id)
-  }
-
-  function goToDelete (id) {
+  // =========================
+  // DELETE
+  // =========================
+  function goToDelete(id) {
     axios({
-      url: apiUrl + '/delete/subjectMapping/' + id,
-      method: 'delete'
+      url: apiUrl + "/delete/subjectMapping/" + id,
+      method: "delete",
+
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
-      .then(result => {
+      .then((result) => {
         if (result.data.success) {
-          setShow(true)
+          setShow(true);
         }
       })
-      .catch(err => {
-        console.log(err.message)
-      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   }
 
   return (
     <>
-      <h3 className='text-center mb-4 py-2 text-primary fw-bold'>
+      {/* =========================
+          HEADING
+      ========================= */}
+      <h3 className="text-center mb-4 py-2 text-primary fw-bold text-danger">
         LIST OF SUBJECT MAPPING
       </h3>
 
-      <InputGroup className="mb-3" style={{ width: "300px" }}>
-        {" "}
+      {/* =========================
+          SEARCH
+      ========================= */}
+      <InputGroup className="mb-3" style={{ width: "100%" }}>
         <InputGroup.Text>
-          <i className='bi bi-search'></i>
+          <i className="bi bi-search"></i>
         </InputGroup.Text>
+
         <Form.Control
-          type='text'
-          placeholder=' Type Subject Name to search'
-          onChange={e => setSearchByCourse(e.target.value)}
+          type="text"
+          placeholder=" Type Course Name to search"
+          value={searchByCourse}
+          onChange={(e) => setSearchByCourse(e.target.value)}
         />
       </InputGroup>
 
+      {/* =========================
+          ADD BUTTON
+      ========================= */}
       <button
-        className='btn btn-success ms-3 mt-2 float-end'
-        onClick={() => navigate('/add/subjectMapping')}
+        className="btn btn-success ms-3 mt-2 float-end"
+        onClick={() => navigate("/add/subjectMapping")}
       >
         Map Subject +
       </button>
 
-      <table className='table text-center table-hover mt-5'>
+      {/* =========================
+          TABLE
+      ========================= */}
+      <table className="table text-center table-hover mt-5">
         <thead>
           <tr>
             <th>Session</th>
@@ -94,15 +137,41 @@ function SubjectMappingList() {
             <th>Action</th>
           </tr>
         </thead>
+
         <tbody>
-          {subjectsmap.map(subject => (
-            <tr>
+          {subjectsmap.map((subject) => (
+            <tr key={subject._id}>
+              {/* SESSION */}
               <td>{subject.session}</td>
-              <td>{subject.subject}</td>
-              <td>{subject.course}</td>
-              <td>{subject.branch}</td>
+
+              {/* SUBJECT */}
+              <td>
+                {subject.subject?.subjectNickName ||
+                  subject.subject?.subjectFullName ||
+                  "-"}
+              </td>
+
+              {/* COURSE */}
+              <td>
+                {subject.course?.courseShortName ||
+                  subject.course?.courseFullName ||
+                  "-"}
+              </td>
+
+              {/* BRANCH */}
+              <td>
+                {subject.branch?.branchShortName ||
+                  subject.branch?.branchFullName ||
+                  "-"}
+              </td>
+
+              {/* YEAR */}
               <td>{subject.year}</td>
+
+              {/* SEMESTER */}
               <td>{subject.semester}</td>
+
+              {/* ACTION */}
               <td>
                 <Button
                   variant="outline-primary"
@@ -126,20 +195,26 @@ function SubjectMappingList() {
         </tbody>
       </table>
 
-      {/* ---------Modal code ------------- */}
+      {/* =========================
+          DELETE SUCCESS MODAL
+      ========================= */}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Success</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Subject Mapping has been Deleted successfully👍</Modal.Body>
+
+        <Modal.Body>
+          Subject Mapping has been Deleted successfully 👍
+        </Modal.Body>
+
         <Modal.Footer>
-          <Button variant='danger' onClick={handleClose}>
+          <Button variant="danger" onClick={handleClose}>
             Close
           </Button>
         </Modal.Footer>
       </Modal>
     </>
-  )
+  );
 }
 
-export default SubjectMappingList
+export default SubjectMappingList;
