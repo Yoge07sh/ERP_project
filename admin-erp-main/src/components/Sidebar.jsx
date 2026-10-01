@@ -7,7 +7,7 @@ import axios from "axios";
 import { FaUserGraduate } from "react-icons/fa";
 
 // ================= SIDEBAR =================
-function Sidebar() {
+function Sidebar({ isOpen, onClose }) {
   let navigate = useNavigate();
   let [userRole, setUserRole] = useState("");
 
@@ -54,14 +54,21 @@ function Sidebar() {
   return (
     <>
       <div
-        className="sidebar d-flex flex-column justify-content-between border-end sticky-top"
-        style={{
-          height: "100vh",
-          borderRight: "1px solid #dee2e6",
-          boxShadow: "2px 0 8px rgba(0, 0, 0, 0.1)",
-        }}
+        className={`sidebar d-flex flex-column justify-content-between ${
+          isOpen ? "sidebar-open" : ""
+        }`}
       >
+        <div className="d-md-none text-end p-2">
+          <button
+            className="btn btn-sm btn-outline-light"
+            onClick={onClose}
+            type="button"
+          >
+            <i className="bi bi-x-lg"></i>
+          </button>
+        </div>
         {/* ================= SIDEBAR MENU ================= */}
+
         <div className="flex-grow-1  mt-3 overflow-auto">
           <ListGroup
             variant="flush"
@@ -76,7 +83,7 @@ function Sidebar() {
                   className="sidebar-menu-item d-flex align-items-center gap-2"
                 >
                   <i className="bi bi-mortarboard-fill"></i>
-                  <span className="d-none d-md-inline">Courses</span>
+                  <span>Courses</span>
                 </ListGroup.Item>
 
                 <ListGroup.Item
@@ -85,7 +92,7 @@ function Sidebar() {
                   className="sidebar-menu-item d-flex align-items-center gap-2"
                 >
                   <i className="bi bi-building"></i>
-                  <span className="d-none d-md-inline">Branches</span>
+                  <span>Branches</span>
                 </ListGroup.Item>
 
                 <ListGroup.Item
@@ -94,7 +101,7 @@ function Sidebar() {
                   className="sidebar-menu-item d-flex align-items-center gap-2"
                 >
                   <i className="bi bi-journal-bookmark"></i>
-                  <span className="d-none d-md-inline">Subjects</span>
+                  <span>Subjects</span>
                 </ListGroup.Item>
 
                 <ListGroup.Item
@@ -103,7 +110,7 @@ function Sidebar() {
                   className="sidebar-menu-item d-flex align-items-center gap-2"
                 >
                   <i className="bi bi-diagram-2"></i>
-                  <span className="d-none d-md-inline">Subject Mapping</span>
+                  <span>Subject Mapping</span>
                 </ListGroup.Item>
 
                 <ListGroup.Item
@@ -112,7 +119,7 @@ function Sidebar() {
                   className="sidebar-menu-item d-flex align-items-center gap-2"
                 >
                   <i className="bi bi-person-workspace"></i>
-                  <span className="d-none d-md-inline">Faculties</span>
+                  <span>Faculties</span>
                 </ListGroup.Item>
 
                 <ListGroup.Item
@@ -121,7 +128,7 @@ function Sidebar() {
                   className="sidebar-menu-item d-flex align-items-center gap-2"
                 >
                   <i className="bi bi-diagram-3"></i>
-                  <span className="d-none d-md-inline">Faculty Mapping</span>
+                  <span>Faculty Mapping</span>
                 </ListGroup.Item>
 
                 <ListGroup.Item
@@ -130,7 +137,7 @@ function Sidebar() {
                   className="sidebar-menu-item d-flex align-items-center gap-2"
                 >
                   <FaUserGraduate />
-                  <span className="d-none d-md-inline">Students</span>
+                  <span>Students</span>
                 </ListGroup.Item>
 
                 <ListGroup.Item
@@ -139,7 +146,7 @@ function Sidebar() {
                   className="sidebar-menu-item d-flex align-items-center gap-2"
                 >
                   <i className="bi bi-clock"></i>
-                  <span className="d-none d-md-inline">TimeSlots</span>
+                  <span>TimeSlots</span>
                 </ListGroup.Item>
               </>
             )}
@@ -153,7 +160,7 @@ function Sidebar() {
                   className="sidebar-menu-item d-flex align-items-center gap-2"
                 >
                   <i className="bi bi-clipboard-check"></i>
-                  <span className="d-none d-md-inline">Attendance</span>
+                  <span>Attendance</span>
                 </ListGroup.Item>
               </>
             )}
@@ -167,13 +174,16 @@ function Sidebar() {
                   className="sidebar-menu-item d-flex align-items-center gap-2"
                 >
                   <i className="bi bi-person-circle"></i>
-                  <span className="d-none d-md-inline">My Profile</span>
+                  <span>My Profile</span>
                 </ListGroup.Item>
               </>
             )}
           </ListGroup>
         </div>
       </div>
+      {isOpen && (
+        <div className="sidebar-overlay d-md-none" onClick={onClose}></div>
+      )}
     </>
   );
 }

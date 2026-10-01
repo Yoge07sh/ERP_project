@@ -28,28 +28,55 @@ async function addSubject(req, res) {
     console.log(error);
   }
 }
+
 async function getSubjects(req, res) {
   try {
-    let subjects = await Subject.find(
-      {
-        subjectFullName: { $regex: new RegExp(req.query.subjectFullName, "i") },
+    const page = parseInt(req.query.pageNo) || 1;
+    const limit = parseInt(req.query.limit) || 5;
+    const skip = (page - 1) * limit;
+
+    const searchTerm = req.query.subjectFullName || "";
+
+    const filter = {
+      subjectFullName: {
+        $regex: new RegExp(searchTerm, "i"),
       },
-      {
-        _id: 1,
-        subjectFullName:1,
-        subjectCode: 1,
-        subjectNickName: 1,
-        subjectCategory: 1,
-        subjectType: 1,
-        creditScore: 1,
+    };
+
+    const totalSubjects = await Subject.countDocuments(filter);
+
+    const subjects = await Subject.find(filter, {
+      _id: 1,
+      subjectFullName: 1,
+      subjectCode: 1,
+      subjectNickName: 1,
+      subjectCategory: 1,
+      subjectType: 1,
+      creditScore: 1,
+    })
+      .sort({ subjectFullName: 1 })
+      .skip(skip)
+      .limit(limit);
+
+    const totalPages = Math.ceil(totalSubjects / limit);
+
+    res.status(200).send({
+      success: true,
+      data: subjects,
+      pagination: {
+        currentPage: page,
+        limit: limit,
+        totalRecords: totalSubjects,
+        totalPages: totalPages,
       },
-    );
-    res.status(200).send({ success: true, data: subjects });
+    });
   } catch (error) {
     console.log(error);
-    res
-      .status(500)
-      .send({ success: false, message: "Something went wrong..!" });
+
+    res.status(500).send({
+      success: false,
+      message: "Something went wrong..!",
+    });
   }
 }
 
@@ -93,12 +120,10 @@ async function editSubject(req, res) {
       .send({ success: true, message: "Subject has been updated" });
   } catch (error) {
     console.log(error);
-    res
-      .status(500)
-      .send({
-        success: false,
-        message: "Something went wrong in updating Subject.",
-      });
+    res.status(500).send({
+      success: false,
+      message: "Something went wrong in updating Subject.",
+    });
   }
 }
 
@@ -125,12 +150,10 @@ async function deleteSubject(req, res) {
       .send({ success: true, message: "Subject has been deleted" });
   } catch (error) {
     console.log(error);
-    res
-      .status(500)
-      .send({
-        success: false,
-        message: "Something went wrong in deleted Subject.",
-      });
+    res.status(500).send({
+      success: false,
+      message: "Something went wrong in deleted Subject.",
+    });
   }
 }
 

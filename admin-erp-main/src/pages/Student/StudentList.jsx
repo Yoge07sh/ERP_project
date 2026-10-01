@@ -5,6 +5,7 @@ import { Modal, Button, Form, InputGroup, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
+import Pagination from "../../components/Pagination";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 function StudentList() {
@@ -17,6 +18,13 @@ function StudentList() {
   let [searchByEnrollment] = useState("");
   let [searchByRollno] = useState("");
   let [searchByFileno] = useState("");
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(0);
+
+  const limit = 20;
+
   const token = localStorage.getItem("token");
   useEffect(() => {
     axios({
@@ -28,12 +36,18 @@ function StudentList() {
         enrollmentNumber: searchByEnrollment,
         rollNumber: searchByRollno,
         fileNumber: searchByFileno,
+        page: currentPage,
+        limit: limit,
       },
     })
       .then((result) => {
         if (result.data.success) {
-          // console.log(result.data.data);
           setStudents(result.data.data);
+              if (result.data.pagination) {
+                setTotalPages(result.data.pagination.totalPages);
+                setTotalRecords(result.data.pagination.totalRecords);
+              }
+
         }
       })
       .catch((error) => {
@@ -46,6 +60,7 @@ function StudentList() {
     searchByEnrollment,
     searchByRollno,
     searchByFileno,
+    currentPage,
   ]);
 
   const handleClose = () => {
@@ -166,7 +181,11 @@ function StudentList() {
             ))}
           </tbody>
         </table>
-
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
         {/* ---------Modal code ------------- */}
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>

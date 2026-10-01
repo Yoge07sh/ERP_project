@@ -1,7 +1,9 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Sidebar from "./components/Sidebar";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+
+import AdminLayout from "./components/AdminLayout";
+
 import WelcomePage from "./pages/WelcomePage/WelcomePage";
-import AdminNavbar from "./components/AdminNavbar";
+
 // Branch
 import AddBranch from "./pages/Branch/AddBranch";
 import BranchList from "./pages/Branch/BranchList";
@@ -26,10 +28,12 @@ import EditSubjectMapping from "./pages/SubjectMapping/EditSubjectMapping";
 import AddFaculty from "./pages/Faculty/AddFaculty";
 import FacultyList from "./pages/Faculty/FacultyList";
 import FacultyEdit from "./pages/Faculty/FacultyEdit";
-import AdminLogin from "./pages/LoginSignupPages/AdminLogin";
 import FacultyProfile from "./pages/Faculty/FacultyProfile";
 
-//faculty mapping
+// Login
+import AdminLogin from "./pages/LoginSignupPages/AdminLogin";
+
+// Faculty Mapping
 import FacultyMappingList from "./pages/FacultyMapping/FacultyMappingList";
 import AddFacultyMapping from "./pages/FacultyMapping/AddFacultyMapping";
 import EditFacultyMapping from "./pages/FacultyMapping/EditFacultyMapping";
@@ -39,12 +43,13 @@ import AddStudent from "./pages/Student/AddStudent";
 import StudentList from "./pages/Student/StudentList";
 import StudentEdit from "./pages/Student/StudentEdit";
 import StudentProfile from "./pages/Student/StudentProfile";
-//TimeSlots
+
+// TimeSlots
 import TimeSlotList from "./pages/TimeSlots/TimeSlotsList";
 import AddTimeSlot from "./pages/TimeSlots/AddTimeSlot";
 import EditTimeSlot from "./pages/TimeSlots/EditTimeSot";
 
-//Attendance
+// Attendance
 import GetStudentForm from "./pages/Attendance/GetStudentForm";
 import StudentsAttendance from "./pages/Attendance/StudentsAttendance";
 import ViewAttendance from "./pages/Attendance/ViewAttendance";
@@ -52,113 +57,118 @@ import EditAttendance from "./pages/Attendance/EditAttendance";
 import AttendanceRegister from "./pages/Attendance/AttendanceRegister";
 import Eregister from "./pages/Attendance/Eregister";
 
-function App() {
-  return (
-    <BrowserRouter>
-      {/* <NavBar /> */}
+function AppContent() {
+  const location = useLocation();
+
+  // Login page should NOT use AdminLayout
+  if (location.pathname === "/") {
+    return (
       <Routes>
         <Route path="/" element={<AdminLogin />} />
       </Routes>
-      <div>
-        <AdminNavbar></AdminNavbar>
-        <div className="d-flex">
-          <Sidebar />
-          <main style={{ flexGrow: 1, padding: "20px" }}>
-            <Routes>
-              <Route path="/admin/dashboard" element={<WelcomePage />} />
+    );
+  }
 
-              {/* Welcome Page */}
-              <Route path="/" element={<WelcomePage />} />
+  // All other pages use AdminLayout
+  return (
+    <AdminLayout>
+      <Routes>
+        {/* Dashboard */}
+        <Route path="/admin/dashboard" element={<WelcomePage />} />
 
-              {/* Courses */}
-              <Route path="/courses" element={<CourseList />} />
-              <Route path="/add/course" element={<AddCourse />} />
-              <Route path="/edit/course/:id" element={<CourseEdit />} />
+        {/* Welcome */}
+        <Route path="/welcome" element={<WelcomePage />} />
 
-              {/* Branches */}
-              <Route path="/branches" element={<BranchList />} />
-              <Route path="/add/branch" element={<AddBranch />} />
-              <Route path="/edit/branch/:id" element={<BranchEdit />} />
+        {/* Courses */}
+        <Route path="/courses" element={<CourseList />} />
 
-              {/* Subjects */}
-              <Route path="/subjects" element={<SubjectList />} />
-              <Route path="/add/subject" element={<AddSubject />} />
-              <Route path="/edit/subject/:id" element={<SubjectEdit />} />
+        <Route path="/add/course" element={<AddCourse />} />
 
-              {/* Subject Mapping */}
-              <Route path="/subjectsmap" element={<SubjectMappingList />} />
-              <Route
-                path="/add/subjectmapping"
-                element={<AddSubjectMapping />}
-              />
-              <Route
-                path="/edit/subjectMapping/:id"
-                element={<EditSubjectMapping />}
-              />
-              <Route path="/add/faculty" element={<AddFaculty />} />
-              <Route path="/faculty/:id" element={<FacultyProfile />} />
+        <Route path="/edit/course/:id" element={<CourseEdit />} />
 
-              {/* Students */}
+        {/* Branches */}
+        <Route path="/branches" element={<BranchList />} />
 
-              <Route path="/students" element={<StudentList />} />
-              <Route path="/add/student" element={<AddStudent />} />
-              <Route path="/edit/student/:id" element={<StudentEdit />} />
-              <Route path="/student/profile/:id" element={<StudentProfile />} />
+        <Route path="/add/branch" element={<AddBranch />} />
 
-              {/*TimeSlots*/}
-              <Route path="/timeslots" element={<TimeSlotList />} />
-              <Route path="/add/timeslots" element={<AddTimeSlot />} />
-              <Route path="/edit/timeslot/:id" element={<EditTimeSlot />} />
+        <Route path="/edit/branch/:id" element={<BranchEdit />} />
 
-              {/*facultyMapping*/}
-              <Route
-                path="/facultymapping"
-                element={<FacultyMappingList></FacultyMappingList>}
-              ></Route>
-              <Route
-                path="/add/facultymapping"
-                element={<AddFacultyMapping></AddFacultyMapping>}
-              ></Route>
-              <Route
-                path="/edit/facultymapping/:id"
-                element={<EditFacultyMapping></EditFacultyMapping>}
-              ></Route>
+        {/* Subjects */}
+        <Route path="/subjects" element={<SubjectList />} />
 
-              {/*faculty*/}
-              <Route path="/faculties" element={<FacultyList />}></Route>
-              <Route path="/add/faculty" element={<AddFaculty />} />
-              <Route path="/edit/faculty/:id" element={<FacultyEdit />} />
-              <Route path="/faculty/profile/:id" element={<FacultyProfile />} />
+        <Route path="/add/subject" element={<AddSubject />} />
 
-              {/*Attendance*/}
-              <Route
-                path="/getstudents"
-                element={<GetStudentForm></GetStudentForm>}
-              ></Route>
-              <Route
-                path="/studentsattendance"
-                element={<StudentsAttendance></StudentsAttendance>}
-              ></Route>
-              <Route
-                path="/viewattendance"
-                element={<ViewAttendance></ViewAttendance>}
-              />
-              <Route
-                path="/edit/attendance/:facultyMapId/:SingletimeSlot/:selectedDate"
-                element={<EditAttendance />}
-              />
-              <Route
-                path="/register"
-                element={<AttendanceRegister></AttendanceRegister>}
-              ></Route>
-              <Route
-                path="/eregister"
-                element={<Eregister></Eregister>}
-              ></Route>
-            </Routes>
-          </main>
-        </div>
-      </div>
+        <Route path="/edit/subject/:id" element={<SubjectEdit />} />
+
+        {/* Subject Mapping */}
+        <Route path="/subjectsmap" element={<SubjectMappingList />} />
+
+        <Route path="/add/subjectmapping" element={<AddSubjectMapping />} />
+
+        <Route
+          path="/edit/subjectMapping/:id"
+          element={<EditSubjectMapping />}
+        />
+
+        {/* Faculty */}
+        <Route path="/faculties" element={<FacultyList />} />
+
+        <Route path="/add/faculty" element={<AddFaculty />} />
+
+        <Route path="/edit/faculty/:id" element={<FacultyEdit />} />
+
+        <Route path="/faculty/profile/:id" element={<FacultyProfile />} />
+
+        {/* Faculty Mapping */}
+        <Route path="/facultymapping" element={<FacultyMappingList />} />
+
+        <Route path="/add/facultymapping" element={<AddFacultyMapping />} />
+
+        <Route
+          path="/edit/facultymapping/:id"
+          element={<EditFacultyMapping />}
+        />
+
+        {/* Students */}
+        <Route path="/students" element={<StudentList />} />
+
+        <Route path="/add/student" element={<AddStudent />} />
+
+        <Route path="/edit/student/:id" element={<StudentEdit />} />
+
+        <Route path="/student/profile/:id" element={<StudentProfile />} />
+
+        {/* TimeSlots */}
+        <Route path="/timeslots" element={<TimeSlotList />} />
+
+        <Route path="/add/timeslots" element={<AddTimeSlot />} />
+
+        <Route path="/edit/timeslot/:id" element={<EditTimeSlot />} />
+
+        {/* Attendance */}
+        <Route path="/getstudents" element={<GetStudentForm />} />
+
+        <Route path="/studentsattendance" element={<StudentsAttendance />} />
+
+        <Route path="/viewattendance" element={<ViewAttendance />} />
+
+        <Route
+          path="/edit/attendance/:facultyMapId/:SingletimeSlot/:selectedDate"
+          element={<EditAttendance />}
+        />
+
+        <Route path="/register" element={<AttendanceRegister />} />
+
+        <Route path="/eregister" element={<Eregister />} />
+      </Routes>
+    </AdminLayout>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
     </BrowserRouter>
   );
 }

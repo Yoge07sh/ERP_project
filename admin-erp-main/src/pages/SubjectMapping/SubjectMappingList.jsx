@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import { FaEdit, FaTrash } from "react-icons/fa";
-
+import Pagination from "../../components/Pagination";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 function SubjectMappingList() {
@@ -22,7 +22,10 @@ function SubjectMappingList() {
   let [isDelete, setIsDelete] = useState(false);
 
   let [searchByCourse, setSearchByCourse] = useState("");
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const limit = 5;
   const token = localStorage.getItem("token");
 
   // =========================
@@ -34,6 +37,8 @@ function SubjectMappingList() {
       method: "get",
       params: {
         course: searchByCourse,
+        pageNo: currentPage,
+        limit: limit,
       },
     })
       .then((result) => {
@@ -42,14 +47,16 @@ function SubjectMappingList() {
 
           setSubjectsmap(result.data.data);
 
+          setTotalPages(result.data.pagination.totalPages);
+          setTotalRecords(result.data.pagination.totalRecords);
+
           setIsDelete(false);
         }
       })
       .catch((error) => {
         console.log(error);
       });
-  }, [isDelete, searchByCourse]);
-
+  }, [isDelete, searchByCourse, currentPage]);
   // =========================
   // CLOSE DELETE MODAL
   // =========================
@@ -108,7 +115,10 @@ function SubjectMappingList() {
           type="text"
           placeholder=" Type Course Name to search"
           value={searchByCourse}
-          onChange={(e) => setSearchByCourse(e.target.value)}
+          onChange={(e) => {
+            setSearchByCourse(e.target.value);
+            setCurrentPage(1);
+          }}
         />
       </InputGroup>
 
@@ -194,6 +204,12 @@ function SubjectMappingList() {
           ))}
         </tbody>
       </table>
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
 
       {/* =========================
           DELETE SUCCESS MODAL
