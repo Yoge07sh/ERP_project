@@ -153,20 +153,59 @@ async function addSubjectMapping(req, res) {
 
 async function getSubjectsMapped(req, res) {
   try {
+    const page = parseInt(req.query.pageNo) || 1;
+    const limit = parseInt(req.query.limit) || 5;
+    const skip = (page - 1) * limit;
+
+    const searchTerm = req.query.course || "";
+
     let filter = {};
 
-    if (req.query.course) {
-      filter.course = req.query.course;
+    // Search course by name
+    if (searchTerm.trim() !== "") {
+      const matchingCourses = await Course.find({
+        $or: [
+          {
+            courseFullName: {
+              $regex: searchTerm.trim(),
+              $options: "i",
+            },
+          },
+          {
+            courseShortName: {
+              $regex: searchTerm.trim(),
+              $options: "i",
+            },
+          },
+        ],
+      }).select("_id");
+
+      const courseIds = matchingCourses.map((course) => course._id);
+
+      filter.course = { $in: courseIds };
     }
+
+    const totalSubjectsMapped = await Mapping.countDocuments(filter);
 
     const subjectsmap = await Mapping.find(filter)
       .populate("subject", "subjectNickName subjectFullName")
       .populate("course", "courseShortName courseFullName")
-      .populate("branch", "branchShortName branchFullName");
+      .populate("branch", "branchShortName branchFullName")
+      .sort({ session: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const totalPages = Math.ceil(totalSubjectsMapped / limit);
 
     res.status(200).send({
       success: true,
       data: subjectsmap,
+      pagination: {
+        currentPage: page,
+        limit: limit,
+        totalRecords: totalSubjectsMapped,
+        totalPages: totalPages,
+      },
     });
   } catch (error) {
     console.log(error);
@@ -177,7 +216,6 @@ async function getSubjectsMapped(req, res) {
     });
   }
 }
-
 const getSubjectMappingById = async (req, res) => {
   try {
     let id = req.params.id;

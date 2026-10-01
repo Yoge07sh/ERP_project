@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import axios from "axios";
-import { Form, InputGroup, Button, Modal, Pagination } from "react-bootstrap";
+import { Form, InputGroup, Button, Modal } from "react-bootstrap";
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
+import Pagination from "../../components/Pagination";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 function FacultyList() {
@@ -12,23 +13,14 @@ function FacultyList() {
   const [showModal, setShowModal] = useState(false);
   let [showSpinner, setShowSpinner] = useState(false);
   let [buttonDisabled, setButtonDisabled] = useState(false);
-
   let [file, setFile] = useState("");
-  let [nop, setNop] = useState(1);
-  let [pageNo, setPageNo] = useState(1);
-  let [totalFaculties, setTotalFaculties] = useState(0);
-  let facultyPerPage = 5;
-  let items = [];
-  for (let i = 1; i <= nop; i++) {
-    items.push(
-      <Pagination.Item key={i} onClick={() => setPageNo(i)}>
-        {i}
-      </Pagination.Item>,
-    );
-  }
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(0);
 
+  const limit = 5;
   let navigate = useNavigate();
-
+  const token = localStorage.getItem("token");
   let [faculties, setFaculties] = useState([]);
   let [searchByFacultyName, setSearchByFacultyName] = useState("");
 
@@ -38,42 +30,21 @@ function FacultyList() {
       method: "get",
       params: {
         firstName: searchByFacultyName,
-        pageNo: pageNo,
-        limit: facultyPerPage,
-      },
-    })
-      .then((result) => {
-        if (result.data.success) {
-          console.log(result.data.data);
-          setTotalFaculties(result.data.totalCount);
-          setNop(Math.ceil(result.data.totalCount / facultyPerPage));
-          setFaculties(result.data.data);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [searchByFacultyName, facultyPerPage, pageNo]);
-
-  function searchFacutly(firstName) {
-    setSearchByFacultyName(firstName);
-    axios({
-      url: apiUrl + "/faculty/search/" + firstName,
-      method: "get",
-      params: {
-        firstName: searchByFacultyName,
+        pageNo: currentPage,
+        limit: limit,
       },
     })
       .then((result) => {
         if (result.data.success) {
           setFaculties(result.data.data);
-          // setCourses(result.data.data || []);
+          setTotalPages(result.data.pagination.totalPages);
+          setTotalRecords(result.data.pagination.totalRecords);
         }
       })
       .catch((error) => {
         console.log(error);
       });
-  }
+  }, [searchByFacultyName, currentPage]);
 
   function doUploadCsv() {
     setShowModal(true);
@@ -167,7 +138,10 @@ function FacultyList() {
         <Form.Control
           type="text"
           placeholder=" Type Faculty Name to search"
-          onChange={(e) => searchFacutly(e.target.value)}
+          onChange={(e) => {
+            setSearchByFacultyName(e.target.value);
+            setCurrentPage(1);
+          }}
         />
       </InputGroup>
       <div className=" d-flex align-content-center gap-2 ms-3 mt-2 float-end">
@@ -243,10 +217,11 @@ function FacultyList() {
         </tbody>
       </table>
 
-      <div className="d-flex justify-content-center">
-        {totalFaculties > facultyPerPage && <Pagination>{items}</Pagination>}
-      </div>
-
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
       {showSpinner && (
         <div className="d-flex justify-content-center align-items-center vh-100">
           <Spinner animation="border" role="status">

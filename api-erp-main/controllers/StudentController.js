@@ -151,7 +151,13 @@ async function getStudents(req, res) {
   try {
     const searchTerm = req.query.courseFullName || "";
 
-    let student = await Student.find({
+    // Pagination
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+
+    const skip = (page - 1) * limit;
+
+    const filter = {
       $or: [
         { firstName: { $regex: new RegExp(searchTerm, "i") } },
         { lastName: { $regex: new RegExp(searchTerm, "i") } },
@@ -159,14 +165,34 @@ async function getStudents(req, res) {
         { fileNumber: { $regex: new RegExp(searchTerm, "i") } },
         { rollNumber: { $regex: new RegExp(searchTerm, "i") } },
       ],
-    });
+    };
 
-    res.status(200).send({ success: true, data: student });
+    // Total matching students
+    const totalRecords = await Student.countDocuments(filter);
+
+    // Students for current page
+    const student = await Student.find(filter).skip(skip).limit(limit);
+
+    // Total number of pages
+    const totalPages = Math.ceil(totalRecords / limit);
+
+    res.status(200).send({
+      success: true,
+      data: student,
+      pagination: {
+        currentPage: page,
+        limit: limit,
+        totalRecords: totalRecords,
+        totalPages: totalPages,
+      },
+    });
   } catch (error) {
     console.log(error);
-    res
-      .status(500)
-      .send({ success: false, message: "Something went wrong..!" });
+
+    res.status(500).send({
+      success: false,
+      message: "Something went wrong..!",
+    });
   }
 }
 

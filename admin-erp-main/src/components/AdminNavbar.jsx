@@ -18,7 +18,6 @@ function SidebarClock() {
     <div
       style={{
         display: "flex",
-        position:"fixed",
         alignItems: "center",
         justifyContent: "center",
         gap: "12px",
@@ -73,7 +72,7 @@ function SidebarClock() {
   );
 }
 
-function AdminNavbar() {
+function AdminNavbar({ onMenuClick }) {
   const username = localStorage.getItem("name") || "Admin";
 
   const handleLogout = () => {
@@ -97,10 +96,20 @@ function AdminNavbar() {
           className="d-flex align-items-center w-100"
           style={{ position: "relative", height: "70px" }}
         >
+          <Button
+            variant="outline-light"
+            className="d-md-none me-2"
+            onClick={onMenuClick}
+            style={{
+              border: "none",
+              fontSize: "22px",
+            }}
+          >
+            <i className="bi bi-list"></i>
+          </Button>
           {/* Left - Logo */}
           <Navbar.Brand
-            href="#home"
-            className="d-flex align-items-center m-0"
+            className="navbar-brand-custom d-flex align-items-center m-0"
             style={{
               color: "#ffffff",
               fontWeight: "700",
@@ -119,20 +128,15 @@ function AdminNavbar() {
           </Navbar.Brand>
 
           {/* Center - Live Clock */}
-          <div
-            style={{
-              position: "absolute",
-              left: "25%",
-              transform: "translateX(-50%)",
-            }}
-          >
+
+          <div className="navbar-clock">
             <SidebarClock />
           </div>
 
           {/* Right - User + Logout */}
-          <div className="ms-auto d-flex align-items-center gap-3">
+          <div className="navbar-right ms-auto d-flex align-items-center gap-3">
             <div
-              className="d-flex align-items-center"
+              className="navbar-user d-flex align-items-center"
               style={{
                 color: "#ffffff",
                 fontSize: "14px",

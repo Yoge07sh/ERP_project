@@ -1,17 +1,11 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import {
-  Button,
-  Form,
-  InputGroup,
-  Container,
-  Pagination,
-  Modal,
-} from "react-bootstrap";
+import { Button, Form, InputGroup, Container, Modal } from "react-bootstrap";
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import Pagination from "../../components/Pagination";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 const token = localStorage.getItem("token");
@@ -28,11 +22,10 @@ function FacultyMappingList() {
   const [sessionSearch, setSessionSearch] = useState("");
   const [facultyNameSearch, setFacultyNameSearch] = useState("");
 
-  // Pagination state
   const [page, setPage] = useState(1);
-  const [limit] = useState(10);
+  const [limit] = useState(5);
   const [totalPages, setTotalPages] = useState(1);
-
+  const [totalRecords, setTotalRecords] = useState(0);
   // Loading state
   const [loading, setLoading] = useState(false);
 
@@ -53,8 +46,8 @@ function FacultyMappingList() {
       });
 
       setFacultyMapping(res.data.data);
-
-      setTotalPages(res.data.totalPages);
+      setTotalPages(res.data.pagination.totalPages);
+      setTotalRecords(res.data.pagination.totalRecords);
     } catch (err) {
       console.log(err);
 
@@ -232,47 +225,12 @@ function FacultyMappingList() {
           </tbody>
         </table>
       </div>
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={setPage}
+      />
 
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="d-flex justify-content-center mt-4">
-          <Pagination>
-            <Pagination.First
-              disabled={page === 1}
-              onClick={() => setPage(1)}
-            />
-
-            <Pagination.Prev
-              disabled={page === 1}
-              onClick={() => setPage(page - 1)}
-            />
-
-            {[...Array(totalPages)].map((_, index) => {
-              const pageNumber = index + 1;
-
-              return (
-                <Pagination.Item
-                  key={pageNumber}
-                  active={pageNumber === page}
-                  onClick={() => setPage(pageNumber)}
-                >
-                  {pageNumber}
-                </Pagination.Item>
-              );
-            })}
-
-            <Pagination.Next
-              disabled={page === totalPages}
-              onClick={() => setPage(page + 1)}
-            />
-
-            <Pagination.Last
-              disabled={page === totalPages}
-              onClick={() => setPage(totalPages)}
-            />
-          </Pagination>
-        </div>
-      )}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Success</Modal.Title>
