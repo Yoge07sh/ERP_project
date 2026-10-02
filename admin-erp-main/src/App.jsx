@@ -56,6 +56,10 @@ import ViewAttendance from "./pages/Attendance/ViewAttendance";
 import EditAttendance from "./pages/Attendance/EditAttendance";
 import AttendanceRegister from "./pages/Attendance/AttendanceRegister";
 import Eregister from "./pages/Attendance/Eregister";
+import AddLeave from "./pages/Leaves/AddLeaves";
+import LeaveForm from "./pages/Leaves/LeaveForm";
+import LeaveDashboard from "./pages/Leaves/LeaveDashboard";
+import LeaveStatus from "./pages/Leaves/LeaveStatus";
 
 function AppContent() {
   const location = useLocation();
@@ -160,6 +164,12 @@ function AppContent() {
         <Route path="/register" element={<AttendanceRegister />} />
 
         <Route path="/eregister" element={<Eregister />} />
+        
+        {/* LEAVES */}
+        <Route path="/leaves" element={<AddLeave />} />
+        <Route path="/getLeaveDashboard" element={<LeaveDashboard />} />
+        <Route path="/getLeaveForm" element={<LeaveForm />} />
+        <Route path="/LeaveStatus" element={<LeaveStatus></LeaveStatus>}></Route>
       </Routes>
     </AdminLayout>
   );
