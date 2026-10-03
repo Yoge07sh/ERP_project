@@ -5,7 +5,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { FaUserGraduate } from "react-icons/fa";
-
+import { FaCalendarAlt } from "react-icons/fa";
 // ================= SIDEBAR =================
 function Sidebar({ isOpen, onClose }) {
   let navigate = useNavigate();
@@ -148,6 +148,16 @@ function Sidebar({ isOpen, onClose }) {
                   <i className="bi bi-clock"></i>
                   <span>TimeSlots</span>
                 </ListGroup.Item>
+                 <>
+                <ListGroup.Item
+                  as={NavLink}
+                  to="/leaves"
+                  className="sidebar-menu-item d-flex align-items-center gap-2"
+                >
+                  <i className="bi bi-calendar"></i>
+                  <span className="d-none d-md-inline">Leaves</span>
+                </ListGroup.Item>
+              </>
               </>
             )}
 
@@ -161,6 +171,14 @@ function Sidebar({ isOpen, onClose }) {
                 >
                   <i className="bi bi-clipboard-check"></i>
                   <span>Attendance</span>
+                </ListGroup.Item>
+                 <ListGroup.Item
+                  as={NavLink}
+                  to="/getLeaveDashboard"
+                  className="sidebar-menu-item d-flex align-items-center gap-2"
+                >
+                  <FaCalendarAlt />
+                  <span className="d-none d-md-inline">Leaves</span>
                 </ListGroup.Item>
               </>
             )}
@@ -178,6 +196,7 @@ function Sidebar({ isOpen, onClose }) {
                 </ListGroup.Item>
               </>
             )}
+            
           </ListGroup>
         </div>
       </div>
