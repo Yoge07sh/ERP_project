@@ -158,6 +158,37 @@ const addFacultyMapping = async (req, res) => {
         message: "Only admin can perform this operation",
       });
     }
+
+    const { session, course, branch, year, semester, section, timeSlots } =
+      req.body;
+
+    // Check if time slot is selected
+    if (!Array.isArray(timeSlots) || timeSlots.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Please select a time slot.",
+      });
+    }
+
+    // Check if the selected time slot is already assigned
+    // to the same class
+    const existingMapping = await FacultyMap.findOne({
+      session,
+      course,
+      branch,
+      year,
+      semester,
+      section,
+      timeSlots: { $in: timeSlots },
+    });
+
+    if (existingMapping) {
+      return res.status(400).json({
+        success: false,
+        message: "This time slot is already assigned to this class.",
+      });
+    }
+
     const facultyMapping = new FacultyMap(req.body);
 
     await facultyMapping.save();
@@ -273,6 +304,14 @@ const getFacultyList = async (req, res) => {
         },
       },
       {
+        $lookup: {
+          from: "timeslots",
+          localField: "timeSlots",
+          foreignField: "_id",
+          as: "timeSlots",
+        },
+      },
+      {
         $unwind: {
           path: "$facultyId",
           preserveNullAndEmptyArrays: true,
@@ -341,7 +380,7 @@ const getFacultyMappingById = async (req, res) => {
 
     let facultyMap = await FacultyMap.findOne({
       _id: facultyId,
-    });
+    }).populate("timeSlots");
 
     console.log("Faculty Mapping:", facultyMap);
 
@@ -384,9 +423,9 @@ const editFacultyMapping = async (req, res) => {
       });
     }
 
-    let facultyId = req.params.id;
+    const facultyId = req.params.id;
 
-    let facultyMap = await FacultyMap.findOne({
+    const facultyMap = await FacultyMap.findOne({
       _id: facultyId,
     });
 
@@ -397,7 +436,44 @@ const editFacultyMapping = async (req, res) => {
       });
     }
 
+    const { session, course, branch, year, semester, section, timeSlots } =
+      req.body;
+
+    // Check time slot
+    if (!Array.isArray(timeSlots) || timeSlots.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Please select a time slot.",
+      });
+    }
+
+    // Check if the selected time slot is already
+    // assigned to another mapping of the same class
+    const existingMapping = await FacultyMap.findOne({
+      _id: { $ne: facultyId },
+
+      session,
+      course,
+      branch,
+      year,
+      semester,
+      section,
+
+      timeSlots: {
+        $in: timeSlots,
+      },
+    });
+
+    if (existingMapping) {
+      return res.status(400).json({
+        success: false,
+        message: "This time slot is already assigned to this class.",
+      });
+    }
+
+    // Update mapping
     Object.assign(facultyMap, req.body);
+
     await facultyMap.save();
 
     res.status(200).send({
@@ -406,9 +482,12 @@ const editFacultyMapping = async (req, res) => {
       data: facultyMap,
     });
   } catch (error) {
+    console.error("Error updating FacultyMapping:", error);
+
     res.status(500).send({
       success: false,
       message: "Something went wrong in updating FacultyMapping",
+      error: error.message,
     });
   }
 };

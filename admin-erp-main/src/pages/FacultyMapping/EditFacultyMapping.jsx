@@ -20,12 +20,15 @@ function EditFacultyMapping() {
     section: "",
     subjectId: "",
     loadPerWeek: "",
+    timeSlots: [],
   });
 
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [branches, setBranches] = useState([]);
   const [faculties, setFaculties] = useState([]);
+  const [timeSlots, setTimeSlots] = useState([]);
+  const [showConflictModal, setShowConflictModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
   const token = localStorage.getItem("token");
@@ -40,8 +43,24 @@ function EditFacultyMapping() {
     setFacultyMapping((prev) => ({
       ...prev,
       [name]: value,
+      ...(name === "session" && { timeSlots: [] }),
     }));
   };
+
+  useEffect(() => {
+    axios
+      .get(apiUrl + "/timeslots")
+      .then((res) => {
+        if (res.data.success) {
+          setTimeSlots(res.data.data);
+        } else {
+          alert("Failed to load Time Slots.");
+        }
+      })
+      .catch((err) => {
+        console.error("Error fetching Time Slots:", err);
+      });
+  }, []);
 
   useEffect(() => {
     axios
@@ -118,26 +137,23 @@ function EditFacultyMapping() {
 
           setFacultyMapping({
             session: data.session || "",
-
             facultyId: data.facultyId?._id || data.facultyId || "",
-
             course: data.course?._id || data.course?.value || data.course || "",
-
             branch: data.branch?._id || data.branch?.value || data.branch || "",
-
             year: data.year || "",
-
             semester: data.semester || "",
-
             section: data.section || "",
-
             subjectId:
               data.subjectId?._id ||
               data.subjectId?.value ||
               data.subjectId ||
               "",
-
             loadPerWeek: data.loadPerWeek || "",
+            timeSlots: Array.isArray(data.timeSlots)
+              ? data.timeSlots.map((slot) =>
+                  typeof slot === "object" ? slot._id : slot,
+                )
+              : [],
           });
         } else {
           alert(res.data.message || "Faculty Mapping not found.");
@@ -177,16 +193,22 @@ function EditFacultyMapping() {
         alert(res.data.message || "Failed to update Faculty Mapping.");
       }
     } catch (err) {
-      console.error("Error updating Faculty Mapping:", err);
+      console.log(err);
 
-      alert(
-        err.response?.data?.message ||
-          "Something went wrong while updating Faculty Mapping.",
-      );
+      const message = err.response?.data?.message;
+
+      if (message === "This time slot is already assigned to this class.") {
+        setShowConflictModal(true);
+      } else {
+        alert(message || "Something went wrong");
+      }
     } finally {
       setLoading(false);
     }
   };
+  const filteredTimeSlots = timeSlots.filter(
+    (slot) => slot.session === facultyMapping.session,
+  );
 
   return (
     <Container>
@@ -442,6 +464,43 @@ function EditFacultyMapping() {
             </Form.Group>
           </Col>
         </Row>
+        <Row className="mb-3">
+          <Col md={12}>
+            <Form.Group>
+              <Form.Label>
+                Time Slots :- <span className="text-danger">*</span>
+              </Form.Label>
+
+              {!facultyMapping.session ? (
+                <div className="text-muted">Please select a session first.</div>
+              ) : filteredTimeSlots.length === 0 ? (
+                <div className="text-danger">
+                  No time slots available for this session.
+                </div>
+              ) : (
+                <div className="d-flex flex-wrap gap-3">
+                  {filteredTimeSlots.map((slot) => (
+                    <Form.Check
+                      key={slot._id}
+                      type="checkbox"
+                      id={`timeslot-${slot._id}`}
+                      label={`L${slot.lectureNo} - ${slot.timeSlot}`}
+                      checked={facultyMapping.timeSlots.includes(slot._id)}
+                      onChange={(e) => {
+                        const { checked } = e.target;
+
+                        setFacultyMapping((prev) => ({
+                          ...prev,
+                          timeSlots: checked ? [slot._id] : [],
+                        }));
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+            </Form.Group>
+          </Col>
+        </Row>
         <div className="d-flex justify-content-center gap-3 mt-4">
           <Button
             onClick={() => navigate("/facultymapping")}
@@ -465,6 +524,26 @@ function EditFacultyMapping() {
 
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal
+        show={showConflictModal}
+        onHide={() => setShowConflictModal(false)}
+        
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Time Slot Already Assigned</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          This time slot is already assigned to this class.
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button variant="danger" onClick={() => setShowConflictModal(false)}>
             Close
           </Button>
         </Modal.Footer>

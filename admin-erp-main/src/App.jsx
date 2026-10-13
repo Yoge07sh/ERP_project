@@ -50,16 +50,21 @@ import AddTimeSlot from "./pages/TimeSlots/AddTimeSlot";
 import EditTimeSlot from "./pages/TimeSlots/EditTimeSot";
 
 // Attendance
-import GetStudentForm from "./pages/Attendance/GetStudentForm";
 import StudentsAttendance from "./pages/Attendance/StudentsAttendance";
 import ViewAttendance from "./pages/Attendance/ViewAttendance";
 import EditAttendance from "./pages/Attendance/EditAttendance";
 import AttendanceRegister from "./pages/Attendance/AttendanceRegister";
 import Eregister from "./pages/Attendance/Eregister";
+import AttendanceSummary from "./pages/Attendance/AttendanceSummary";
+
+//leaves
 import AddLeave from "./pages/Leaves/AddLeaves";
 import LeaveForm from "./pages/Leaves/LeaveForm";
 import LeaveDashboard from "./pages/Leaves/LeaveDashboard";
 import LeaveStatus from "./pages/Leaves/LeaveStatus";
+import ArrangementRequests from "./pages/Leaves/ArrangementRequests";
+import ManageLeaveHome from "./pages/Leaves/ManageLeaveHome";
+import AdminLeaveApprovals from "./pages/Leaves/AdminLeaveApprovals";
 
 function AppContent() {
   const location = useLocation();
@@ -150,26 +155,42 @@ function AppContent() {
         <Route path="/edit/timeslot/:id" element={<EditTimeSlot />} />
 
         {/* Attendance */}
-        <Route path="/getstudents" element={<GetStudentForm />} />
+        <Route
+          path="/attendance/summary"
+          element={<AttendanceSummary></AttendanceSummary>}
+        ></Route>
 
         <Route path="/studentsattendance" element={<StudentsAttendance />} />
 
         <Route path="/viewattendance" element={<ViewAttendance />} />
 
-        <Route
-          path="/edit/attendance/:facultyMapId/:SingletimeSlot/:selectedDate"
-          element={<EditAttendance />}
-        />
+        <Route path="/edit/attendance" element={<EditAttendance />} />
 
         <Route path="/register" element={<AttendanceRegister />} />
 
         <Route path="/eregister" element={<Eregister />} />
-        
+
         {/* LEAVES */}
         <Route path="/leaves" element={<AddLeave />} />
         <Route path="/getLeaveDashboard" element={<LeaveDashboard />} />
         <Route path="/getLeaveForm" element={<LeaveForm />} />
-        <Route path="/LeaveStatus" element={<LeaveStatus></LeaveStatus>}></Route>
+        <Route
+          path="/LeaveStatus"
+          element={<LeaveStatus></LeaveStatus>}
+        ></Route>
+        <Route
+          path="/arrangementRequests"
+          element={<ArrangementRequests></ArrangementRequests>}
+        ></Route>
+        <Route
+          path="/adminLeaveApprovals"
+          element={<AdminLeaveApprovals></AdminLeaveApprovals>}
+        />
+
+        <Route
+          path="/manageLeaves"
+          element={<ManageLeaveHome></ManageLeaveHome>}
+        />
       </Routes>
     </AdminLayout>
   );

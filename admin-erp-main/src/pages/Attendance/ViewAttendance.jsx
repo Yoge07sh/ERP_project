@@ -11,14 +11,12 @@ function ViewAttendance() {
   const navigate = useNavigate();
 
   const {
-    formData = {},
     facultyMapId = "",
     SingletimeSlot = "",
     selectedDate = "",
   } = location.state || {};
-
   const [attendanceRecords, setAttendanceRecords] = useState([]);
-
+  const [formData, setFormData] = useState({});
   const getAttendance = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -35,7 +33,22 @@ function ViewAttendance() {
       });
 
       if (response.data.success) {
-        setAttendanceRecords(response.data.data || []);
+        const records = response.data.data || [];
+
+        setAttendanceRecords(records);
+
+        if (records.length > 0) {
+          const record = records[0];
+
+          setFormData({
+            courseName: record.facultyMapId?.course?.courseShortName || "",
+            branchName: record.facultyMapId?.branch?.branchShortName || "",
+            session: record.facultyMapId?.session || "",
+            year: record.facultyMapId?.year || "",
+            semester: record.facultyMapId?.semester || "",
+            section: record.facultyMapId?.section || "",
+          });
+        }
       }
     } catch (err) {
       console.error("View attendance error:", err);
@@ -45,11 +58,10 @@ function ViewAttendance() {
   };
 
   useEffect(() => {
-    if (facultyMapId && SingletimeSlot) {
+    if (facultyMapId && SingletimeSlot && selectedDate) {
       getAttendance();
     }
-  }, [facultyMapId, SingletimeSlot]);
-
+  }, [facultyMapId, SingletimeSlot, selectedDate]);
   return (
     <Container className="py-3">
       {/* Page Heading */}
@@ -184,17 +196,13 @@ function ViewAttendance() {
           variant="warning"
           className="me-2"
           onClick={() =>
-            navigate(
-              `/edit/attendance/${facultyMapId}/${SingletimeSlot}/${selectedDate}`,
-              {
-                state: {
-                  formData: formData,
-                  facultyMapId: facultyMapId,
-                  SingletimeSlot: SingletimeSlot,
-                  selectedDate: selectedDate,
-                },
+            navigate("/edit/attendance", {
+              state: {
+                facultyMapId,
+                timeSlotId: SingletimeSlot,
+                date: selectedDate,
               },
-            )
+            })
           }
         >
           Edit Attendance

@@ -1,21 +1,39 @@
-
-const express = require('express');
-const bodyParser = require('body-parser');
+const express = require("express");
 const router = express.Router();
-const leaveController = require('../controllers/LeaveController');
+const leaveController = require("../controllers/LeaveController");
+const authMiddleware = require("../middleware/authMiddleware");
 
-router.use(bodyParser.json());
-router.use(bodyParser.urlencoded({ extended: false }));
-
-
-router.get('/faculty/for/leave/:id', (req, res) => {
-    leaveController.getFaculty(req, res);
+router.post("/leave/apply", authMiddleware, (req, res) => {
+  leaveController.applyLeave(req, res);
 });
 
-router.post('/add/leave', (req, res)=> {
-    leaveController.addLeave(req, res);
+router.get("/faculty/for/leave/:userId", authMiddleware, (req, res) => {
+  leaveController.getFacultyForLeave(req, res);
 });
-router.get('/leaves/faculty/:facultyId', (req, res) => {
-    leaveController.getFacultyLeaves(req, res);
+
+router.get("/active/faculty", authMiddleware, (req, res) => {
+  leaveController.getActiveFaculty(req, res);
 });
+
+router.get("/leaves/faculty/:id", authMiddleware, (req, res) => {
+  leaveController.getMyLeaveHistory(req, res);
+});
+router.get(
+  "/arrangements/pending",
+  authMiddleware,
+  leaveController.getMyArrangementRequests,
+);
+router.patch(
+  "/arrangements/:leaveId/respond",
+  authMiddleware,
+  leaveController.respondToArrangement,
+);
+
+router.get("/admin/leaves", authMiddleware, leaveController.getAdminLeaves);
+router.patch(
+  "/admin/leaves/:leaveId/decision",
+  authMiddleware,
+  leaveController.decideLeave,
+);
+
 module.exports = router;

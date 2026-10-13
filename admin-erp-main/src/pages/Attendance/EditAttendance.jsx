@@ -12,19 +12,17 @@ import {
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import { useEffect, useState } from "react";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
 function EditAttendance() {
-  const { facultyMapId, SingletimeSlot, selectedDate } = useParams();
-
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { formData = {} } = location.state || {};
-
+  const { facultyMapId, timeSlotId, date: selectedDate } = location.state || {};
+  const [formData, setFormData] = useState({});
   const [students, setStudents] = useState([]);
   const [attendance, setAttendance] = useState({});
   const [submitting, setSubmitting] = useState(false);
@@ -42,7 +40,7 @@ function EditAttendance() {
       const response = await axios.get(`${apiUrl}/viewattendance`, {
         params: {
           mappingId: facultyMapId,
-          SingletimeSlot: SingletimeSlot,
+          SingletimeSlot: timeSlotId,
           date: selectedDate,
         },
         headers: {
@@ -60,7 +58,13 @@ function EditAttendance() {
         }
 
         const record = records[0];
-
+        setFormData({
+          courseName: record.facultyMapId?.course?.courseShortName || "",
+          branchName: record.facultyMapId?.branch?.branchShortName || "",
+          year: record.facultyMapId?.year || "",
+          semester: record.facultyMapId?.semester || "",
+          section: record.facultyMapId?.section || "",
+        });
         setStudents(
           record.students?.map((item) => item.studentId).filter(Boolean) || [],
         );
@@ -85,10 +89,10 @@ function EditAttendance() {
   };
 
   useEffect(() => {
-    if (facultyMapId && SingletimeSlot && selectedDate) {
+    if (facultyMapId && timeSlotId && selectedDate) {
       getAttendance();
     }
-  }, [facultyMapId, SingletimeSlot, selectedDate]);
+  }, [facultyMapId, timeSlotId, selectedDate]);
 
   // Update attendance
   const handleUpdate = async () => {
@@ -97,7 +101,7 @@ function EditAttendance() {
       return;
     }
 
-    if (!SingletimeSlot) {
+    if (!timeSlotId) {
       alert("Time slot is missing.");
       return;
     }
@@ -126,7 +130,7 @@ function EditAttendance() {
         `${apiUrl}/edit/attendance`,
         {
           facultyMapId: facultyMapId,
-          timeSlotId: SingletimeSlot,
+          timeSlotId: timeSlotId,
           date: selectedDate,
           students: attendanceData,
         },
@@ -400,14 +404,7 @@ function EditAttendance() {
                 onClick={() => {
                   handleClose();
 
-                  navigate("/viewattendance", {
-                    state: {
-                      formData,
-                      facultyMapId,
-                      SingletimeSlot,
-                      selectedDate,
-                    },
-                  });
+                  navigate("/attendance/summary");
                 }}
               >
                 OK
