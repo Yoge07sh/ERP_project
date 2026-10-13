@@ -71,10 +71,15 @@ const getStudentsData = async (req, res) => {
       });
     }
 
+    // Find mapping assigned to this faculty
     const mapping = await FacultyMap.findOne({
       _id: mappingId,
       facultyId: faculty._id,
-    });
+    })
+      .populate("course")
+      .populate("branch")
+      .populate("subjectId")
+      .populate("timeSlots");
 
     if (!mapping) {
       return res.status(403).json({
@@ -83,6 +88,7 @@ const getStudentsData = async (req, res) => {
       });
     }
 
+    // Get students for this mapping
     const students = await Student.find({
       currentSession: mapping.session,
       course: mapping.course,
@@ -91,14 +97,22 @@ const getStudentsData = async (req, res) => {
       semester: mapping.semester,
       section: mapping.section,
       status: "Active",
-    });
+    }).select("_id rollNumber firstName lastName");
 
     return res.status(200).json({
       success: true,
       data: students,
+      timeSlots: mapping.timeSlots || [],
+      mapping: {
+        course: mapping.course,
+        branch: mapping.branch,
+        year: mapping.year,
+        semester: mapping.semester,
+        section: mapping.section,
+      },
     });
   } catch (error) {
-    console.error(error);
+    console.error("Get Students Error:", error);
 
     return res.status(500).json({
       success: false,
@@ -324,8 +338,21 @@ const viewAttendance = async (req, res) => {
     })
       .populate("timeSlotId")
       .populate("students.studentId")
+      .populate({
+        path: "facultyMapId",
+        populate: [
+          {
+            path: "course",
+          },
+          {
+            path: "branch",
+          },
+          {
+            path: "subjectId",
+          },
+        ],
+      })
       .sort({ date: -1 });
-
     return res.status(200).json({
       success: true,
       data: attendance,
@@ -454,13 +481,32 @@ const updateAttendance = async (req, res) => {
 
 const getEregister = async (req, res) => {
   try {
-    const { mappingId, fromDate, toDate } = req.query;
+    const {
+      session,
+      course,
+      branch,
+      year,
+      semester,
+      section,
+      fromDate,
+      toDate,
+    } = req.query;
 
     // Validate required fields
-    if (!mappingId || !fromDate || !toDate) {
+    if (
+      !session ||
+      !course ||
+      !branch ||
+      !year ||
+      !semester ||
+      !section ||
+      !fromDate ||
+      !toDate
+    ) {
       return res.status(400).json({
         success: false,
-        message: "Mapping ID, From Date and To Date are required",
+        message:
+          "Session, Course, Branch, Year, Semester, Section, From Date and To Date are required",
       });
     }
 
@@ -491,29 +537,52 @@ const getEregister = async (req, res) => {
       });
     }
 
-    // Verify that this mapping belongs to the logged-in faculty
-    const facultyMap = await FacultyMap.findOne({
-      _id: mappingId,
-      facultyId: faculty._id,
-    });
+    // Find ALL faculty mappings for this class
+    const facultyMaps = await FacultyMap.find({
+      session,
+      course,
+      branch,
+      year,
+      semester,
+      section,
+    }).populate("course")
+      .populate("branch")
+      .populate("subjectId");
 
-    if (!facultyMap) {
-      return res.status(403).json({
+    if (facultyMaps.length === 0) {
+      return res.status(404).json({
         success: false,
-        message: "You are not authorized to view this faculty mapping",
+        message: "No faculty mappings found for this class",
       });
     }
 
-    // Get ALL attendance records for this mapping
-    // within the selected date range.
-    // attendance of every lecture.
+    // Get all faculty mapping IDs
+    const facultyMapIds = facultyMaps.map((mapping) => mapping._id);
+
+    // Get attendance for ALL subjects in this class
     const attendanceRecords = await Attendance.find({
-      facultyMapId: mappingId,
+      facultyMapId: {
+        $in: facultyMapIds,
+      },
       date: {
         $gte: startDate,
         $lte: endDate,
       },
     })
+      .populate({
+        path: "facultyMapId",
+        populate: [
+          {
+            path: "course",
+          },
+          {
+            path: "branch",
+          },
+          {
+            path: "subjectId",
+          },
+        ],
+      })
       .populate({
         path: "timeSlotId",
         select: "lectureNo timeSlot",
@@ -541,6 +610,19 @@ const getEregister = async (req, res) => {
 
     return res.status(200).json({
       success: true,
+      class: {
+        session,
+        course: facultyMaps[0].course,
+        branch: facultyMaps[0].branch,
+        year,
+        semester,
+        section,
+      },
+      subjects: facultyMaps.map((mapping) => ({
+        facultyMapId: mapping._id,
+        subject: mapping.subjectId,
+        facultyId: mapping.facultyId,
+      })),
       data: attendanceRecords,
     });
   } catch (error) {
@@ -553,6 +635,82 @@ const getEregister = async (req, res) => {
     });
   }
 };
+
+const getAttendanceSummary = async (req, res) => {
+  try {
+    // 1. Find faculty using logged-in user
+    const faculty = await Faculty.findOne({
+      userId: req.user._id,
+    });
+
+    if (!faculty) {
+      return res.status(404).json({
+        success: false,
+        message: "Faculty not found",
+      });
+    }
+
+    // 2. Get today's date
+    const now = new Date();
+
+    const indiaDate = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Kolkata",
+    }).format(now);
+
+    const startOfDay = new Date(`${indiaDate}T00:00:00+05:30`);
+
+    const endOfDay = new Date(`${indiaDate}T23:59:59.999+05:30`);
+    // 3. Get faculty mappings with subject + time slot
+    const facultyMappings = await FacultyMap.find({
+      facultyId: faculty._id,
+    })
+      .populate("subjectId")
+      .populate("timeSlots");
+
+    const summary = [];
+
+    // 4. Check attendance for every assigned time slot
+    for (const mapping of facultyMappings) {
+      for (const slot of mapping.timeSlots || []) {
+        const attendance = await Attendance.findOne({
+          facultyMapId: mapping._id,
+          timeSlotId: slot._id,
+          date: {
+            $gte: startOfDay,
+            $lte: endOfDay,
+          },
+        });
+
+        summary.push({
+          facultyMapId: mapping._id,
+          timeSlotId: slot._id,
+          subject: mapping.subjectId?.subjectFullName || "",
+          lectureNo: slot.lectureNo,
+          timeSlot: slot.timeSlot,
+          status: attendance ? "Marked" : "Not Marked",
+          attendanceId: attendance?._id || null,
+        });
+      }
+    }
+
+    // 5. Sort lectures by lecture number
+    summary.sort((a, b) => a.lectureNo - b.lectureNo);
+
+    res.status(200).json({
+      success: true,
+      date: indiaDate,
+      data: summary,
+    });
+  } catch (error) {
+    console.error("Attendance Summary Error:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to get attendance summary",
+      error: error.message,
+    });
+  }
+};
 module.exports = {
   getStudentsData,
   getFacultyMappings,
@@ -560,4 +718,5 @@ module.exports = {
   viewAttendance,
   updateAttendance,
   getEregister,
+  getAttendanceSummary,
 };

@@ -18,12 +18,15 @@ function AddFacultyMapping() {
     section: "",
     subjectId: "",
     loadPerWeek: "",
+    timeSlots: [],
   });
 
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [branches, setBranches] = useState([]);
   const [faculties, setFaculties] = useState([]);
+  const [timeSlots, setTimeSlots] = useState([]);
+  const [showConflictModal, setShowConflictModal] = useState(false);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   // ================= SUCCESS MODAL =================
@@ -40,8 +43,23 @@ function AddFacultyMapping() {
     setFacultyMapping((prev) => ({
       ...prev,
       [name]: value,
+      ...(name === "session" && { timeSlots: [] }),
     }));
   };
+  useEffect(() => {
+    axios
+      .get(apiUrl + "/timeslots")
+      .then((res) => {
+        if (res.data.success) {
+          setTimeSlots(res.data.data);
+        } else {
+          alert("Failed to load Time Slots.");
+        }
+      })
+      .catch((err) => {
+        console.error("Error fetching Time Slots:", err);
+      });
+  }, []);
 
   // ================= FETCH COURSES =================
   useEffect(() => {
@@ -144,21 +162,27 @@ function AddFacultyMapping() {
           section: "",
           subjectId: "",
           loadPerWeek: "",
+          timeSlots: [],
         });
         navigate("/facultymapping");
       } else {
         alert(res.data.message || "Failed to add faculty mapping.");
       }
     } catch (err) {
-      console.error("Error adding faculty mapping:", err);
+      console.log(err);
 
-      alert(
-        err.response?.data?.message ||
-          "Something went wrong while adding faculty mapping.",
-      );
+      const message = err.response?.data?.message;
+
+      if (message === "This time slot is already assigned to this class.") {
+        setShowConflictModal(true);
+      } else {
+        alert(message || "Something went wrong");
+      }
     }
   };
-
+  const filteredTimeSlots = timeSlots.filter(
+    (slot) => slot.session === facultyMapping.session,
+  );
   return (
     <Container>
       <h3 className="text-center mb-4 py-2 text-primary fw-bold">
@@ -379,6 +403,44 @@ function AddFacultyMapping() {
             </Form.Group>
           </Col>
         </Row>
+        <Row className="mb-3">
+          <Col md={12}>
+            <Form.Group>
+              <Form.Label>
+                Time Slots :- <span className="text-danger">*</span>
+              </Form.Label>
+
+              {!facultyMapping.session ? (
+                <div className="text-muted">Please select a session first.</div>
+              ) : filteredTimeSlots.length === 0 ? (
+                <div className="text-danger">
+                  No time slots available for this session.
+                </div>
+              ) : (
+                <div className="d-flex flex-wrap gap-3">
+                  {filteredTimeSlots.map((slot) => (
+                    <Form.Check
+                      key={slot._id}
+                      type="checkbox"
+                      id={`timeslot-${slot._id}`}
+                      label={`L${slot.lectureNo} - ${slot.timeSlot}`}
+                      checked={facultyMapping.timeSlots.includes(slot._id)}
+                      onChange={(e) => {
+                        const { checked } = e.target;
+
+                        setFacultyMapping((prev) => ({
+                          ...prev,
+                          timeSlots: checked ? [slot._id] : [],
+                        }));
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+            </Form.Group>
+          </Col>
+        </Row>
+
         {/* ================= SUBMIT BUTTON ================= */}
         <div className="d-flex justify-content-center gap-3 mt-4">
           <Button
@@ -403,6 +465,26 @@ function AddFacultyMapping() {
 
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal
+        show={showConflictModal}
+        onHide={() => setShowConflictModal(false)}
+        
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Time Slot Already Assigned</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          This time slot is already assigned to this class.
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button variant="danger" onClick={() => setShowConflictModal(false)}>
             Close
           </Button>
         </Modal.Footer>

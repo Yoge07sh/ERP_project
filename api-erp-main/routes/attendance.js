@@ -26,5 +26,7 @@ router.put("/edit/attendance", authMiddleware, (req, res) => {
 router.get("/eregister", authMiddleware, (req, res) => {
   AttendanceController.getEregister(req, res);
 });
-
+router.get("/attendance/summary", authMiddleware, (req, res) => {
+  AttendanceController.getAttendanceSummary(req, res);
+});
 module.exports = router;

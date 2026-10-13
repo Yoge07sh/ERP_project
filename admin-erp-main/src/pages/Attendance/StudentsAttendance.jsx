@@ -9,7 +9,7 @@ import {
   Modal,
 } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -19,13 +19,11 @@ function StudentsAttendance() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const {
-    students = [],
-    formData = {},
-    facultyMapId = "",
-    timeSlotId = "",
-  } = location.state || {};
+  const { facultyMapId = "", timeSlotId = "" } = location.state || {};
 
+  const [students, setStudents] = useState([]);
+  const [formData, setFormData] = useState({});
+  const [loading, setLoading] = useState(true);
   const [attendance, setAttendance] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [show, setShow] = useState(false);
@@ -34,6 +32,52 @@ function StudentsAttendance() {
   const handleClose = () => {
     setShow(false);
   };
+
+  useEffect(() => {
+    const fetchStudents = async () => {
+      if (!facultyMapId) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const token = localStorage.getItem("token");
+
+        const response = await axios.get(`${apiUrl}/getstudentsdata`, {
+          params: {
+            mappingId: facultyMapId,
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.data.success) {
+          setStudents(response.data.data || []);
+
+          setFormData({
+            courseName: response.data.mapping?.course?.courseShortName || "",
+            branchName: response.data.mapping?.branch?.branchShortName || "",
+            year: response.data.mapping?.year || "",
+            semester: response.data.mapping?.semester || "",
+            section: response.data.mapping?.section || "",
+          });
+        }
+      } catch (error) {
+        console.error("Failed to fetch students:", error);
+
+        setErrorMessage(
+          error.response?.data?.message || "Failed to fetch students",
+        );
+
+        setShowError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStudents();
+  }, [facultyMapId]);
+
   const handleSubmit = async () => {
     if (!facultyMapId) {
       alert("Mapping information is missing.");
@@ -218,7 +262,13 @@ function StudentsAttendance() {
                   </thead>
 
                   <tbody>
-                    {students.length > 0 ? (
+                    {loading ? (
+                      <tr>
+                        <td colSpan="4" className="text-center py-4">
+                          <div className="text-muted">Loading students...</div>
+                        </td>
+                      </tr>
+                    ) : students.length > 0 ? (
                       students.map((student, index) => {
                         const status = attendance[student._id] || "Present";
 
@@ -314,7 +364,7 @@ function StudentsAttendance() {
                 variant="success"
                 onClick={() => {
                   handleClose();
-                  navigate("/getstudents");
+                  navigate("/attendance/summary");
                 }}
               >
                 OK

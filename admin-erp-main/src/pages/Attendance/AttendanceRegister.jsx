@@ -25,7 +25,7 @@ function AttendanceRegister() {
   const navigate = useNavigate();
 
   const [mappings, setMappings] = useState([]);
-  const [selectedMapping, setSelectedMapping] = useState("");
+  const [selectedClass, setSelectedClass] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState(getTodayIST());
 
@@ -67,25 +67,52 @@ function AttendanceRegister() {
       });
   }, [token]);
 
-  // When faculty selects a mapping
-  const handleMappingChange = (e) => {
-    const mappingId = e.target.value;
+  const classes = Array.from(
+    new Map(
+      mappings.map((mapping) => {
+        const key = [
+          mapping.session,
+          mapping.course?._id,
+          mapping.branch?._id,
+          mapping.year,
+          mapping.semester,
+          mapping.section,
+        ].join("-");
 
-    setSelectedMapping(mappingId);
+        return [
+          key,
+          {
+            key,
+            session: mapping.session,
+            course: mapping.course,
+            branch: mapping.branch,
+            year: mapping.year,
+            semester: mapping.semester,
+            section: mapping.section,
+          },
+        ];
+      }),
+    ).values(),
+  );
 
-    const mapping = mappings.find((item) => item._id === mappingId);
+  const handleClassChange = (e) => {
+    const classKey = e.target.value;
 
-    if (mapping) {
+    setSelectedClass(classKey);
+
+    const selected = classes.find((item) => item.key === classKey);
+
+    if (selected) {
       setFormData({
-        session: mapping.session || "",
-        course: mapping.course?._id || "",
-        courseName: mapping.course?.courseShortName || "",
-        branch: mapping.branch?._id || "",
-        branchName: mapping.branch?.branchShortName || "",
-        year: mapping.year || "",
-        semester: mapping.semester || "",
-        section: mapping.section || "",
-        subjectName: mapping.subjectId?.subjectFullName || "",
+        session: selected.session || "",
+        course: selected.course?._id || "",
+        courseName: selected.course?.courseShortName || "",
+        branch: selected.branch?._id || "",
+        branchName: selected.branch?.branchShortName || "",
+        year: selected.year || "",
+        semester: selected.semester || "",
+        section: selected.section || "",
+        subjectName: "",
       });
     } else {
       setFormData({
@@ -101,16 +128,14 @@ function AttendanceRegister() {
       });
     }
   };
-
   // Submit form
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!selectedMapping) {
+    if (!selectedClass) {
       alert("Please select a class.");
       return;
     }
-
     if (!fromDate) {
       alert("Please select From Date.");
       return;
@@ -129,13 +154,19 @@ function AttendanceRegister() {
     navigate("/eregister", {
       state: {
         formData,
-        facultyMapId: selectedMapping,
+        classData: {
+          session: formData.session,
+          course: formData.course,
+          branch: formData.branch,
+          year: formData.year,
+          semester: formData.semester,
+          section: formData.section,
+        },
         fromDate,
         toDate,
       },
     });
   };
-
   return (
     <Container
       fluid
@@ -198,10 +229,9 @@ function AttendanceRegister() {
                   />
                   Select Class / Subject
                 </Form.Label>
-
                 <Form.Select
-                  value={selectedMapping}
-                  onChange={handleMappingChange}
+                  value={selectedClass}
+                  onChange={handleClassChange}
                   className="py-2"
                   style={{
                     borderRadius: "10px",
@@ -209,14 +239,14 @@ function AttendanceRegister() {
                     boxShadow: "none",
                   }}
                 >
-                  <option value="">Select Class / Subject</option>
+                  <option value="">Select Class</option>
 
-                  {mappings.map((mapping) => (
-                    <option key={mapping._id} value={mapping._id}>
-                      {mapping.session} | {mapping.course?.courseShortName} |{" "}
-                      {mapping.branch?.branchShortName || "No Branch"} | Year{" "}
-                      {mapping.year} | Semester {mapping.semester} | Section{" "}
-                      {mapping.section} | {mapping.subjectId?.subjectFullName}
+                  {classes.map((item) => (
+                    <option key={item.key} value={item.key}>
+                      {item.session} | {item.course?.courseShortName} |{" "}
+                      {item.branch?.branchShortName || "No Branch"} | Year{" "}
+                      {item.year} | Semester {item.semester} | Section{" "}
+                      {item.section}
                     </option>
                   ))}
                 </Form.Select>
@@ -287,7 +317,7 @@ function AttendanceRegister() {
           <div className="d-flex gap-3 mt-2">
             <Button
               type="submit"
-              disabled={!selectedMapping || !fromDate || !toDate}
+              disabled={!selectedClass || !fromDate || !toDate}
               className="d-flex align-items-center justify-content-center gap-2 px-4 py-2 border-0"
               style={{
                 backgroundColor: "#2563eb",

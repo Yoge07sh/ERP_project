@@ -148,16 +148,15 @@ function Sidebar({ isOpen, onClose }) {
                   <i className="bi bi-clock"></i>
                   <span>TimeSlots</span>
                 </ListGroup.Item>
-                 <>
+
                 <ListGroup.Item
                   as={NavLink}
-                  to="/leaves"
+                  to="/manageLeaves"
                   className="sidebar-menu-item d-flex align-items-center gap-2"
                 >
-                  <i className="bi bi-calendar"></i>
-                  <span className="d-none d-md-inline">Leaves</span>
+                  <FaCalendarAlt />
+                  <span>Manage Leave</span>
                 </ListGroup.Item>
-              </>
               </>
             )}
 
@@ -166,13 +165,23 @@ function Sidebar({ isOpen, onClose }) {
               <>
                 <ListGroup.Item
                   as={NavLink}
-                  to="/getstudents"
+                  to="/attendance/summary"
                   className="sidebar-menu-item d-flex align-items-center gap-2"
                 >
                   <i className="bi bi-clipboard-check"></i>
                   <span>Attendance</span>
                 </ListGroup.Item>
-                 <ListGroup.Item
+
+                <ListGroup.Item
+                  as={NavLink}
+                  to="/register"
+                  className="sidebar-menu-item d-flex align-items-center gap-2"
+                >
+                  <i className="bi bi-clipboard-check"></i>
+                  <span>E-register</span>
+                </ListGroup.Item>
+
+                <ListGroup.Item
                   as={NavLink}
                   to="/getLeaveDashboard"
                   className="sidebar-menu-item d-flex align-items-center gap-2"
@@ -196,7 +205,6 @@ function Sidebar({ isOpen, onClose }) {
                 </ListGroup.Item>
               </>
             )}
-            
           </ListGroup>
         </div>
       </div>

@@ -91,6 +91,9 @@ function FacultyMappingList() {
       const res = await axios({
         url: apiUrl + "/delete/facultyMapping/" + id,
         method: "delete",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (res.data.success) {
@@ -163,6 +166,7 @@ function FacultyMappingList() {
               <th>Year</th>
               <th>Semester</th>
               <th>Section</th>
+              <th>Time Slot</th>
               <th>Subject</th>
               <th>LoadPerWeek</th>
               <th>Action</th>
@@ -172,7 +176,7 @@ function FacultyMappingList() {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan="10">Loading...</td>
+                <td colSpan="11">Loading...</td>
               </tr>
             ) : facultyMapping.length > 0 ? (
               facultyMapping.map((mapping) => (
@@ -192,6 +196,11 @@ function FacultyMappingList() {
                   <td>{mapping.semester}</td>
 
                   <td>{mapping.section}</td>
+                  <td>
+                    {mapping.timeSlots?.length > 0
+                      ? `${mapping.timeSlots[0].timeSlot}`
+                      : "—"}
+                  </td>
 
                   <td>{mapping.subjectId?.subjectNickName}</td>
 
@@ -219,7 +228,7 @@ function FacultyMappingList() {
               ))
             ) : (
               <tr>
-                <td colSpan="10">No records found</td>
+                <td colSpan="11">No records found</td>
               </tr>
             )}
           </tbody>

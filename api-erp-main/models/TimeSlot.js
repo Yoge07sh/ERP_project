@@ -1,18 +1,21 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const TimeSlotsScehma = new mongoose.Schema({
+const TimeSlotsSchema = new mongoose.Schema(
+  {
     session: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     lectureNo: {
-        type: Number,
-        required: true
+      type: Number,
+      required: true,
     },
     timeSlot: {
-        type: String,
-        required: true
-    }
-}, { timestamps: true });
+      type: String,
+      required: true,
+    },
+  },
+  { timestamps: true },
+);
 
-module.exports = mongoose.model('timeSlots', TimeSlotsScehma);
+module.exports = mongoose.model("timeSlots", TimeSlotsSchema);
